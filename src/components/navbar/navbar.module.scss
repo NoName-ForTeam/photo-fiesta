@@ -1,0 +1,10 @@
+.navbarContainer {
+  display: flex;
+  flex-direction: column;
+  background-color: #0D0D0D;
+
+  div + div {
+    margin-top: 10px;
+  }
+
+}
