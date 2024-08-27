@@ -1,8 +1,8 @@
-import { getLayout } from "@/components/layout/layout";
+import { getLayout } from '@/components/layout/layout'
 
 function MyProfile() {
-  return <>My Profile</>;
+  return <>My Profile</>
 }
 
-MyProfile.getLayout = getLayout;
-export default MyProfile;
+MyProfile.getLayout = getLayout
+export default MyProfile

@@ -1,10 +1,9 @@
-import {getLayout} from "@/components/layout/layout";
+import { getLayout } from '@/components/layout/layout'
 
 function Messenger() {
-    return <>Messenger</>;
+  return <>Messenger</>
 }
 
-Messenger.getLayout = getLayout;
+Messenger.getLayout = getLayout
 
-
-export default Messenger;
+export default Messenger

@@ -1,8 +1,8 @@
-import { getLayout } from "@/components/layout/layout";
+import { getLayout } from '@/components/layout/layout'
 
 function Statistics() {
-  return <>Statistics</>;
+  return <>Statistics</>
 }
 
-Statistics.getLayout = getLayout;
-export default Statistics;
+Statistics.getLayout = getLayout
+export default Statistics

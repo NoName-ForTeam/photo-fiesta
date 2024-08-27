@@ -1,8 +1,8 @@
-import { getLayout } from "@/components/layout/layout";
+import { getLayout } from '@/components/layout/layout'
 
 function Favorites() {
-  return <>Favorites</>;
+  return <>Favorites</>
 }
 
-Favorites.getLayout = getLayout;
-export default Favorites;
+Favorites.getLayout = getLayout
+export default Favorites

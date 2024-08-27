@@ -1,10 +1,9 @@
 .navbarContainer {
   display: flex;
   flex-direction: column;
-  background-color: #0D0D0D;
+  background-color: #0d0d0d;
 
   div + div {
     margin-top: 10px;
   }
-
 }

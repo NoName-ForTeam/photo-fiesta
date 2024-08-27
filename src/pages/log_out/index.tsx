@@ -1,8 +1,8 @@
-import { getLayout } from "@/components/layout/layout";
+import { getLayout } from '@/components/layout/layout'
 
 function LogOut() {
-    return <>Log out</>;
+  return <>Log out</>
 }
 
-LogOut.getLayout = getLayout;
-export default LogOut;
+LogOut.getLayout = getLayout
+export default LogOut
