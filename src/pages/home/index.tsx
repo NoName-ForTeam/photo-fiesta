@@ -1,4 +1,5 @@
 import { getLayout } from '@/components/layout/layout'
+import { Button, Checkbox, Select } from '@photo-fiesta/ui-lib'
 
 function Home() {
   return (
@@ -9,7 +10,9 @@ function Home() {
         fontWeight: 'var(--font-weight-bold)',
       }}
     >
-      home
+      <Button variant={'primary'}>Primary</Button>
+      <Checkbox />
+      <Select />
     </div>
   )
 }
