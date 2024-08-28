@@ -1,15 +1,15 @@
 .navbarItem {
-  font-weight: bold;
   display: flex;
-  color: white;
   gap: 10px;
+  font-weight: bold;
+  color: white;
 
   a {
-    text-decoration: none;
     color: inherit;
+    text-decoration: none;
   }
 }
 
 .active {
-  color: #397DF6;
+  color: #397df6;
 }

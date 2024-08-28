@@ -1,28 +1,53 @@
 {
-  "name": "inctagram",
+  "name": "photo-fiesta",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "prebuild": "rimraf dist",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0 --no-error-on-unmatched-pattern --fix",
+    "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx,json,css,scss}\" && stylelint --fix \"src/**/*.{css,less,scss,sass,sss}\"",
+    "comp": "node src/shared/utils/create-component.mjs",
+    "prepare": "husky install",
+    "pre-push": "pnpm run build",
+    "lint-staged": "lint-staged"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "prettier --write",
+      "eslint --fix"
+    ],
+    "*.{css,less,scss,sass,sss}": [
+      "prettier --write",
+      "stylelint --fix"
+    ]
   },
   "dependencies": {
+    "@fontsource/inter": "^5.0.20",
+    "@photo-fiesta/ui-lib": "^0.0.4",
+    "clsx": "^2.1.1",
     "next": "14.2.5",
-    "prettier": "^3.3.3",
     "react": "^18",
-    "react-dom": "^18",
-    "sass": "^1.77.8",
-    "storybook": "^8.2.9"
+    "react-dom": "^18"
   },
   "devDependencies": {
+    "@it-incubator/eslint-config": "^1.0.3",
     "@it-incubator/prettier-config": "^0.1.2",
+    "@it-incubator/stylelint-config": "^2.0.0",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "eslint": "^8",
     "eslint-config-next": "14.2.5",
+    "eslint-plugin-react-refresh": "^0.4.11",
+    "husky": "^8.0.0",
+    "lint-staged": "^15.2.9",
+    "prettier": "^3.3.3",
+    "rimraf": "^6.0.1",
+    "sass": "^1.77.8",
+    "stylelint": "^16.8.2",
     "typescript": "^5"
   }
 }

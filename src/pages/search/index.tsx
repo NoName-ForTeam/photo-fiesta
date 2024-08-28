@@ -1,8 +1,8 @@
-import { getLayout } from "@/components/layout/layout";
+import { getLayout } from '@/components/layout/layout'
 
 function Search() {
-  return <>Search</>;
+  return <>Search</>
 }
 
-Search.getLayout = getLayout;
-export default Search;
+Search.getLayout = getLayout
+export default Search
