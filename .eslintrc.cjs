@@ -10,11 +10,5 @@ module.exports = {
       'warn',
       { allowConstantExport: true },
     ],
-  "lines-around-comment": ["error", {
-      "afterBlockComment": true,
-      "afterLineComment": true,
-      "beforeBlockComment": true,
-      "beforeLineComment": true
-    }]
   },
 }
