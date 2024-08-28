@@ -1,8 +1,7 @@
 export default function Home() {
   return (
-      <>
-        <button>Hello</button>
-      </>
-  );
+    <>
+      <button type={'button'}>Hello</button>
+    </>
+  )
 }
-
