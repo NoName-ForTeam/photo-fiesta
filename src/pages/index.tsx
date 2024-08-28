@@ -1,8 +1,7 @@
-import { getLayout } from '@/components/layout/layout'
-
-function Start() {
-  return <>Start</>
+export default function Home() {
+  return (
+    <>
+      <button type={'button'}>Hello</button>
+    </>
+  )
 }
-
-Start.getLayout = getLayout
-export default Start
