@@ -1,0 +1,28 @@
+/**
+ * Applies standard font styles with customization options.
+ *
+ * @param {string} $size - Font size (default: var(--font-size-m))
+ * @param {string} $line-height - Line height (default: var(--line-height-m))
+ * @param {string} $weight - Font weight (default: var(--font-weight-regular))
+ *
+ * @example
+ *  Usage in a module.scss file:
+ *  First, at the beginning of your module.scss file, add:
+ * @use '@/styles' as *;
+ *
+ *  Then use the mixin:
+ * .yourClassName {
+ *   @include font(var(--font-size-l), var(--line-height-l), var(--font-weight-bold));
+ * }
+ */
+
+@mixin font(
+  $size: var(--font-size-m),
+  $line-height: var(--line-height-m),
+  $weight: var(--font-weight-regular)
+) {
+  margin: 0;
+  font-size: $size;
+  font-weight: $weight;
+  line-height: $line-height;
+}
