@@ -1,9 +1,11 @@
-import { Modal } from '@photo-fiesta/ui-lib'
+import { SignIn } from '@/features/auth/ui'
 
 export default function Home() {
   return (
-    <>
-      <Modal />
-    </>
+    <div
+      style={{ alignItems: 'center', display: 'flex', height: '100vh', justifyContent: 'center' }}
+    >
+      <SignIn />
+    </div>
   )
 }

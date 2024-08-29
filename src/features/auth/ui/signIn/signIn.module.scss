@@ -1,3 +1,61 @@
-.root {
+.card {
+  width: 100%;
+  max-width: var(--width-card-form);
+  padding: var(--auth-form-padding);
+}
+
+.header {
   display: flex;
+  flex-direction: column;
+  gap: 13px;
+  align-items: center;
+  justify-content: center;
+
+  margin-bottom: 24px;
+}
+
+.links {
+  display: flex;
+  gap: 60px;
+}
+
+.icons {
+  width: var(--google-link-size);
+  height: var(--google-link-size);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  margin-bottom: 18px;
+
+  & .container {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    width: 100%;
+  }
+
+  & .button {
+    display: flex;
+    flex-direction: column;
+    gap: var(--auth-form-gap);
+
+    & .password {
+      align-self: flex-end;
+      color: var(--light-900);
+    }
+  }
+}
+
+.footer {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: center;
+
+  & .signUp {
+    color: var(--accent-500);
+  }
 }
