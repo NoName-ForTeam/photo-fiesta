@@ -3,3 +3,113 @@
   align-self: center;
   justify-content: center;
 }
+
+.formBox {
+  width: fit-content;
+  height: auto;
+  padding: 25px;
+
+  background-color: var(--dark-500);
+  border: 1px solid var(--dark-300);
+  box-shadow: (-1px -1px 2px rgb(0 0 0 / 10%)), (1px 1px 2px rgb(0 0 0 / 10%));
+}
+
+.titleSignUp {
+  display: flex;
+  flex-direction: column;
+
+  font: var(--font-family-primary);
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-l);
+  color: var(--color-light-100);
+  text-align: center;
+}
+
+.iconsBox {
+  display: flex;
+  flex-direction: row;
+  gap: 60px;
+  justify-content: center;
+
+  margin-top: 25px;
+}
+
+.icon {
+  width: 36px;
+  height: 36px;
+}
+
+.input {
+  width: 100%;
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
+
+.input input {
+  background-color: var(--dark-500);
+}
+
+.checkbox {
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+  align-items: center;
+
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--line-height-s);
+
+  a {
+    color: var(--accent-300);
+  }
+}
+
+.submitBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 348px;
+  padding: 6px 0;
+
+  border-radius: 2px;
+}
+
+.haveAcc {
+  padding: 20px 0 11px;
+
+  font: var(--font-family-primary);
+  font-size: var(--font-size-m);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--line-height-m);
+  color: var(--light-100);
+  text-align: center;
+}
+
+.signIn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: var(--font-size-m);
+  font-weight: var(--font-weight-semibold);
+  font-style: normal;
+  line-height: var(--line-height-m);
+  color: var(--accent-500);
+  text-align: center;
+}
+
+.error {
+  display: flex;
+  justify-content: end;
+  margin-top: 60px;
+  margin-bottom: 10px;
+
+  span {
+    font-size: var(--font-size-s);
+    font-weight: var(--font-weight-regular);
+    line-height: var(--line-height-m);
+    color: var(--danger-500);
+  }
+}
