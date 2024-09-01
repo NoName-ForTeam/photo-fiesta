@@ -12,6 +12,24 @@ type SignInProps = {
   onSubmit: (data: FormInputs) => void
 }
 
+/**
+ * SignIn component for user authentication
+ *@component
+ * @example
+ *   type FormInputs =
+ *  {
+ *    email: string;
+ *    password: string;
+ *  }
+ *
+ * const handleSubmit = (data:FormInputs) => {
+ *   console.log('Form submitted with:', data)
+ * }
+ *
+ * function AuthPage() {
+ *   return <SignIn onSubmit={handleSubmit} />
+ * }
+ */
 export const SignIn = ({ onSubmit }: SignInProps) => {
   const { control, errors, handleSubmit, isDirty, isValid, onSubmitForm } = useSignIn(onSubmit)
   const classNames = {

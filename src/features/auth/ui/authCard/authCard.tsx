@@ -13,6 +13,22 @@ type AuthCardProps = {
   title: string
 } & ComponentPropsWithoutRef<typeof Card>
 
+/**
+ * AuthCard component for authentication forms
+ * @component
+ * @example
+ * <AuthCard
+ *   title="Sign In"
+ *   footerText="Don't have an account?"
+ *   footerLinkText="Sign Up"
+ *   footerLinkHref="/signup"
+ * >
+ *   <form>
+ *     {/* Your form fields here *\/}
+ *   </form>
+ * </AuthCard>
+ */
+
 export const AuthCard = ({
   children,
   footerLinkHref,
