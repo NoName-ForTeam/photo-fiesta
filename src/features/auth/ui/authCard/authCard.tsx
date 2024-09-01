@@ -1,14 +1,59 @@
 import { ComponentPropsWithoutRef } from 'react'
 
-import clsx from 'clsx'
+import { GithubSvgrepoCom31, GoogleSvgrepoCom1 } from '@/assets'
+import { Button, Card, Typography } from '@photo-fiesta/ui-lib'
+import Link from 'next/link'
 
 import styles from './authCard.module.scss'
 
-export type AuthCardProps = ComponentPropsWithoutRef<'div'>
-export const AuthCard = ({ className }: AuthCardProps) => {
+type AuthCardProps = {
+  footerLinkHref: string
+  footerLinkText: string
+  footerText: string
+  title: string
+} & ComponentPropsWithoutRef<typeof Card>
+
+export const AuthCard = ({
+  children,
+  footerLinkHref,
+  footerLinkText,
+  footerText,
+  title,
+}: AuthCardProps) => {
   const classNames = {
-    root: styles.root,
+    card: styles.card,
+    footer: styles.footer,
+    header: styles.header,
+    icons: styles.icons,
+    links: styles.links,
   } as const
 
-  return <div className={clsx(classNames.root, className)}></div>
+  return (
+    <Card className={classNames.card}>
+      <div className={classNames.header}>
+        <Typography variant={'h1'}>{title}</Typography>
+        <div className={classNames.links}>
+          <Button asChild variant={'link'}>
+            {/**TODO: add link to google*/}
+            <Link href={'#'} passHref>
+              <GoogleSvgrepoCom1 className={classNames.icons} />
+            </Link>
+          </Button>
+          <Button asChild variant={'link'}>
+            {/**TODO: add link to github*/}
+            <Link href={'#'} passHref>
+              <GithubSvgrepoCom31 className={classNames.icons} />
+            </Link>
+          </Button>
+        </div>
+      </div>
+      {children}
+      <div className={classNames.footer}>
+        <Typography variant={'text16'}>{footerText}</Typography>
+        <Button asChild variant={'link'}>
+          <Link href={footerLinkHref}>{footerLinkText}</Link>
+        </Button>
+      </div>
+    </Card>
+  )
 }
