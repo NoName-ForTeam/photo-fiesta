@@ -1,4 +1,4 @@
-import { ComponentPropsWithoutRef } from 'react'
+import { Controller } from 'react-hook-form'
 
 import { GithubSvgrepoCom31, GoogleSvgrepoCom1 } from '@/assets'
 import { Button, Card, Input, Typography } from '@photo-fiesta/ui-lib'
@@ -7,12 +7,19 @@ import Link from 'next/link'
 
 import styles from './signIn.module.scss'
 
-export type SignInProps = ComponentPropsWithoutRef<'div'>
-export const SignIn = ({}: SignInProps) => {
+import { FormInputs, useSignIn } from './useSignIn'
+
+type SignInProps = {
+  onSubmit: (data: FormInputs) => void
+}
+
+export const SignIn = ({ onSubmit }: SignInProps) => {
+  const { control, errors, handleSubmit, isDirty, isValid, onSubmitForm } = useSignIn(onSubmit)
   const classNames = {
     button: styles.button,
     card: clsx(styles.card),
     container: styles.container,
+    errorMessage: styles.errorMessage,
     footer: styles.footer,
     form: styles.form,
     header: styles.header,
@@ -22,6 +29,7 @@ export const SignIn = ({}: SignInProps) => {
     signIn: styles.signIn,
     signUp: styles.signUp,
   } as const
+  const isButtonDisabled = !isValid || !isDirty
 
   return (
     <Card className={classNames.card}>
@@ -40,28 +48,48 @@ export const SignIn = ({}: SignInProps) => {
           </Button>
         </div>
       </div>
-      <form className={classNames.form}>
+      <form className={classNames.form} onSubmit={handleSubmit(onSubmitForm)}>
         <div className={classNames.container}>
-          <Input label={'Email'} placeholder={'Enter your email'} />
-          <Input label={'Password'} placeholder={'Enter your password'} variant={'password'} />
+          <Controller
+            control={control}
+            name={'email'}
+            render={({ field }) => (
+              <Input label={'Email'} placeholder={'Enter your email'} {...field} />
+            )}
+          />
+          <Controller
+            control={control}
+            name={'password'}
+            render={({ field }) => (
+              <Input
+                label={'Password'}
+                placeholder={'Enter your password'}
+                variant={'password'}
+                {...field}
+              />
+            )}
+          />
+          {(errors.email || errors.password) && (
+            <Typography className={classNames.errorMessage} variant={'text14'}>
+              The email or password are incorrect. Try again please
+            </Typography>
+          )}
         </div>
         <div className={classNames.button}>
-          <Typography className={classNames.password} variant={'text14'}>
-            Forgot Password
-          </Typography>
-          <Button asChild variant={'primary'}>
-            <Link className={classNames.signIn} href={'#'} passHref>
-              Sign in
+          <Button asChild className={classNames.password} variant={'link'}>
+            <Link href={'/forgot-password'}>
+              <Typography variant={'text14'}>Forgot Password</Typography>
             </Link>
+          </Button>
+          <Button disabled={isButtonDisabled} variant={'primary'}>
+            Sign in
           </Button>
         </div>
       </form>
       <div className={classNames.footer}>
         <Typography variant={'text16'}>Don’t have an account?</Typography>
         <Button asChild variant={'link'}>
-          <Link className={classNames.signUp} href={'#'} passHref>
-            Sign Up
-          </Link>
+          <Link href={'/sign-up'}>Sign Up</Link>
         </Button>
       </div>
     </Card>

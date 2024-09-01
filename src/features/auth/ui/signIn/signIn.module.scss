@@ -35,6 +35,10 @@
     flex-direction: column;
     gap: 18px;
     width: 100%;
+
+    & .errorMessage {
+      color: var(--danger-500);
+    }
   }
 
   & .button {
@@ -43,6 +47,7 @@
     gap: var(--auth-form-gap);
 
     & .password {
+      cursor: pointer;
       align-self: flex-end;
       color: var(--light-900);
     }
@@ -54,8 +59,4 @@
   flex-direction: column;
   gap: 6px;
   align-items: center;
-
-  & .signUp {
-    color: var(--accent-500);
-  }
 }
