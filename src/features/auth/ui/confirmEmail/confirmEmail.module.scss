@@ -1,3 +1,6 @@
+@import 'src/shared/styles/mixins';
+@import 'src/shared/styles/variables';
+
 .root {
   display: flex;
   flex-direction: column;
@@ -6,10 +9,10 @@
 
   width: 100%;
   max-width: 432px;
-  height: 100vh;
+  height: calc(100vh - 60px);
   margin: 0 auto;
 
-  @media (width <= 360px) {
+  @include media($mobile-width) {
     max-width: 330px;
   }
 }
@@ -22,7 +25,11 @@
 
   margin-bottom: 54px;
 
-  @media (width <= 360px) {
+  p {
+    text-align: center;
+  }
+
+  @include media($mobile-width) {
     gap: 13px;
     margin-bottom: 66px;
   }
@@ -36,27 +43,32 @@
   justify-content: center;
 
   .img {
-    width: 432px;
-    height: 300px;
+    width: 100%;
+    max-width: 432px;
+    height: auto;
+    max-height: 300px;
+
+    object-fit: contain;
   }
 
-  @media (width <= 360px) {
+  @include media($mobile-width) {
     flex-direction: column-reverse;
     gap: 46px;
 
     .img {
-      width: 330px;
+      max-width: 330px;
       height: 230px;
     }
   }
-}
 
-.btn {
-  width: 100%;
-  max-width: 180px;
+  .btn {
+    width: 100%;
+    max-width: 180px;
 
-  @media (width <= 360px) {
-    max-width: 330px;
-    height: 48px;
+    @include media($mobile-width) {
+      width: 100%;
+      max-width: 330px;
+      height: 48px;
+    }
   }
 }
