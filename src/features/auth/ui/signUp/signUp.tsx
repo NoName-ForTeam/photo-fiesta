@@ -9,9 +9,9 @@ import s from './signUp.module.scss'
 
 export const PASSWORD_REGEX =
   /^(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z])(?=.*[!"#$%&'()*+,-./:;<=>?@[\]^_{|}~])[A-Za-z0-9!"#$%&'()*+,-./:;<=>?@[\]^_{|}~]+$/
-export const USER_NAME_REGEX = /^[a-zA-Z0-9_-]*$/
+export const USERNAME_REGEX = /^[a-zA-Z0-9_-]*$/
 
-const emailSchema = z.string().email()
+const emailSchema = z.string().email('The email must match the format example@example.com')
 
 const signUpSchema = z
   .object({
@@ -20,34 +20,44 @@ const signUpSchema = z
     email: emailSchema,
     password: z
       .string()
-      .min(6)
-      .max(20)
-      .regex(PASSWORD_REGEX, 'Minimum number of characters 6,Maximum number of characters 20'),
+      .min(6, 'Minimum number of characters 6')
+      .max(20, 'Maximum number of characters 20')
+      .regex(
+        PASSWORD_REGEX,
+        'Password must contain 0-9, a-z, A-Z, ! " # $ % & \' ( ) * + , - . / : ; < = > ? @ [ \\ ] ^ _` { | } ~}'
+      ),
     username: z
       .string()
-      .min(6)
-      .max(30)
-      .regex(USER_NAME_REGEX, 'Minimum number of characters 6,Maximum number of characters 30'),
+      .min(6, 'Username must be at least 6 characters long')
+      .max(30, 'Username must not exceed 30 characters')
+      .regex(USERNAME_REGEX),
   })
   .refine(data => data.password === data.confirmPassword, {
     message: 'Passwords must match',
     path: ['confirmPassword'],
   })
   .refine(data => data.agreeWithTerms, {
-    message: '',
+    message: 'You must agree to the terms and conditions',
     path: ['agreeWithTerms'],
   })
 
 export type FormValues = z.infer<typeof signUpSchema>
-type SignUpProps = {
-  validationError?: string
-}
-export const SignUp = ({ validationError }: SignUpProps) => {
-  const { control, handleSubmit } = useForm<FormValues>({
+
+export const SignUp = () => {
+  const {
+    control,
+    formState: { errors },
+    handleSubmit,
+    reset,
+  } = useForm<FormValues>({
+    mode: 'onBlur',
     resolver: zodResolver(signUpSchema),
   })
 
-  const onSubmit = () => {}
+  const onSubmit = (data: FormValues) => {
+    console.log('Form Submitted:', data)
+    reset()
+  }
 
   return (
     <div className={s.form}>
@@ -66,67 +76,43 @@ export const SignUp = ({ validationError }: SignUpProps) => {
         <div className={s.input}>
           <FormInput
             control={control}
+            errorMessage={errors.username?.message}
             label={'Username'}
             name={'username'}
             placeholder={'Epam11'}
             type={'username'}
           />
         </div>
-        {validationError && (
-          <div className={s.error}>
-            <Typography as={'span'} variant={'text14'}>
-              {validationError}
-            </Typography>
-          </div>
-        )}
         <div className={s.input}>
           <FormInput
             control={control}
+            errorMessage={errors.email?.message}
             label={'Email'}
             name={'email'}
             placeholder={'Epam@epam.com'}
             type={'email'}
           />
         </div>
-        {validationError && (
-          <div className={s.error}>
-            <Typography as={'span'} variant={'text14'}>
-              {validationError}
-            </Typography>
-          </div>
-        )}
         <div className={s.input}>
           <FormInput
             control={control}
+            errorMessage={errors.password?.message}
             label={'Password'}
             name={'password'}
             placeholder={'jk34!@#GF'}
             variant={'password'}
           />
         </div>
-        {validationError && (
-          <div className={s.error}>
-            <Typography as={'span'} variant={'text14'}>
-              {validationError}
-            </Typography>
-          </div>
-        )}
         <div className={s.input}>
           <FormInput
             control={control}
-            label={'Password Confirmation'}
+            errorMessage={errors.confirmPassword?.message}
+            label={'Password confirmation'}
             name={'confirmPassword'}
             placeholder={'Confirm Password'}
             variant={'password'}
           />
         </div>
-        {validationError && (
-          <div className={s.error}>
-            <Typography as={'span'} variant={'text14'}>
-              {validationError}
-            </Typography>
-          </div>
-        )}
         <div className={s.checkbox}>
           <FormCheckbox control={control} name={'agreeWithTerms'} />
           <Typography variant={'textSmall'}>
