@@ -117,3 +117,54 @@
     white-space: normal;
   }
 }
+
+@media (width <= 360px) {
+  .form {
+    padding: 0 15px;
+  }
+
+  .formBox {
+    max-width: 360px;
+    padding: 20px;
+  }
+
+  .titleSignUp {
+    font-size: var(--font-size-l);
+    line-height: var(--line-height-m);
+  }
+
+  .iconsBox {
+    gap: 40px;
+    margin: 20px 0 10px;
+  }
+
+  .icon {
+    width: 30px;
+    height: 30px;
+  }
+
+  .input {
+    padding-bottom: 10px;
+  }
+
+  .submitBtn {
+    max-width: 300px;
+    padding: 5px 0;
+  }
+
+  .haveAcc {
+    padding: 15px 0 10px;
+    font-size: var(--font-size-s);
+    line-height: var(--line-height-s);
+  }
+
+  .signIn {
+    font-size: var(--font-size-s);
+    line-height: var(--line-height-s);
+  }
+
+  .error span {
+    font-size: var(--font-size-xs);
+    line-height: var(--line-height-s);
+  }
+}

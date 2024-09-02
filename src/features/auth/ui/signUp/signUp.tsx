@@ -1,79 +1,46 @@
-import { useForm } from 'react-hook-form'
-
 import { GithubSvgrepoCom31, GoogleSvgrepoCom1 } from '@/assets'
-import { zodResolver } from '@hookform/resolvers/zod'
+import { useSignUpForm } from '@/features/auth/ui/signUp/useSignUpForm'
 import { Button, FormCheckbox, FormInput, Typography } from '@photo-fiesta/ui-lib'
-import { z } from 'zod'
+import Link from 'next/link'
 
-import s from './signUp.module.scss'
-
-export const PASSWORD_REGEX =
-  /^(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z])(?=.*[!"#$%&'()*+,-./:;<=>?@[\]^_{|}~])[A-Za-z0-9!"#$%&'()*+,-./:;<=>?@[\]^_{|}~]+$/
-export const USERNAME_REGEX = /^[a-zA-Z0-9_-]*$/
-
-const emailSchema = z.string().email('The email must match the format example@example.com')
-
-const signUpSchema = z
-  .object({
-    agreeWithTerms: z.boolean(),
-    confirmPassword: z.string(),
-    email: emailSchema,
-    password: z
-      .string()
-      .min(6, 'Minimum number of characters 6')
-      .max(20, 'Maximum number of characters 20')
-      .regex(
-        PASSWORD_REGEX,
-        'Password must contain 0-9, a-z, A-Z, ! " # $ % & \' ( ) * + , - . / : ; < = > ? @ [ \\ ] ^ _` { | } ~}'
-      ),
-    username: z
-      .string()
-      .min(6, 'Username must be at least 6 characters long')
-      .max(30, 'Username must not exceed 30 characters')
-      .regex(USERNAME_REGEX),
-  })
-  .refine(data => data.password === data.confirmPassword, {
-    message: 'Passwords must match',
-    path: ['confirmPassword'],
-  })
-  .refine(data => data.agreeWithTerms, {
-    message: 'You must agree to the terms and conditions',
-    path: ['agreeWithTerms'],
-  })
-
-export type FormValues = z.infer<typeof signUpSchema>
+import styles from './signUp.module.scss'
 
 export const SignUp = () => {
-  const {
-    control,
-    formState: { errors },
-    handleSubmit,
-    reset,
-  } = useForm<FormValues>({
-    mode: 'onBlur',
-    resolver: zodResolver(signUpSchema),
-  })
+  const { control, errors, handleSubmit, onSubmit } = useSignUpForm()
 
-  const onSubmit = (data: FormValues) => {
-    console.log('Form Submitted:', data)
-    reset()
+  const classNames = {
+    checkbox: styles.checkbox,
+    error: styles.error,
+    form: styles.form,
+    formBox: styles.formBox,
+    haveAcc: styles.haveAcc,
+    icon: styles.icon,
+    iconsBox: styles.iconsBox,
+    input: styles.input,
+    signIn: styles.signIn,
+    submitBtn: styles.submitBtn,
+    titleSignUp: styles.titleSignUp,
   }
 
   return (
-    <div className={s.form}>
-      <form className={s.formBox} onSubmit={handleSubmit(onSubmit)}>
-        <Typography className={s.titleSignUp} variant={'h1'}>
+    <div className={classNames.form}>
+      <form className={classNames.formBox} onSubmit={handleSubmit(onSubmit)}>
+        <Typography className={classNames.titleSignUp} variant={'h1'}>
           Sign Up
-          <span className={s.iconsBox}>
-            <Button type={'button'} variant={'link'}>
-              <GoogleSvgrepoCom1 className={s.icon} />
+          <span className={classNames.iconsBox}>
+            <Button asChild type={'button'} variant={'link'}>
+              <Link href={'#'}>
+                <GoogleSvgrepoCom1 className={classNames.icon} />
+              </Link>
             </Button>
-            <Button type={'button'} variant={'link'}>
-              <GithubSvgrepoCom31 className={s.icon} />
+            <Button asChild type={'button'} variant={'link'}>
+              <Link href={'#'}>
+                <GithubSvgrepoCom31 className={classNames.icon} />
+              </Link>
             </Button>
           </span>
         </Typography>
-        <div className={s.input}>
+        <div className={classNames.input}>
           <FormInput
             control={control}
             errorMessage={errors.username?.message}
@@ -83,7 +50,7 @@ export const SignUp = () => {
             type={'username'}
           />
         </div>
-        <div className={s.input}>
+        <div className={classNames.input}>
           <FormInput
             control={control}
             errorMessage={errors.email?.message}
@@ -93,7 +60,7 @@ export const SignUp = () => {
             type={'email'}
           />
         </div>
-        <div className={s.input}>
+        <div className={classNames.input}>
           <FormInput
             control={control}
             errorMessage={errors.password?.message}
@@ -103,7 +70,7 @@ export const SignUp = () => {
             variant={'password'}
           />
         </div>
-        <div className={s.input}>
+        <div className={classNames.input}>
           <FormInput
             control={control}
             errorMessage={errors.confirmPassword?.message}
@@ -113,25 +80,25 @@ export const SignUp = () => {
             variant={'password'}
           />
         </div>
-        <div className={s.checkbox}>
+        <div className={classNames.checkbox}>
           <FormCheckbox control={control} name={'agreeWithTerms'} />
           <Typography variant={'textSmall'}>
             {' '}
-            I agree to the <a href={'/terms'}>Terms of Service</a> and{' '}
-            <a href={'/privacy'}>Privacy Policy</a>
+            I agree to the <Link href={'/terms'}>Terms of Service</Link> and{' '}
+            <Link href={'/privacy'}>Privacy Policy</Link>
           </Typography>
         </div>
-        <div className={s.submitBtn}>
+        <div className={classNames.submitBtn}>
           <Button fullWidth type={'submit'}>
             Sign Up
           </Button>
         </div>
-        <Typography className={s.haveAcc} variant={'text16'}>
+        <Typography className={classNames.haveAcc} variant={'text16'}>
           Do you have an account?
         </Typography>
-        <div className={s.signIn}>
+        <div className={classNames.signIn}>
           <Button asChild variant={'link'}>
-            <a href={'/signIn'}>Sign In</a>
+            <Link href={'/signIn'}>Sign In</Link>
           </Button>
         </div>
       </form>
