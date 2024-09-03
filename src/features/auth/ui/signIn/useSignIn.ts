@@ -16,7 +16,7 @@ const signInSchema = z.object({
 export const useSignIn = (onSubmit: (data: FormInputs) => void) => {
   const {
     control,
-    formState: { errors, isDirty, isValid },
+    formState: { errors },
     handleSubmit,
     register,
   } = useForm<FormInputs>({
@@ -36,8 +36,6 @@ export const useSignIn = (onSubmit: (data: FormInputs) => void) => {
     control,
     errors,
     handleSubmit,
-    isDirty,
-    isValid,
     onSubmitForm,
     register,
   }

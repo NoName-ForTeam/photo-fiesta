@@ -8,7 +8,7 @@
  * @example
  *  Usage in a module.scss file:
  *  First, at the beginning of your module.scss file, add:
- * @use '@/styles' as *;
+ * @use '@/shared/styles/mixins' as * ;
  *
  *  Then use the mixin:
  * .yourClassName {

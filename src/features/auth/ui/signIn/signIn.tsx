@@ -31,14 +31,14 @@ type SignInProps = {
  * }
  */
 export const SignIn = ({ onSubmit }: SignInProps) => {
-  const { control, errors, handleSubmit, isDirty, isValid, onSubmitForm } = useSignIn(onSubmit)
+  const { control, errors, handleSubmit, onSubmitForm } = useSignIn(onSubmit)
   const classNames = {
     container: styles.container,
     form: styles.form,
   } as const
-  const isButtonDisabled = !isValid || !isDirty
 
   return (
+    /**TODO: write correct path to sign up page*/
     <AuthCard
       footerLinkHref={'/sign-up'}
       footerLinkText={'Sign Up'}
@@ -68,7 +68,7 @@ export const SignIn = ({ onSubmit }: SignInProps) => {
           />
           {(errors.email || errors.password) && <ErrorMessage />}
         </div>
-        <FormButtons isButtonDisabled={isButtonDisabled} />
+        <FormButtons />
       </form>
     </AuthCard>
   )
@@ -86,7 +86,7 @@ const ErrorMessage = () => {
   )
 }
 
-const FormButtons = ({ isButtonDisabled }: { isButtonDisabled: boolean }) => {
+const FormButtons = () => {
   const classNames = {
     button: styles.button,
     password: styles.password,
@@ -100,9 +100,7 @@ const FormButtons = ({ isButtonDisabled }: { isButtonDisabled: boolean }) => {
           <Typography variant={'text14'}>Forgot Password</Typography>
         </Link>
       </Button>
-      <Button disabled={isButtonDisabled} variant={'primary'}>
-        Sign in
-      </Button>
+      <Button variant={'primary'}>Sign in</Button>
     </div>
   )
 }
