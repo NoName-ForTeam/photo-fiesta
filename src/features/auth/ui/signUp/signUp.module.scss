@@ -1,0 +1,157 @@
+@import 'src/shared/styles/mixins';
+
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  max-width: 378px;
+  height: auto;
+  padding: 25px;
+}
+
+.titleSignUp {
+  display: flex;
+  font: var(--font-family-primary);
+
+  @include font(var(--font-weight-bold), var(--font-size-xl), var(--line-height-l));
+
+  color: var(--color-light-100);
+  text-align: center;
+}
+
+.iconsBox {
+  display: flex;
+  flex-direction: row;
+  gap: 60px;
+  justify-content: center;
+
+  margin: 25px 0 10px;
+}
+
+.icon {
+  width: var(--signUP-icons-links);
+  height: var(--signUP-icons-links);
+}
+
+.input {
+  width: 100%;
+  padding-bottom: 13px;
+}
+
+.input input {
+  background-color: var(--dark-500);
+}
+
+.checkbox {
+  display: flex;
+  flex-direction: row;
+  gap: 3px;
+  align-items: center;
+
+  @include font(var(--font-weight-regular), var(--font-size-xs), var(--line-height-s));
+
+  a {
+    color: var(--accent-300);
+  }
+}
+
+.submitBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  max-width: var(--submitBtn-maxWidth);
+  padding: 6px 0;
+
+  border-radius: 2px;
+}
+
+.haveAcc {
+  padding: 20px 0 11px;
+  font: var(--font-family-primary);
+
+  @include font(var(--font-weight-regular), var(--font-size-m), var(--line-height-m));
+
+  color: var(--light-100);
+  text-align: center;
+}
+
+.signIn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  @include font(var(--font-weight-semibold), var(--font-size-m), var(--line-height-m));
+
+  font-style: normal;
+  color: var(--accent-500);
+  text-align: center;
+}
+
+.error {
+  display: flex;
+  justify-content: end;
+
+  span {
+    max-width: 100%;
+
+    @include font(var(--font-weight-regular), var(--font-size-s), var(--line-height-m));
+
+    color: var(--danger-500);
+    word-break: break-word;
+    word-wrap: break-word;
+    white-space: normal;
+  }
+}
+
+@media (width <= 360px) {
+  .form {
+    padding: 0 15px;
+  }
+
+  .formBox {
+    max-width: 360px;
+    padding: 20px;
+  }
+
+  .titleSignUp {
+    @include font(var(--font-weight-bold), var(--font-size-l), var(--line-height-m));
+  }
+
+  .iconsBox {
+    gap: 40px;
+    margin: 20px 0 10px;
+  }
+
+  .icon {
+    width: var(--signUP-icons-links-mobile);
+    height: var(--signUP-icons-links-mobile);
+  }
+
+  .input {
+    padding-bottom: 10px;
+  }
+
+  .submitBtn {
+    max-width: var(--submitBtn-maxWidth-mobile);
+    padding: 5px 0;
+  }
+
+  .haveAcc {
+    padding: 15px 0 10px;
+
+    @include font(var(--font-weight-regular), var(--font-size-s), var(--line-height-s));
+  }
+
+  .signIn {
+    @include font(var(--font-weight-semibold), var(--font-size-s), var(--line-height-s));
+  }
+
+  .error span {
+    @include font(var(--font-weight-regular), var(--font-size-xs), var(--line-height-s));
+  }
+}
