@@ -1,11 +1,8 @@
 import { useForm } from 'react-hook-form'
 
+import { PASSWORD_REGEX, USERNAME_REGEX } from '@/shared/config/regex-constants'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-
-export const PASSWORD_REGEX =
-  /^(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z])(?=.*[!"#$%&'()*+,-./:;<=>?@[\]^_{|}~])[A-Za-z0-9!"#$%&'()*+,-./:;<=>?@[\]^_{|}~]+$/
-export const USERNAME_REGEX = /^[a-zA-Z0-9_-]*$/
 
 const emailSchema = z.string().email('The email must match the format example@example.com')
 
@@ -52,6 +49,7 @@ export const useSignUpForm = () => {
 
   const onSubmit = (data: FormValues) => {
     console.log('Form Submitted:', data)
+    //toDo: connect to api
     reset()
   }
 
