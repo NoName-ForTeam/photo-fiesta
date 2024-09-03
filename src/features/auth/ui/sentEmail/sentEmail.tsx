@@ -26,8 +26,6 @@ export const SentEmail = ({ email }: SentEmailProps) => {
 
   const finalEmail = email ?? 'epam@epam.com'
 
-  const onClickHandler = () => {}
-
   return (
     <Modal open>
       <ModalContent className={classNames.content}>
@@ -42,7 +40,9 @@ export const SentEmail = ({ email }: SentEmailProps) => {
             We have sent a link to confirm your email to {finalEmail}
           </Typography>
           <ModalFooter className={classNames.footer}>
-            <Button onClick={onClickHandler}>OK</Button>
+            <ModalClose>
+              <Button>OK</Button>
+            </ModalClose>
           </ModalFooter>
         </div>
       </ModalContent>
