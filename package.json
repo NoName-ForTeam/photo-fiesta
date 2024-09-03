@@ -27,7 +27,7 @@
   "dependencies": {
     "@fontsource/inter": "^5.0.20",
     "@hookform/resolvers": "^3.9.0",
-    "@photo-fiesta/ui-lib": "^0.0.5",
+    "@photo-fiesta/ui-lib": "^0.0.7",
     "@reduxjs/toolkit": "^2.2.7",
     "clsx": "^2.1.1",
     "next": "14.2.5",
