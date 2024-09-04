@@ -1,4 +1,5 @@
 @import 'src/shared/styles/mixins';
+@import 'src/shared/styles/variables';
 
 .card {
   display: flex;
@@ -32,8 +33,8 @@
 }
 
 .icon {
-  width: var(--signUP-icons-links);
-  height: var(--signUP-icons-links);
+  width: $signUP-icons-links;
+  height: $signUP-icons-links;
 }
 
 .input {
@@ -64,7 +65,7 @@
   justify-content: center;
 
   width: 100%;
-  max-width: var(--submitBtn-maxWidth);
+  max-width: $submitBtn-maxWidth;
   padding: 6px 0;
 
   border-radius: 2px;
@@ -128,8 +129,8 @@
   }
 
   .icon {
-    width: var(--signUP-icons-links-mobile);
-    height: var(--signUP-icons-links-mobile);
+    width: $signUP-icons-links-mobile;
+    height: $signUP-icons-links-mobile;
   }
 
   .input {
@@ -137,7 +138,7 @@
   }
 
   .submitBtn {
-    max-width: var(--submitBtn-maxWidth-mobile);
+    max-width: $submitBtn-maxWidth-mobile;
     padding: 5px 0;
   }
 

@@ -1,10 +1,7 @@
 :root {
-  /* stylelint-disable-next-line scss/double-slash-comment-whitespace-inside */
-  //todo: remove this, it's just for testing
-  --global-variable: 10px;
-  --signUP-icons-links: 36px;
-  --submitBtn-maxWidth: 330px;
-  --signUP-icons-links-mobile: 30px;
-  --submitBtn-maxWidth-mobile: 300px;
+  --mobileWidth: 360px;
+  --signUPIconsLinks: 36px;
+  --submitBtnMaxWidth: 330px;
+  --signUPIconsLinksMobile: 30px;
+  --submitBtnMaxWidthMobile: 300px;
 }
-$mobile-width: 360px;
