@@ -1,0 +1,73 @@
+@use 'src/shared/styles/mixins' as *;
+
+.root {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  max-width: 432px;
+  height: calc(100vh - var(--header-height));
+  margin: 0 auto;
+
+  // TODO: change on global variable
+  @include media(360px) {
+    max-width: 330px;
+  }
+}
+
+.description {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+
+  margin-bottom: 54px;
+
+  p {
+    text-align: center;
+  }
+
+  @include media(360px) {
+    gap: 13px;
+    margin-bottom: 66px;
+  }
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  gap: 72px;
+  align-items: center;
+  justify-content: center;
+
+  .img {
+    width: 100%;
+    max-width: 432px;
+    height: auto;
+    max-height: 300px;
+
+    object-fit: contain;
+  }
+
+  @include media(360px) {
+    flex-direction: column-reverse;
+    gap: 46px;
+
+    .img {
+      max-width: 330px;
+    }
+  }
+
+  .btn {
+    width: 100%;
+    max-width: 180px;
+
+    @include media(360px) {
+      width: 100%;
+      max-width: 330px;
+      min-height: 48px;
+    }
+  }
+}

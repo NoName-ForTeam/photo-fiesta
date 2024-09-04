@@ -8,6 +8,7 @@ export default function Home() {
       <button type={'button'}>Hello</button>
       <SignUp />
       <Modal />
+      <ConfirmEmail />
       <SentEmail />
     </>
   )
