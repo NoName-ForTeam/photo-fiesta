@@ -1,5 +1,6 @@
 import { useForm } from 'react-hook-form'
 
+import { useSignUpMutation } from '@/features/auth'
 import { PASSWORD_REGEX, USERNAME_REGEX } from '@/shared/config/regex-constants'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -37,6 +38,7 @@ const signUpSchema = z
 export type FormValues = z.infer<typeof signUpSchema>
 
 export const useSignUpForm = () => {
+  const [signUp] = useSignUpMutation()
   const {
     control,
     formState: { errors },
@@ -49,6 +51,7 @@ export const useSignUpForm = () => {
 
   const onSubmit = (data: FormValues) => {
     console.log('Form Submitted:', data)
+    signUp
     //toDo: connect to api
     reset()
   }
