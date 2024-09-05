@@ -4,6 +4,9 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
 export type FormInputs = z.infer<typeof signInSchema>
+{
+  /**TODO: use global variable regex*/
+}
 const signInSchema = z.object({
   email: z.string().email('Invalid email address'),
   password: z
