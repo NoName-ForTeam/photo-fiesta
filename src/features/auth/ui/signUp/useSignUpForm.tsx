@@ -48,6 +48,7 @@ export const useSignUpForm = () => {
   })
 
   const onSubmit = (data: FormValues) => {
+    // eslint-disable-next-line no-console
     console.log('Form Submitted:', data)
     //toDo: connect to api
     reset()
