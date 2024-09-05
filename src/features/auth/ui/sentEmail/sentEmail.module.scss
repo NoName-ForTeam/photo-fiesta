@@ -1,0 +1,65 @@
+@use '@/shared/styles/mixins' as *;
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 0 24px 36px;
+
+  @include media(var(--mobile-width)) {
+    padding: 0 12px 30px;
+  }
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 30px;
+
+  @include media(var(--mobile-width)) {
+    padding: 12px;
+  }
+}
+
+.content {
+  width: 100%;
+  max-width: 380px;
+
+  @include media(var(--mobile-width)) {
+    max-width: 330px;
+  }
+}
+
+.footer {
+  display: flex;
+  justify-content: end;
+
+  button {
+    @include media(var(--mobile-width)) {
+      width: 100%;
+      padding: 12px 0;
+    }
+  }
+}
+
+.description {
+  @include media(var(--mobile-width)) {
+    max-width: 306px;
+    margin: 0 auto;
+    text-align: center;
+  }
+}
+
+.icon {
+  cursor: pointer;
+  width: var(--svg-size);
+  height: var(--svg-size);
+
+  &:hover {
+    color: var(--light-900);
+  }
+
+  &:active {
+    color: var(--light-100);
+  }
+}

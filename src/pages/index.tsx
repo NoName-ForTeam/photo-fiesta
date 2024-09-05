@@ -1,4 +1,7 @@
-import { SignIn } from '@/features/auth/ui'
+import { SentEmail } from '@/features/auth/ui'
+import { SignUp } from '@/features/auth/ui/signUp'
+import { Modal } from '@photo-fiesta/ui-lib'
+
 
 export default function Home() {
   function handleSubmit(data: unknown) {
@@ -7,10 +10,12 @@ export default function Home() {
   }
 
   return (
-    <div
-      style={{ alignItems: 'center', display: 'flex', height: '100vh', justifyContent: 'center' }}
-    >
-      <SignIn onSubmit={handleSubmit} />
-    </div>
+    <>
+      <button type={'button'}>Hello</button>
+      <SignUp />
+      <Modal />
+      <ConfirmEmail />
+      <SentEmail />
+    </>
   )
 }
