@@ -12,8 +12,6 @@ import { useCreateNewPassword } from './useCreateNewPassword'
  *
  * @component
  * @example
- * import { CreateNewPassword } from '@/features/auth/ui/createNewPassword/CreateNewPassword';
- *
  * const App = () => (
  *   <div>
  *     <CreateNewPassword />

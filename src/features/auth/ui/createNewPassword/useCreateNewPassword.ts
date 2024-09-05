@@ -39,8 +39,8 @@ export const useCreateNewPassword = () => {
     resolver: zodResolver(CreateNewPasswordSchema),
   })
 
-  const onSubmit = (data: FormValues) => {
-    console.log('Form Submitted:', data)
+  const onSubmit = () => {
+    // TODO:add logic
   }
 
   return { control, handleSubmit, onSubmit }
