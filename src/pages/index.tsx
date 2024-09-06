@@ -1,8 +1,13 @@
-import { ConfirmEmail, SentEmail } from '@/features/auth/ui'
+import { ConfirmEmail, SentEmail, SignIn } from '@/features/auth/ui'
 import { SignUp } from '@/features/auth/ui/signUp'
 import { Modal } from '@photo-fiesta/ui-lib'
 
 export default function Home() {
+  function handleSubmit(data: unknown) {
+    // eslint-disable-next-line no-console
+    console.log('Form submitted with:', data)
+  }
+
   return (
     <>
       <button type={'button'}>Hello</button>
@@ -10,6 +15,7 @@ export default function Home() {
       <Modal />
       <ConfirmEmail />
       <SentEmail />
+      <SignIn onSubmit={handleSubmit} />
     </>
   )
 }
