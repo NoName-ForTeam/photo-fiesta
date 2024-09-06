@@ -22,6 +22,7 @@ export const ForgotPassword = () => {
   const classNames = {
     card: styles.card,
     description: styles.description,
+    field: styles.field,
     form: styles.form,
     link: styles.link,
     title: styles.title,
@@ -34,6 +35,7 @@ export const ForgotPassword = () => {
       </Typography>
       <form className={classNames.form} onSubmit={handleSubmit(onSubmit)}>
         <FormInput
+          className={classNames.field}
           control={control}
           errorMessage={errors.email?.message}
           label={'Email'}
