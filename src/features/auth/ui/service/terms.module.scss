@@ -19,6 +19,8 @@
 }
 
 .terms {
+  position: relative;
+
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -34,8 +36,14 @@
   }
 }
 
-@media (width <= 768px) {
+@media (width < 630px) {
   .container {
     margin: 15px;
+  }
+
+  .link {
+    position: absolute;
+    top: 20px;
+    left: 0;
   }
 }

@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react'
+
 import { ArrowBackOutline } from '@/assets'
 import Link from 'next/link'
 
@@ -12,14 +14,29 @@ export const TermsOfService = () => {
     text: styles.text,
   }
 
+  const [width, setWidth] = useState(0)
+
+  useEffect(() => {
+    window.addEventListener('resize', () => {
+      setWidth(window.innerWidth)
+    })
+  }, [])
+
   return (
     <div className={styles.container}>
-      <Link className={classNames.link} href={'/'}>
-        <ArrowBackOutline className={classNames.SVG} />
-        Back to Sign Up
-      </Link>
+      {width >= 630 && (
+        <Link className={classNames.link} href={'/'}>
+          <ArrowBackOutline className={classNames.SVG} />
+          Back to Sign Up
+        </Link>
+      )}
 
       <div className={classNames.terms}>
+        {width < 630 && (
+          <Link className={classNames.link} href={'/'}>
+            <ArrowBackOutline className={classNames.SVG} />
+          </Link>
+        )}
         <h2>Terms Of Service</h2>
         <div>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
