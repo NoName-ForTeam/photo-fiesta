@@ -1,4 +1,4 @@
-import { CloseOutline } from '@/assets'
+import { CloseOutline } from '@/assets/icons'
 import {
   Button,
   Modal,

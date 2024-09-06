@@ -1,0 +1,41 @@
+.container {
+  margin: 64px;
+}
+
+.link {
+  display: flex;
+  gap: 6px;
+
+  width: fit-content;
+
+  font-weight: var(--font-weight-regular);
+  color: inherit;
+  text-decoration: none;
+}
+
+.SVG {
+  width: var(--svg-size);
+  height: var(--svg-size);
+}
+
+.terms {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  max-width: 1000px;
+  margin: 0 auto;
+
+  color: var(--light-100);
+  text-align: center;
+
+  h2 {
+    margin: 20px;
+  }
+}
+
+@media (width <= 768px) {
+  .container {
+    margin: 15px;
+  }
+}
