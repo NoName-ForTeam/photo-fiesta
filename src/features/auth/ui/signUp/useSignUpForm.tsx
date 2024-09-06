@@ -53,7 +53,6 @@ export const useSignUpForm = () => {
   })
 
   const onSubmit = (data: FormValues) => {
-    console.log('Form Submitted:', data)
     //toDo: connect to api
     setUserEmail(data.email)
     setIsModalOpen(true)

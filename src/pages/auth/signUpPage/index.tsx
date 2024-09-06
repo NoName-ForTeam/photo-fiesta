@@ -1,5 +1,5 @@
 import { SignUp } from '@/features/auth/ui/signUp'
-import { getAuthLayout } from '@/shared/authLayout/authLayout'
+import { getAuthLayout } from '@/features/layout/layout'
 
 /**
  * `SignUpPage` is a page component that renders the sign-up form for new users.
