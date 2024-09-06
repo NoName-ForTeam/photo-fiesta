@@ -23,7 +23,7 @@ export const authApi = baseApi.injectEndpoints({
         query: params => ({
           body: params,
           method: 'POST',
-          url: 'v1/auth/registration',
+          url: '/api/v1/auth/registration',
         }),
       }),
     }

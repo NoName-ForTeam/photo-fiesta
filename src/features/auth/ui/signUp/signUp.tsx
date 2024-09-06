@@ -6,7 +6,7 @@ import Link from 'next/link'
 import styles from './signUp.module.scss'
 
 export const SignUp = () => {
-  const { control, errors, handleSubmit, onSubmit } = useSignUpForm()
+  const { control, errors, onSubmit } = useSignUpForm()
 
   const classNames = {
     card: styles.card,
@@ -38,13 +38,13 @@ export const SignUp = () => {
           </Link>
         </Button>
       </span>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={onSubmit}>
         <div className={classNames.input}>
           <FormInput
             control={control}
-            errorMessage={errors.username?.message}
+            errorMessage={errors.userName?.message}
             label={'Username'}
-            name={'username'}
+            name={'userName'}
             placeholder={'Epam11'}
             type={'username'}
           />
