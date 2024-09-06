@@ -1,6 +1,5 @@
-import { useEffect, useState } from 'react'
-
 import { ArrowBackOutline } from '@/assets'
+import { Typography } from '@photo-fiesta/ui-lib'
 import Link from 'next/link'
 
 import styles from './terms.module.scss'
@@ -9,18 +8,11 @@ export const TermsOfService = () => {
   const classNames = {
     container: styles.container,
     link: styles.link,
-    svg: styles.SVG,
+    signup: styles.signup,
+    svg: styles.svg,
     terms: styles.terms,
     text: styles.text,
   }
-
-  const [width, setWidth] = useState(0)
-
-  useEffect(() => {
-    window.addEventListener('resize', () => {
-      setWidth(window.innerWidth)
-    })
-  }, [])
 
   /**
    * Page with terms of service
@@ -31,21 +23,13 @@ export const TermsOfService = () => {
 
   return (
     <div className={classNames.container}>
-      {width >= 630 && (
-        <Link className={classNames.link} href={'/'}>
-          <ArrowBackOutline className={classNames.svg} />
-          Back to Sign Up
-        </Link>
-      )}
-
+      <Link className={classNames.link} href={'/'}>
+        <ArrowBackOutline className={classNames.svg} />
+        <Typography className={classNames.signup}>Back to Sign Up</Typography>
+      </Link>
       <div className={classNames.terms}>
-        {width < 630 && (
-          <Link className={classNames.link} href={'/'}>
-            <ArrowBackOutline className={classNames.svg} />
-          </Link>
-        )}
-        <h1>Terms Of Service</h1>
-        <div>
+        <Typography variant={'h1'}>Terms Of Service</Typography>
+        <Typography>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
           ut labore et dolore magna aliqua. Fames ac turpis egestas integer eget aliquet nibh. Amet
           consectetur adipiscing elit ut aliquam purus sit amet luctus. Tortor vitae purus faucibus
@@ -105,7 +89,7 @@ export const TermsOfService = () => {
           Sed lectus vestibulum mattis ullamcorper velit. Commodo odio aenean sed adipiscing diam.
           Viverra nam libero justo laoreet. Id neque aliquam vestibulum morbi blandit cursus. Vel
           facilisis volutpat est velit egestas dui id ornare. Feugiat nibh sed pulvinar proin.
-        </div>
+        </Typography>
       </div>
     </div>
   )
