@@ -2,9 +2,9 @@ import { ArrowBackOutline } from '@/assets'
 import { Typography } from '@photo-fiesta/ui-lib'
 import Link from 'next/link'
 
-import styles from './terms.module.scss'
+import styles from './privacy.module.scss'
 
-export const TermsOfService = () => {
+export const PrivacyPolicy = () => {
   const classNames = {
     container: styles.container,
     link: styles.link,
@@ -18,7 +18,7 @@ export const TermsOfService = () => {
    * Page with terms of service
    * @component
    * @example
-   * <TermsOfService/>
+   * <PrivacyPolicy/>
    */
 
   return (
@@ -28,7 +28,7 @@ export const TermsOfService = () => {
         <Typography className={classNames.signup}>Back to Sign Up</Typography>
       </Link>
       <div className={classNames.terms}>
-        <Typography as={'h1'}>Terms Of Service</Typography>
+        <Typography as={'h1'}>Privacy Policy</Typography>
         <Typography>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
           ut labore et dolore magna aliqua. Fames ac turpis egestas integer eget aliquet nibh. Amet
