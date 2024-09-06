@@ -1,4 +1,4 @@
-import { CloseOutline } from '@/assets'
+import { CloseOutline } from '@/assets/icons'
 import {
   Button,
   Modal,
@@ -12,9 +12,10 @@ import {
 import styles from './sentEmail.module.scss'
 
 export type SentEmailProps = {
+  closeModal: () => void
   email?: string
 }
-export const SentEmail = ({ email }: SentEmailProps) => {
+export const SentEmail = ({ closeModal, email }: SentEmailProps) => {
   const classNames = {
     container: styles.container,
     content: styles.content,
@@ -31,7 +32,7 @@ export const SentEmail = ({ email }: SentEmailProps) => {
       <ModalContent className={classNames.content}>
         <ModalHeader className={classNames.header}>
           <Typography variant={'h1'}>Email sent</Typography>
-          <ModalClose>
+          <ModalClose onClick={closeModal}>
             <CloseOutline className={classNames.icon} />
           </ModalClose>
         </ModalHeader>
@@ -40,9 +41,7 @@ export const SentEmail = ({ email }: SentEmailProps) => {
             We have sent a link to confirm your email to {finalEmail}
           </Typography>
           <ModalFooter className={classNames.footer}>
-            <ModalClose>
-              <Button>OK</Button>
-            </ModalClose>
+            <Button onClick={closeModal}>OK</Button>
           </ModalFooter>
         </div>
       </ModalContent>
