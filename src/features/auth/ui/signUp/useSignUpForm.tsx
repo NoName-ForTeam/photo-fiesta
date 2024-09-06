@@ -1,5 +1,7 @@
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 
+import { SentEmail } from '@/features/auth/ui'
 import { PASSWORD_REGEX, USERNAME_REGEX } from '@/shared/config/regex-constants'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -37,6 +39,9 @@ const signUpSchema = z
 export type FormValues = z.infer<typeof signUpSchema>
 
 export const useSignUpForm = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [userEmail, setUserEmail] = useState('')
+
   const {
     control,
     formState: { errors },
@@ -48,11 +53,17 @@ export const useSignUpForm = () => {
   })
 
   const onSubmit = (data: FormValues) => {
-    // eslint-disable-next-line no-console
-    console.log('Form Submitted:', data)
     //toDo: connect to api
+    setUserEmail(data.email)
+    setIsModalOpen(true)
     reset()
   }
 
-  return { control, errors, handleSubmit, onSubmit }
+  const closeModal = () => {
+    setIsModalOpen(false)
+  }
+
+  const renderModal = () => <SentEmail closeModal={closeModal} email={userEmail} />
+
+  return { control, errors, handleSubmit, isModalOpen, onSubmit, renderModal }
 }
