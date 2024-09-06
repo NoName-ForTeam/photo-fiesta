@@ -6,7 +6,7 @@
   gap: 18px;
   padding: 0 24px 36px;
 
-  @include media(var(--mobile-width)) {
+  @include mobile {
     padding: 0 12px 30px;
   }
 }
@@ -16,7 +16,7 @@
   justify-content: space-between;
   margin-bottom: 30px;
 
-  @include media(var(--mobile-width)) {
+  @include mobile {
     padding: 12px;
   }
 }
@@ -25,7 +25,7 @@
   width: 100%;
   max-width: 380px;
 
-  @include media(var(--mobile-width)) {
+  @include mobile {
     max-width: 330px;
   }
 }
@@ -35,7 +35,7 @@
   justify-content: end;
 
   button {
-    @include media(var(--mobile-width)) {
+    @include mobile {
       width: 100%;
       padding: 12px 0;
     }
@@ -43,7 +43,7 @@
 }
 
 .description {
-  @include media(var(--mobile-width)) {
+  @include mobile {
     max-width: 306px;
     margin: 0 auto;
     text-align: center;
