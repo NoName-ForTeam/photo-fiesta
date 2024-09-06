@@ -1,3 +1,5 @@
+@use '@/shared/styles/mixins' as *;
+
 .container {
   margin: 64px;
 }
@@ -31,8 +33,10 @@
   color: var(--light-100);
   text-align: center;
 
-  h2 {
-    margin: 20px;
+  h1 {
+    padding: 20px;
+
+    @include font(var(--font-size-xl), var(--line-height-l), var(--font-weight-bold));
   }
 }
 
@@ -43,7 +47,7 @@
 
   .link {
     position: absolute;
-    top: 20px;
+    top: 26px;
     left: 0;
   }
 }

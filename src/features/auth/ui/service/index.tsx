@@ -7,9 +7,9 @@ import styles from './terms.module.scss'
 
 export const TermsOfService = () => {
   const classNames = {
-    SVG: styles.SVG,
     container: styles.container,
     link: styles.link,
+    svg: styles.SVG,
     terms: styles.terms,
     text: styles.text,
   }
@@ -22,11 +22,18 @@ export const TermsOfService = () => {
     })
   }, [])
 
+  /**
+   * Page with terms of service
+   * @component
+   * @example
+   * <TermsOfService/>
+   */
+
   return (
-    <div className={styles.container}>
+    <div className={classNames.container}>
       {width >= 630 && (
         <Link className={classNames.link} href={'/'}>
-          <ArrowBackOutline className={classNames.SVG} />
+          <ArrowBackOutline className={classNames.svg} />
           Back to Sign Up
         </Link>
       )}
@@ -34,10 +41,10 @@ export const TermsOfService = () => {
       <div className={classNames.terms}>
         {width < 630 && (
           <Link className={classNames.link} href={'/'}>
-            <ArrowBackOutline className={classNames.SVG} />
+            <ArrowBackOutline className={classNames.svg} />
           </Link>
         )}
-        <h2>Terms Of Service</h2>
+        <h1>Terms Of Service</h1>
         <div>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
           ut labore et dolore magna aliqua. Fames ac turpis egestas integer eget aliquet nibh. Amet
