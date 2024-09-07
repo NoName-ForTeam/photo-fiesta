@@ -16,9 +16,8 @@ export const SignIn = () => {
   } as const
 
   return (
-    /**TODO: write correct path to sign up page*/
     <AuthCard
-      footerLinkHref={'/sign-up'}
+      footerLinkHref={'/auth/signUpPage'}
       footerLinkText={'Sign Up'}
       footerText={"Don't have an account?"}
       title={'Sign In'}

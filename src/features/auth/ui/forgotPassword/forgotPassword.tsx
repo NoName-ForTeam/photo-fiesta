@@ -48,8 +48,7 @@ export const ForgotPassword = () => {
         <Button fullWidth>Send Link</Button>
       </form>
       <Button asChild className={classNames.link} variant={'link'}>
-        <Link href={'/signIn'}>Back to Sign In</Link>
-        {/*todo: check path for links*/}
+        <Link href={'/auth/signInPage'}>Back to Sign In</Link>
       </Button>
 
       {/*TODO: add recaptcha and modal*/}
