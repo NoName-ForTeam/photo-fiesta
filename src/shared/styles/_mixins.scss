@@ -27,7 +27,7 @@
   line-height: $line-height;
 }
 
-@mixin media($width) {
+@mixin mobile($width: 360px) {
   @media (max-width: $width) {
     @content;
   }
