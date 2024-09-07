@@ -29,11 +29,13 @@ export const SignUp = () => {
         </Typography>
         <span className={classNames.iconsBox}>
           <Button asChild type={'button'} variant={'link'}>
+            {/*TODO: check path for links*/}
             <Link href={'#'}>
               <GoogleSvgrepoCom1 className={classNames.icon} />
             </Link>
           </Button>
           <Button asChild type={'button'} variant={'link'}>
+            {/*TODO: check path for links*/}
             <Link href={'#'}>
               <GithubSvgrepoCom31 className={classNames.icon} />
             </Link>
@@ -85,8 +87,8 @@ export const SignUp = () => {
             <Typography variant={'textSmall'}>
               {' '}
               I agree to the <Link href={'/terms'}>Terms of Service</Link> and{' '}
+              {/*TODO: check path for links*/}
               <Link href={'/privacy'}>Privacy Policy</Link>
-              {/*todo: check path for links*/}
             </Typography>
           </div>
           <div className={classNames.submitBtn}>
@@ -100,8 +102,8 @@ export const SignUp = () => {
         </Typography>
         <div className={classNames.signIn}>
           <Button asChild variant={'link'}>
+            {/*TODO: check path for links*/}
             <Link href={'/signIn'}>Sign In</Link>
-            {/*todo: check path for links*/}
           </Button>
         </div>
       </Card>

@@ -1,4 +1,4 @@
-import { SubmitHandler, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 
 import { PASSWORD_REGEX } from '@/shared/config/regex-constants'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -9,17 +9,16 @@ const signInSchema = z.object({
   email: z.string().email('Invalid email address'),
   password: z
     .string()
-    .min(6, 'Password must be at least 8 characters')
+    .min(6, 'Password must be at least 6 characters')
     .max(20, 'Password must be at most 32 characters')
     .regex(PASSWORD_REGEX),
 })
 
-export const useSignIn = (onSubmit: (data: FormInputs) => void) => {
+export const useSignIn = () => {
   const {
     control,
     formState: { errors },
     handleSubmit,
-    register,
   } = useForm<FormInputs>({
     defaultValues: {
       email: '',
@@ -29,15 +28,17 @@ export const useSignIn = (onSubmit: (data: FormInputs) => void) => {
     resolver: zodResolver(signInSchema),
   })
 
-  const onSubmitForm: SubmitHandler<FormInputs> = data => {
-    onSubmit(data)
+  const onSubmitForm = (data: FormInputs): void => {
+    {
+      /*TODO: remove console.log*/
+    }
+    //eslint-disable-next-line no-console
+    console.log(data)
   }
 
   return {
     control,
     errors,
-    handleSubmit,
-    onSubmitForm,
-    register,
+    handleSubmit: handleSubmit(onSubmitForm),
   }
 }

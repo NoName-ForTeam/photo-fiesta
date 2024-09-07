@@ -6,32 +6,10 @@ import Link from 'next/link'
 import styles from './signIn.module.scss'
 
 import { AuthCard } from '../authCard'
-import { FormInputs, useSignIn } from './useSignIn'
+import { useSignIn } from './useSignIn'
 
-type SignInProps = {
-  onSubmit: (data: FormInputs) => void
-}
-
-/**
- * SignIn component for user authentication
- *@component
- * @example
- *   type FormInputs =
- *  {
- *    email: string;
- *    password: string;
- *  }
- *
- * const handleSubmit = (data:FormInputs) => {
- *   console.log('Form submitted with:', data)
- * }
- *
- * function AuthPage() {
- *   return <SignIn onSubmit={handleSubmit} />
- * }
- */
-export const SignIn = ({ onSubmit }: SignInProps) => {
-  const { control, errors, handleSubmit, onSubmitForm } = useSignIn(onSubmit)
+export const SignIn = () => {
+  const { control, errors, handleSubmit } = useSignIn()
   const classNames = {
     container: styles.container,
     form: styles.form,
@@ -45,7 +23,7 @@ export const SignIn = ({ onSubmit }: SignInProps) => {
       footerText={"Don't have an account?"}
       title={'Sign In'}
     >
-      <form className={classNames.form} onSubmit={handleSubmit(onSubmitForm)}>
+      <form className={classNames.form} onSubmit={handleSubmit}>
         <div className={classNames.container}>
           <Controller
             control={control}
