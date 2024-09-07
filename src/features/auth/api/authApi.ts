@@ -7,8 +7,8 @@ import { SignUpData } from './auth.types'
  * This service provides methods for user registration and other authentication tasks.
  *
  * @example
- * const [signUp, { isLoading, error }] = useSignUpMutation();
- * signUp({ email: 'test@example.com', password: 'password123' });
+ * const [signUpPage, { isLoading, error }] = useSignUpMutation();
+ * signUpPage({ email: 'test@example.com', password: 'password123' });
  */
 
 export const authApi = baseApi.injectEndpoints({

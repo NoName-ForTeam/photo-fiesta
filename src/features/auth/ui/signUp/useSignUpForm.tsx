@@ -1,7 +1,9 @@
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { toast } from 'react-toastify'
+// import { toast } from 'react-toastify'
 
 import { useSignUpMutation } from '@/features/auth'
+import { SentEmail } from '@/features/auth/ui'
 import { PASSWORD_REGEX, USERNAME_REGEX } from '@/shared/config/regex-constants'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -37,49 +39,40 @@ const signUpSchema = z
     path: ['agreeWithTerms'],
   })
 
-const badRequestSchema = z.object({
-  messages: z.array(
-    z.object({ field: z.enum(['email', 'password', 'userName']), message: z.string() })
-  ),
-})
+// const badRequestSchema = z.object({
+//   messages: z.array(
+//     z.object({ field: z.enum(['email', 'password', 'userName']), message: z.string() })
+//   ),
+// })
 
 export type FormValues = z.infer<typeof signUpSchema>
 
 export const useSignUpForm = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [userEmail, setUserEmail] = useState('')
   const [signUp] = useSignUpMutation()
+
   const {
     control,
     formState: { errors },
     handleSubmit,
-    reset,
-    setError,
+    // reset,
+    // setError,
   } = useForm<FormValues>({
     mode: 'onBlur',
     resolver: zodResolver(signUpSchema),
   })
 
-  const onSubmit = handleSubmit(data => {
-    signUp(data)
-      .unwrap()
-      .catch(e => {
-        const parsed = badRequestSchema.safeParse(e.data)
+  const onSubmit = (data: FormValues) => {
+    signUp(data).unwrap()
+    setUserEmail(userEmail)
+  }
 
-        if (parsed.success) {
-          parsed.data.messages.forEach(m => setError(m.field, { message: m.message }))
-        } else if ('error' in e) {
-          toast.error(e.error)
-        } else if ('message' in e) {
-          toast.error(e.message)
-        } else {
-          const message = JSON.stringify(e) ?? 'Some error'
+  const closeModal = () => setIsModalOpen(false)
 
-          toast.error(message)
-        }
-      })
-    reset()
-  })
+  const renderModal = () => <SentEmail closeModal={closeModal} email={userEmail} />
 
-  return { control, errors, handleSubmit, onSubmit }
+  return { control, errors, handleSubmit, isModalOpen, onSubmit, renderModal }
 }
 
 // {
@@ -110,3 +103,19 @@ export const useSignUpForm = () => {
 //         console.error('Sign up failed:', error)
 //     }
 // }
+
+// .catch(e => {
+//     const parsed = badRequestSchema.safeParse(e.data)
+//
+//     if (parsed.success) {
+//         parsed.data.messages.forEach(m => setError(m.field, { message: m.message }))
+//     } else if ('error' in e) {
+//         toast.error(e.error)
+//     } else if ('message' in e) {
+//         toast.error(e.message)
+//     } else {
+//         const message = JSON.stringify(e) ?? 'Some error'
+//
+//         toast.error(message)
+//     }
+// })

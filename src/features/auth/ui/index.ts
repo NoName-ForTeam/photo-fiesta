@@ -1,2 +1,7 @@
+export * from './authCard'
 export * from './confirmEmail'
+export * from './createNewPassword'
+export * from './forgotPassword'
 export * from './sentEmail'
+export * from './signIn'
+export * from './signUp'
