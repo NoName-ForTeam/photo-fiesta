@@ -1,4 +1,4 @@
-import { Controller } from 'react-hook-form'
+import { Controller, FieldErrors } from 'react-hook-form'
 
 import { Button, Input, Typography } from '@photo-fiesta/ui-lib'
 import Link from 'next/link'
@@ -6,7 +6,7 @@ import Link from 'next/link'
 import styles from './signIn.module.scss'
 
 import { AuthCard } from '../authCard'
-import { useSignIn } from './useSignIn'
+import { FormInputs, useSignIn } from './useSignIn'
 
 export const SignIn = () => {
   const { control, errors, handleSubmit } = useSignIn()
@@ -17,6 +17,7 @@ export const SignIn = () => {
 
   return (
     <AuthCard
+      //TODO:use routing constants
       footerLinkHref={'/auth/signUpPage'}
       footerLinkText={'Sign Up'}
       footerText={"Don't have an account?"}
@@ -43,7 +44,7 @@ export const SignIn = () => {
               />
             )}
           />
-          {(errors.email || errors.password) && <ErrorMessage />}
+          {(errors.email || errors.password) && <ErrorMessage errors={errors} />}
         </div>
         <FormButtons />
       </form>
@@ -51,14 +52,20 @@ export const SignIn = () => {
   )
 }
 
-const ErrorMessage = () => {
+type ErrorMessageProps = {
+  errors: FieldErrors<FormInputs>
+}
+
+const ErrorMessage = ({ errors }: ErrorMessageProps) => {
   const classNames = {
     errorMessage: styles.errorMessage,
   } as const
 
   return (
     <Typography className={classNames.errorMessage} variant={'text14'}>
-      The email or password are incorrect. Try again please
+      {errors.email?.message ||
+        errors.password?.message ||
+        'The email or password are incorrect. Try again please'}
     </Typography>
   )
 }
@@ -72,7 +79,7 @@ const FormButtons = () => {
   return (
     <div className={classNames.button}>
       <Button asChild className={classNames.password} variant={'link'}>
-        {/**TODO: add link to forgot password*/}
+        {/**TODO: add link to forgot password and use routing constants*/}
         <Link href={'/forgot-password'}>
           <Typography variant={'text14'}>Forgot Password</Typography>
         </Link>
