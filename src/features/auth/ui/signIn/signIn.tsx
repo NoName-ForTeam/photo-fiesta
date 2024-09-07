@@ -8,6 +8,17 @@ import styles from './signIn.module.scss'
 import { AuthCard } from '../authCard'
 import { FormInputs, useSignIn } from './useSignIn'
 
+/**
+ * SignIn component for user authentication.
+ * This component provides a form for users to sign in with their email and password.
+ *@component
+ * @example
+ * import { SignIn } from './path/to/SignIn';
+ * const SignUpPage = () => {
+ * return <SignUp />
+ * }
+ */
+
 export const SignIn = () => {
   const { control, errors, handleSubmit } = useSignIn()
   const classNames = {

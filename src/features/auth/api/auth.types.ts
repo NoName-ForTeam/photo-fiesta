@@ -3,6 +3,7 @@ export type SignUpData = {
   password: string
   userName: string
 }
+
 export type SignInData = {
   email: string
   password: string
@@ -18,6 +19,7 @@ export type ErrorResponse = {
   messages: ErrorMessage[]
   statusCode: number
 }
+
 export type SuccessSignInResponse = {
   accessToken: string
 }
