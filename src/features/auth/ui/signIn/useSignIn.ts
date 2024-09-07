@@ -1,6 +1,6 @@
 import { useForm } from 'react-hook-form'
 
-import { PASSWORD_REGEX } from '@/shared/config/regex-constants'
+import { PASSWORD_REGEX } from '@/shared/config'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 

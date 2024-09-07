@@ -1,8 +1,9 @@
-import { useForgotPassword } from '@/features/auth/ui/forgotPassword/useForgotPassword'
 import { Button, Card, FormInput, Typography } from '@photo-fiesta/ui-lib'
 import Link from 'next/link'
 
 import styles from './forgotPassword.module.scss'
+
+import { useForgotPassword } from './useForgotPassword'
 
 /**
  * ForgotPassword component renders a form for users to reset their password.
