@@ -3,3 +3,8 @@ export type SignUpData = {
   password: string
   userName: string
 }
+
+export type CreateNewPasswordData = {
+  newPassword: string
+  recoveryCode: string
+}
