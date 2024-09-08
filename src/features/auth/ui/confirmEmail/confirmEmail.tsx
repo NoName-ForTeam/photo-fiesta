@@ -1,4 +1,4 @@
-import { bro } from '@/assets'
+import { bro } from '@/shared/assets'
 import { Button, Typography } from '@photo-fiesta/ui-lib'
 import Image from 'next/image'
 

@@ -1,4 +1,4 @@
-import { ArrowBackOutline } from '@/assets'
+import { ArrowBackOutline } from '@/shared/assets'
 import { Typography } from '@photo-fiesta/ui-lib'
 import Link from 'next/link'
 
