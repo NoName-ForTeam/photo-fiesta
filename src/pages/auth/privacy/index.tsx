@@ -1,4 +1,4 @@
-import { PrivacyPolicy } from '@/features/auth/ui/privacy'
+import { PrivacyPolicy } from '@/features/auth/ui/privacyPolicy'
 
 const PrivacyPolicyPage = () => {
   return <PrivacyPolicy />

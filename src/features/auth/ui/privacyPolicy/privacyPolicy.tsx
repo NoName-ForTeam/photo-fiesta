@@ -8,7 +8,7 @@ export const PrivacyPolicy = () => {
   const classNames = {
     container: styles.container,
     link: styles.link,
-    signup: styles.signup,
+    signUp: styles.signUp,
     svg: styles.svg,
     terms: styles.terms,
     text: styles.text,
@@ -25,7 +25,7 @@ export const PrivacyPolicy = () => {
     <div className={classNames.container}>
       <Link className={classNames.link} href={'/'}>
         <ArrowBackOutline className={classNames.svg} />
-        <Typography className={classNames.signup}>Back to Sign Up</Typography>
+        <Typography className={classNames.signUp}>Back to Sign Up</Typography>
       </Link>
       <div className={classNames.terms}>
         <Typography as={'h1'}>Privacy Policy</Typography>

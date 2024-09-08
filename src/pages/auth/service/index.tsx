@@ -1,4 +1,4 @@
-import { TermsOfService } from '@/features/auth/ui/service'
+import { TermsOfService } from '@/features/auth/ui/termsOfService'
 
 const TermsOfServicePage = () => {
   return <TermsOfService />
