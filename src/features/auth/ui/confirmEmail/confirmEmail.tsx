@@ -11,7 +11,6 @@ import styles from './confirmEmail.module.scss'
  *
  * @component
  * @example
- * // Usage example:
  * import { ConfirmEmail } from './ConfirmEmail'
  *
  * function App() {
@@ -33,6 +32,9 @@ export const ConfirmEmail = () => {
     title: styles.title,
   } as const
 
+  {
+    /* TODO: add logic for onclick */
+  }
   const onClickHandler = () => {}
 
   return (

@@ -2,7 +2,7 @@ import { Button } from '@photo-fiesta/ui-lib'
 import Link from 'next/link'
 
 export default function Home() {
-  // This is a mock data, need to fix
+  //TODO: This is a mock data, need to fix
   return (
     <>
       <main
