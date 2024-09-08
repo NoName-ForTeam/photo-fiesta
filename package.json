@@ -6,7 +6,7 @@
     "dev": "next dev",
     "prebuild": "rimraf dist",
     "build": "next build",
-    "build:production": "npm build",
+    "build:production": "pnpm build",
     "start": "next start",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0 --no-error-on-unmatched-pattern --fix",
     "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx,json,css,scss}\" && stylelint --fix \"src/**/*.{css,less,scss,sass,sss}\"",
