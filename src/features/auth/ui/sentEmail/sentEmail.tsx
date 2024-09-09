@@ -1,6 +1,4 @@
-
-import { CloseOutline } from '@/assets'
-
+import { CloseOutline } from '@/shared/assets'
 import {
   Button,
   Modal,

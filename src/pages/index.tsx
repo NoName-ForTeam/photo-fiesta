@@ -1,4 +1,3 @@
-import { ROUTES } from '@/shared/config/routes'
 import { Button } from '@photo-fiesta/ui-lib'
 import Link from 'next/link'
 

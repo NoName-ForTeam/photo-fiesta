@@ -1,4 +1,4 @@
-import { useSignUpForm } from '@/features/auth/ui/signUp/useSignUpForm'
+import { GithubSvgrepoCom31, GoogleSvgrepoCom1 } from '@/shared/assets'
 import { Button, Card, FormCheckbox, FormInput, Typography } from '@photo-fiesta/ui-lib'
 import Link from 'next/link'
 
