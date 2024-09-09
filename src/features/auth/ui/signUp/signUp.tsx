@@ -1,4 +1,5 @@
 import { GithubSvgrepoCom31, GoogleSvgrepoCom1 } from '@/assets'
+import { SentEmail } from '@/features'
 import { useSignUpForm } from '@/features/auth/ui/signUp/useSignUpForm'
 import { Button, Card, FormCheckbox, FormInput, Typography } from '@photo-fiesta/ui-lib'
 import Link from 'next/link'
@@ -6,7 +7,7 @@ import Link from 'next/link'
 import styles from './signUp.module.scss'
 
 export const SignUp = () => {
-  const { control, errors, handleSubmit, isModalOpen, onSubmit, renderModal } = useSignUpForm()
+  const { control, errors, isOpen, onCloseModalHandler, onSubmit, userEmail } = useSignUpForm()
 
   const classNames = {
     card: styles.card,
@@ -39,7 +40,7 @@ export const SignUp = () => {
             </Link>
           </Button>
         </span>
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={onSubmit}>
           <div className={classNames.input}>
             <FormInput
               control={control}
@@ -84,8 +85,9 @@ export const SignUp = () => {
             <FormCheckbox control={control} name={'agreeWithTerms'} />
             <Typography variant={'textSmall'}>
               {' '}
-              I agree to the <Link href={'/terms'}>Terms of Service</Link> and{' '}
-              <Link href={'/privacy'}>Privacy Policy</Link>
+              I agree to the <Link href={'/auth/termsOfServicePage'}>
+                Terms of Service
+              </Link> and <Link href={'/auth/privacyPolicyPage'}>Privacy Policy</Link>
               {/*todo: check path for links*/}
             </Typography>
           </div>
@@ -100,12 +102,12 @@ export const SignUp = () => {
         </Typography>
         <div className={classNames.signIn}>
           <Button asChild variant={'link'}>
-            <Link href={'/signIn'}>Sign In</Link>
-            {/*todo: check path for links*/}
+            <Link href={'/auth/signInPage'}>Sign In</Link>
+            {/*TODO: check path for links*/}
           </Button>
         </div>
       </Card>
-      {isModalOpen && renderModal()}
+      {userEmail && <SentEmail closeModal={onCloseModalHandler} email={userEmail} open={isOpen} />}
     </>
   )
 }

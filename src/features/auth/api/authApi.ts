@@ -1,6 +1,5 @@
+import { SignUpData } from '@/features'
 import { baseApi } from '@/shared/api'
-
-import { SignUpData } from './auth.types'
 
 /**
  * API service for authentication-related endpoints.
@@ -23,7 +22,7 @@ export const authApi = baseApi.injectEndpoints({
         query: params => ({
           body: params,
           method: 'POST',
-          url: '/api/v1/auth/registration',
+          url: 'v1/auth/registration',
         }),
       }),
     }
