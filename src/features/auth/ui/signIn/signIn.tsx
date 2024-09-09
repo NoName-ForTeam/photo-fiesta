@@ -1,5 +1,6 @@
 import { Controller, FieldErrors } from 'react-hook-form'
 
+import { ROUTES } from '@/shared/config/routes'
 import { Button, Input, Typography } from '@photo-fiesta/ui-lib'
 import Link from 'next/link'
 
@@ -28,8 +29,7 @@ export const SignIn = () => {
 
   return (
     <AuthCard
-      //TODO:use routing constants
-      footerLinkHref={'/auth/signUpPage'}
+      footerLinkHref={ROUTES.SIGN_UP}
       footerLinkText={'Sign Up'}
       footerText={"Don't have an account?"}
       title={'Sign In'}
@@ -90,8 +90,7 @@ const FormButtons = () => {
   return (
     <div className={classNames.button}>
       <Button asChild className={classNames.password} variant={'link'}>
-        {/**TODO: add link to forgot password and use routing constants*/}
-        <Link href={'/forgot-password'}>
+        <Link href={ROUTES.FORGOT_PASSWORD}>
           <Typography variant={'text14'}>Forgot Password</Typography>
         </Link>
       </Button>

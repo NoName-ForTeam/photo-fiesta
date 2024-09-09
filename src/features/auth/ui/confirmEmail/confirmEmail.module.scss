@@ -11,9 +11,8 @@
   height: calc(100vh - var(--header-height));
   margin: 0 auto;
 
-  // TODO: change on global variable
   @include mobile {
-    max-width: 330px;
+    max-width: var(--mobile-content-width);
   }
 }
 
@@ -32,6 +31,10 @@
   @include mobile {
     gap: 13px;
     margin-bottom: 66px;
+
+    & h1 {
+      font-size: var(--font-size-l);
+    }
   }
 }
 
