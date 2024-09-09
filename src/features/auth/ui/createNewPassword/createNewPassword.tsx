@@ -53,7 +53,7 @@ export const CreateNewPassword = () => {
         <Typography as={'p'} className={classNames.description} variant={'text14'}>
           Your password must be between 6 and 20 characters
         </Typography>
-        <Button className={classNames.submitBtn} fullWidth>
+        <Button className={classNames.submitBtn} fullWidth type={'submit'}>
           Create new password
         </Button>
       </form>

@@ -1,5 +1,7 @@
 import { useForm } from 'react-hook-form'
+import { toast } from 'react-toastify'
 
+import { useCreateNewPasswordMutation } from '@/features/auth'
 import { PASSWORD_REGEX } from '@/shared/config/regex-constants'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -22,21 +24,32 @@ const CreateNewPasswordSchema = z
         PASSWORD_REGEX,
         'Password must contain 0-9, a-z, A-Z, ! " # $ % & \' ( ) * + , - . / : ; < = > ? @ [ \\ ] ^ _` { | } ~}'
       ),
+    //TODO: maybe change condition for recovery code
+    recoveryCode: z.string().min(1, 'Recovery code is required'),
   })
   .refine(data => data.newPassword === data.confirmPassword, {
     message: 'The password must match the new password',
     path: ['confirmPassword'],
   })
 
-type ForValues = z.infer<typeof CreateNewPasswordSchema>
-type FormDate = { recoveryCode: string } & ForValues
+type FormValues = z.infer<typeof CreateNewPasswordSchema>
+
+const badRequestSchema = z.object({
+  messages: z.array(
+    z.object({
+      field: z.enum(['confirmPassword', 'newPassword', 'recoveryCode']),
+      message: z.string(),
+    })
+  ),
+})
 
 export const useCreateNewPassword = () => {
+  const [createNewPassword] = useCreateNewPasswordMutation()
   const {
     control,
     formState: { errors },
     handleSubmit,
-  } = useForm<FormDate>({
+  } = useForm<FormValues>({
     defaultValues: {
       confirmPassword: '',
       newPassword: '',
@@ -45,7 +58,24 @@ export const useCreateNewPassword = () => {
     mode: 'onBlur',
     resolver: zodResolver(CreateNewPasswordSchema),
   })
-  const onSubmit = () => {}
+  const onSubmit = async (data: Omit<FormValues, 'confirmPassword'>) => {
+    console.log('submit')
+
+    try {
+      const res = await createNewPassword(data).unwrap()
+
+      if (res.status === 200) {
+        toast.success('Password has been changed')
+      }
+    } catch (error) {
+      const parsed = badRequestSchema.safeParse(error)
+
+      console.log(parsed)
+      if (parsed.success) {
+        toast.error(parsed.data.messages[0].message)
+      }
+    }
+  }
 
   return { control, errors, handleSubmit: handleSubmit(onSubmit) }
 }
