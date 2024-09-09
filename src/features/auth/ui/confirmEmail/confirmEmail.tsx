@@ -1,6 +1,8 @@
 import { bro } from '@/assets'
+import { ROUTES } from '@/shared/config/routes'
 import { Button, Typography } from '@photo-fiesta/ui-lib'
 import Image from 'next/image'
+import Link from 'next/link'
 
 import styles from './confirmEmail.module.scss'
 
@@ -33,8 +35,6 @@ export const ConfirmEmail = () => {
     title: styles.title,
   } as const
 
-  const onClickHandler = () => {}
-
   return (
     <div className={classNames.root}>
       <div className={classNames.description}>
@@ -46,8 +46,8 @@ export const ConfirmEmail = () => {
         </Typography>
       </div>
       <div className={classNames.main}>
-        <Button className={classNames.button} onClick={onClickHandler}>
-          Sign In
+        <Button asChild className={classNames.button}>
+          <Link href={ROUTES.SIGN_IN}>Sign In</Link>
         </Button>
         <Image alt={'confirm'} className={classNames.img} src={bro} />
       </div>
