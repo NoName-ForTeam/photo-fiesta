@@ -13,7 +13,7 @@ const signInSchema = z.object({
   password: z
     .string()
     .min(6, 'Password must be at least 6 characters')
-    .max(20, 'Password must be at most 32 characters')
+    .max(20, 'Password must be at most 20 characters')
     .regex(PASSWORD_REGEX),
 })
 
@@ -40,6 +40,7 @@ export const useSignIn = () => {
     try {
       const response = (await signIn(data).unwrap()) as unknown as SuccessSignInResponse
 
+      //TODO: temporary solution to use local storage
       localStorage.setItem('signInToken', response.accessToken)
       // TODO: add redirect to home page and use routing constants
       router.push('/home')
@@ -52,6 +53,7 @@ export const useSignIn = () => {
             /**TODO: check response data and add error message*/
           }
           setError('email', {
+            //TODO:temporary solution to add error message
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             //@ts-expect-error
             message: error.data.messages ?? 'Incorrect input data',

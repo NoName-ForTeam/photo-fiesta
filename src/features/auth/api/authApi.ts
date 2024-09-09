@@ -1,6 +1,6 @@
 import { baseApi } from '@/shared/api'
 
-import { SignInData, SignUpData } from './auth.types'
+import { SignInData, SignUpData, SuccessSignInResponse } from './auth.types'
 
 /**
  * API service for authentication-related endpoints.
@@ -17,7 +17,7 @@ export const authApi = baseApi.injectEndpoints({
        * const [signIn] = useSignInMutation();
        * signIn({ email: 'user@example.com', password: 'password123' });
        */
-      signIn: builder.mutation<void, SignInData>({
+      signIn: builder.mutation<SuccessSignInResponse, SignInData>({
         invalidatesTags: ['Auth'],
         query: params => ({
           body: params,

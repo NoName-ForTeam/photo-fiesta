@@ -95,7 +95,9 @@ const FormButtons = () => {
           <Typography variant={'text14'}>Forgot Password</Typography>
         </Link>
       </Button>
-      <Button variant={'primary'}>Sign in</Button>
+      <Button type={'submit'} variant={'primary'}>
+        Sign in
+      </Button>
     </div>
   )
 }
