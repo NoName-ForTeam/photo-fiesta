@@ -1,4 +1,4 @@
-import { TermsOfService } from '@/features/auth/ui/termsOfService/termsOfService'
+import { TermsOfService, getAuthLayout } from '@/features'
 
 /**
  * `TermsOfServicePage` is a page component that renders the terms of service for users.
@@ -16,4 +16,4 @@ export default TermsOfServicePage
  * within the authentication layout. This function is used by Next.js to apply the layout.
  */
 
-TermsOfServicePage.getLayout = TermsOfServicePage
+TermsOfServicePage.getLayout = getAuthLayout

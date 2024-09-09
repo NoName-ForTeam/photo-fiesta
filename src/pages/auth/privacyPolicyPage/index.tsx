@@ -1,5 +1,4 @@
-import { getAuthLayout } from '@/features'
-import { PrivacyPolicy } from '@/features/auth/ui/privacyPolicy/privacyPolicy'
+import { PrivacyPolicy, getAuthLayout } from '@/features'
 
 /**
  * `PrivacyPolicyPage` is a page component that renders the privacy policy for users.
