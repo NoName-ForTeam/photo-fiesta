@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 import { SentEmail } from '@/features/auth/ui'
-import { PASSWORD_REGEX, USERNAME_REGEX } from '@/shared/config/regex-constants'
+import { PASSWORD_REGEX, USERNAME_REGEX } from '@/shared/config'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
