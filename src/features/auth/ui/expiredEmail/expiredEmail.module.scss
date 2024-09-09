@@ -1,0 +1,62 @@
+@use '@/shared/styles/mixins' as *;
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  max-width: 473px;
+  height: calc(100vh - var(--header-height));
+  margin: 0 auto;
+
+  background-color: inherit;
+  border: none;
+
+  @include mobile {
+    gap: 35px;
+    max-width: var(--mobile-content-width);
+  }
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 19px;
+  order: 1;
+
+  width: 100%;
+  max-width: 294px;
+
+  text-align: center;
+
+  @include mobile {
+    max-width: var(--mobile-content-width);
+
+    & h1 {
+      font-size: var(--font-size-l);
+    }
+  }
+}
+
+.img {
+  order: 3;
+  width: 100%;
+  max-width: 473px;
+  height: auto;
+
+  @include mobile {
+    order: 2;
+  }
+}
+
+.btn {
+  order: 2;
+
+  @include mobile {
+    order: 3;
+    width: 100%;
+  }
+}

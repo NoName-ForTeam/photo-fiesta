@@ -1,5 +1,6 @@
 import { Controller } from 'react-hook-form'
 
+import { ROUTES } from '@/shared/config/routes'
 import { Button, Input, Typography } from '@photo-fiesta/ui-lib'
 import Link from 'next/link'
 
@@ -38,9 +39,8 @@ export const SignIn = ({ onSubmit }: SignInProps) => {
   } as const
 
   return (
-    /**TODO: write correct path to sign up page*/
     <AuthCard
-      footerLinkHref={'/sign-up'}
+      footerLinkHref={ROUTES.SIGN_UP}
       footerLinkText={'Sign Up'}
       footerText={"Don't have an account?"}
       title={'Sign In'}
@@ -95,8 +95,7 @@ const FormButtons = () => {
   return (
     <div className={classNames.button}>
       <Button asChild className={classNames.password} variant={'link'}>
-        {/**TODO: add link to forgot password*/}
-        <Link href={'/forgot-password'}>
+        <Link href={ROUTES.FORGOT_PASSWORD}>
           <Typography variant={'text14'}>Forgot Password</Typography>
         </Link>
       </Button>

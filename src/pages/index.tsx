@@ -1,8 +1,9 @@
+import { ROUTES } from '@/shared/config/routes'
 import { Button } from '@photo-fiesta/ui-lib'
 import Link from 'next/link'
 
 export default function Home() {
-  // This is a mock data, need to fix
+  //TODO: This is a mock data, need to fix
   return (
     <>
       <main
@@ -22,7 +23,7 @@ export default function Home() {
             padding: '20px',
           }}
         >
-          <Link href={'/auth/signUpPage'}>
+          <Link href={ROUTES.SIGN_UP}>
             <Button style={{ margin: '30px' }}>Sign Up</Button>
           </Link>
           <Link href={'/auth/signInPage'}>
