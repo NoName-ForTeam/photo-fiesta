@@ -21,10 +21,12 @@ import style from './layout.module.scss'
  * )
  */
 
+// eslint-disable-next-line react-refresh/only-export-components
 const Layout = ({ children }: PropsWithChildren) => {
   //toDO isLoggedIn & onChangeLanguage
   const isLoggedIn = true
   const onChangeLanguage = (value: string) => {
+    // eslint-disable-next-line no-console
     console.log(`Language changed to ${value}`)
   }
 

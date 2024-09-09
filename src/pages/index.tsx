@@ -1,11 +1,10 @@
-import { Button } from '@photo-fiesta/ui-lib'
-import Link from 'next/link'
+import { CreateNewPassword } from '@/features'
 
 export default function Home() {
   // This is a mock data, need to fix
   return (
     <>
-      <main
+      {/* <main
         style={{
           alignItems: 'center',
           display: 'flex',
@@ -29,7 +28,8 @@ export default function Home() {
             <Button style={{ margin: '30px' }}>Log In</Button>
           </Link>
         </div>
-      </main>
+      </main> */}
+      <CreateNewPassword />
     </>
   )
 }

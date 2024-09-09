@@ -28,20 +28,24 @@ const CreateNewPasswordSchema = z
     path: ['confirmPassword'],
   })
 
-type FormValues = z.infer<typeof CreateNewPasswordSchema>
+type ForValues = z.infer<typeof CreateNewPasswordSchema>
+type FormDate = { recoveryCode: string } & ForValues
 
 export const useCreateNewPassword = () => {
-  const { control, handleSubmit } = useForm<FormValues>({
+  const {
+    control,
+    formState: { errors },
+    handleSubmit,
+  } = useForm<FormDate>({
     defaultValues: {
       confirmPassword: '',
       newPassword: '',
+      recoveryCode: '',
     },
+    mode: 'onBlur',
     resolver: zodResolver(CreateNewPasswordSchema),
   })
+  const onSubmit = () => {}
 
-  const onSubmit = () => {
-    // TODO:add logic
-  }
-
-  return { control, handleSubmit, onSubmit }
+  return { control, errors, handleSubmit: handleSubmit(onSubmit) }
 }
