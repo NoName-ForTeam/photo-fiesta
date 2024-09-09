@@ -1,4 +1,4 @@
-import { bro } from '@/assets'
+import { bro } from '@/shared/assets'
 import { ROUTES } from '@/shared/config/routes'
 import { Button, Typography } from '@photo-fiesta/ui-lib'
 import Image from 'next/image'
@@ -13,7 +13,6 @@ import styles from './confirmEmail.module.scss'
  *
  * @component
  * @example
- * // Usage example:
  * import { ConfirmEmail } from './ConfirmEmail'
  *
  * function App() {

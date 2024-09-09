@@ -1,14 +1,14 @@
-import { ArrowBackOutline } from '@/assets'
+import { ArrowBackOutline } from '@/shared/assets'
 import { Typography } from '@photo-fiesta/ui-lib'
 import Link from 'next/link'
 
-import styles from './privacy.module.scss'
+import styles from './termsOfService.module.scss'
 
-export const PrivacyPolicy = () => {
+export const TermsOfService = () => {
   const classNames = {
     container: styles.container,
     link: styles.link,
-    signup: styles.signup,
+    signUp: styles.signUp,
     svg: styles.svg,
     terms: styles.terms,
     text: styles.text,
@@ -18,17 +18,17 @@ export const PrivacyPolicy = () => {
    * Page with terms of service
    * @component
    * @example
-   * <PrivacyPolicy/>
+   * <TermsOfService/>
    */
 
   return (
     <div className={classNames.container}>
       <Link className={classNames.link} href={'/'}>
         <ArrowBackOutline className={classNames.svg} />
-        <Typography className={classNames.signup}>Back to Sign Up</Typography>
+        <Typography className={classNames.signUp}>Back to Sign Up</Typography>
       </Link>
       <div className={classNames.terms}>
-        <Typography as={'h1'}>Privacy Policy</Typography>
+        <Typography as={'h1'}>Terms Of Service</Typography>
         <Typography>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
           ut labore et dolore magna aliqua. Fames ac turpis egestas integer eget aliquet nibh. Amet
