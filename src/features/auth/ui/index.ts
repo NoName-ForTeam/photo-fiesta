@@ -8,4 +8,3 @@ export * from './sentEmail'
 export * from './signIn'
 export * from './signUp'
 export * from './termsOfService'
-
