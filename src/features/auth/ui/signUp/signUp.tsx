@@ -1,11 +1,13 @@
 import { GithubSvgrepoCom31, GoogleSvgrepoCom1 } from '@/assets'
 import { SentEmail } from '@/features'
 import { useSignUpForm } from '@/features/auth/ui/signUp/useSignUpForm'
-import { GithubSvgrepoCom31, GoogleSvgrepoCom1 } from '@/shared/assets/icons'
+import { GithubSvgrepoCom31, GoogleSvgrepoCom1 } from '@/shared/assets'
 import { Button, Card, FormCheckbox, FormInput, Typography } from '@photo-fiesta/ui-lib'
 import Link from 'next/link'
 
 import styles from './signUp.module.scss'
+
+import { useSignUpForm } from './useSignUpForm'
 
 export const SignUp = () => {
   const { control, errors, isOpen, onCloseModalHandler, onSubmit, userEmail } = useSignUpForm()
@@ -31,11 +33,13 @@ export const SignUp = () => {
         </Typography>
         <span className={classNames.iconsBox}>
           <Button asChild type={'button'} variant={'link'}>
+            {/*TODO: check path for links*/}
             <Link href={'#'}>
               <GoogleSvgrepoCom1 className={classNames.icon} />
             </Link>
           </Button>
           <Button asChild type={'button'} variant={'link'}>
+            {/*TODO: check path for links*/}
             <Link href={'#'}>
               <GithubSvgrepoCom31 className={classNames.icon} />
             </Link>
