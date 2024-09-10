@@ -1,4 +1,4 @@
-import { CloseOutline } from '@/shared/assets/icons'
+import { CloseOutline } from '@/shared/assets'
 import {
   Button,
   Modal,
@@ -6,7 +6,6 @@ import {
   ModalContent,
   ModalFooter,
   ModalHeader,
-  ModalTitle,
   Typography,
 } from '@photo-fiesta/ui-lib'
 
@@ -15,9 +14,8 @@ import styles from './sentEmail.module.scss'
 export type SentEmailProps = {
   closeModal: () => void
   email?: string
-  open: boolean
 }
-export const SentEmail = ({ closeModal, email, open }: SentEmailProps) => {
+export const SentEmail = ({ closeModal, email }: SentEmailProps) => {
   const classNames = {
     container: styles.container,
     content: styles.content,
@@ -30,17 +28,14 @@ export const SentEmail = ({ closeModal, email, open }: SentEmailProps) => {
   const finalEmail = email ?? 'epam@epam.com'
 
   return (
-    <Modal onOpenChange={closeModal} open={open}>
+    <Modal open>
       <ModalContent className={classNames.content}>
         <ModalHeader className={classNames.header}>
-          <ModalTitle>
-            <Typography variant={'h1'}>Email sent</Typography>
-          </ModalTitle>
+          <Typography variant={'h1'}>Email sent</Typography>
           <ModalClose onClick={closeModal}>
             <CloseOutline className={classNames.icon} />
           </ModalClose>
         </ModalHeader>
-
         <div className={classNames.container}>
           <Typography className={classNames.description} variant={'text16'}>
             We have sent a link to confirm your email to {finalEmail}

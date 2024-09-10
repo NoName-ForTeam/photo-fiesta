@@ -1,4 +1,4 @@
-import { Controller } from 'react-hook-form'
+import { Controller, FieldErrors } from 'react-hook-form'
 
 import { ROUTES } from '@/shared/config/routes'
 import { Button, Input, Typography } from '@photo-fiesta/ui-lib'
@@ -9,30 +9,19 @@ import styles from './signIn.module.scss'
 import { AuthCard } from '../authCard'
 import { FormInputs, useSignIn } from './useSignIn'
 
-type SignInProps = {
-  onSubmit: (data: FormInputs) => void
-}
-
 /**
- * SignIn component for user authentication
+ * SignIn component for user authentication.
+ * This component provides a form for users to sign in with their email and password.
  *@component
  * @example
- *   type FormInputs =
- *  {
- *    email: string;
- *    password: string;
- *  }
- *
- * const handleSubmit = (data:FormInputs) => {
- *   console.log('Form submitted with:', data)
- * }
- *
- * function AuthPage() {
- *   return <SignIn onSubmit={handleSubmit} />
+ * import { SignIn } from './path/to/SignIn';
+ * const SignUpPage = () => {
+ * return <SignUp />
  * }
  */
-export const SignIn = ({ onSubmit }: SignInProps) => {
-  const { control, errors, handleSubmit, onSubmitForm } = useSignIn(onSubmit)
+
+export const SignIn = () => {
+  const { control, errors, handleSubmit } = useSignIn()
   const classNames = {
     container: styles.container,
     form: styles.form,
@@ -45,7 +34,7 @@ export const SignIn = ({ onSubmit }: SignInProps) => {
       footerText={"Don't have an account?"}
       title={'Sign In'}
     >
-      <form className={classNames.form} onSubmit={handleSubmit(onSubmitForm)}>
+      <form className={classNames.form} onSubmit={handleSubmit}>
         <div className={classNames.container}>
           <Controller
             control={control}
@@ -66,7 +55,7 @@ export const SignIn = ({ onSubmit }: SignInProps) => {
               />
             )}
           />
-          {(errors.email || errors.password) && <ErrorMessage />}
+          {(errors.email || errors.password) && <ErrorMessage errors={errors} />}
         </div>
         <FormButtons />
       </form>
@@ -74,14 +63,20 @@ export const SignIn = ({ onSubmit }: SignInProps) => {
   )
 }
 
-const ErrorMessage = () => {
+type ErrorMessageProps = {
+  errors: FieldErrors<FormInputs>
+}
+
+const ErrorMessage = ({ errors }: ErrorMessageProps) => {
   const classNames = {
     errorMessage: styles.errorMessage,
   } as const
 
   return (
     <Typography className={classNames.errorMessage} variant={'text14'}>
-      The email or password are incorrect. Try again please
+      {errors.email?.message ||
+        errors.password?.message ||
+        'The email or password are incorrect. Try again please'}
     </Typography>
   )
 }
@@ -99,7 +94,9 @@ const FormButtons = () => {
           <Typography variant={'text14'}>Forgot Password</Typography>
         </Link>
       </Button>
-      <Button variant={'primary'}>Sign in</Button>
+      <Button type={'submit'} variant={'primary'}>
+        Sign in
+      </Button>
     </div>
   )
 }
