@@ -1,9 +1,8 @@
+import { useForgotPassword } from '@/features/auth/ui/forgotPassword/useForgotPassword'
 import { Button, Card, FormInput, Typography } from '@photo-fiesta/ui-lib'
 import Link from 'next/link'
 
 import styles from './forgotPassword.module.scss'
-
-import { useForgotPassword } from './useForgotPassword'
 
 /**
  * ForgotPassword component renders a form for users to reset their password.
@@ -49,7 +48,8 @@ export const ForgotPassword = () => {
         <Button fullWidth>Send Link</Button>
       </form>
       <Button asChild className={classNames.link} variant={'link'}>
-        <Link href={'/auth/signInPage'}>Back to Sign In</Link>
+        <Link href={'/signIn'}>Back to Sign In</Link>
+        {/*todo: check path for links*/}
       </Button>
 
       {/*TODO: add recaptcha and modal*/}

@@ -1,14 +1,11 @@
-@use '@/shared/styles/mixins' as *;
+/* stylelint-disable-next-line scss/double-slash-comment-whitespace-inside */
+//TODO: make styles for mobile
 
 .form {
   display: flex;
   flex-direction: column;
   gap: 30px;
   margin-bottom: 18px;
-
-  @include mobile {
-    gap: 5px;
-  }
 
   & .container {
     display: flex;
@@ -25,10 +22,6 @@
     display: flex;
     flex-direction: column;
     gap: var(--auth-form-gap);
-
-    @include mobile {
-      gap: 65px;
-    }
 
     & .password {
       cursor: pointer;

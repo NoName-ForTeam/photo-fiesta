@@ -1,14 +1,7 @@
-@use '@/shared/styles/mixins' as *;
-
 .card {
   width: 100%;
   max-width: var(--width-card-form);
   padding: var(--auth-form-padding);
-
-  @include mobile {
-    height: 100%;
-    padding: 17px 15px 76px;
-  }
 }
 
 .header {
@@ -19,12 +12,6 @@
   justify-content: center;
 
   margin-bottom: 24px;
-
-  @include mobile {
-    > * {
-      @include font(var(--font-size-l), var(--line-height-m), var(--font-weight-bold));
-    }
-  }
 }
 
 .links {

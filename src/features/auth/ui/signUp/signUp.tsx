@@ -1,3 +1,4 @@
+import { SentEmail } from '@/features'
 import { GithubSvgrepoCom31, GoogleSvgrepoCom1 } from '@/shared/assets'
 import { Button, Card, FormCheckbox, FormInput, Typography } from '@photo-fiesta/ui-lib'
 import Link from 'next/link'
@@ -7,7 +8,7 @@ import styles from './signUp.module.scss'
 import { useSignUpForm } from './useSignUpForm'
 
 export const SignUp = () => {
-  const { control, errors, handleSubmit, isModalOpen, onSubmit, renderModal } = useSignUpForm()
+  const { control, errors, isOpen, onCloseModalHandler, onSubmit, userEmail } = useSignUpForm()
 
   const classNames = {
     card: styles.card,
@@ -30,25 +31,23 @@ export const SignUp = () => {
         </Typography>
         <span className={classNames.iconsBox}>
           <Button asChild type={'button'} variant={'link'}>
-            {/*TODO: check path for links*/}
             <Link href={'#'}>
               <GoogleSvgrepoCom1 className={classNames.icon} />
             </Link>
           </Button>
           <Button asChild type={'button'} variant={'link'}>
-            {/*TODO: check path for links*/}
             <Link href={'#'}>
               <GithubSvgrepoCom31 className={classNames.icon} />
             </Link>
           </Button>
         </span>
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={onSubmit}>
           <div className={classNames.input}>
             <FormInput
               control={control}
-              errorMessage={errors.username?.message}
+              errorMessage={errors.userName?.message}
               label={'Username'}
-              name={'username'}
+              name={'userName'}
               placeholder={'Epam11'}
               type={'username'}
             />
@@ -87,9 +86,10 @@ export const SignUp = () => {
             <FormCheckbox control={control} name={'agreeWithTerms'} />
             <Typography variant={'textSmall'}>
               {' '}
-              I agree to the <Link href={'/terms'}>Terms of Service</Link> and{' '}
-              {/*TODO: check path for links*/}
-              <Link href={'/privacy'}>Privacy Policy</Link>
+              I agree to the <Link href={'/auth/termsOfServicePage'}>
+                Terms of Service
+              </Link> and <Link href={'/auth/privacyPolicyPage'}>Privacy Policy</Link>
+              {/*todo: check path for links*/}
             </Typography>
           </div>
           <div className={classNames.submitBtn}>
@@ -104,10 +104,11 @@ export const SignUp = () => {
         <div className={classNames.signIn}>
           <Button asChild variant={'link'}>
             <Link href={'/auth/signInPage'}>Sign In</Link>
+            {/*TODO: check path for links*/}
           </Button>
         </div>
       </Card>
-      {isModalOpen && renderModal()}
+      {userEmail && <SentEmail closeModal={onCloseModalHandler} email={userEmail} open={isOpen} />}
     </>
   )
 }
