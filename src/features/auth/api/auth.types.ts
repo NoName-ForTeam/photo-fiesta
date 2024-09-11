@@ -23,3 +23,7 @@ export type ErrorResponse = {
 export type SuccessSignInResponse = {
   accessToken: string
 }
+
+export type ConfirmRegistration = {
+  confirmationCode: string
+}
