@@ -3,6 +3,7 @@ import { toast } from 'react-toastify'
 
 import { useCreateNewPasswordMutation } from '@/features/auth'
 import { PASSWORD_REGEX } from '@/shared/config/regex-constants'
+import { handleErrorResponse } from '@/shared/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
@@ -37,7 +38,9 @@ type FormValues = z.infer<typeof CreateNewPasswordSchema>
 const badRequestSchema = z.object({
   messages: z.array(
     z.object({
-      field: z.enum(['confirmPassword', 'newPassword', 'recoveryCode']),
+      /**
+       * *the 'recoveryCode' field is replaced by the 'code' field in response from the backend */
+      field: z.enum(['confirmPassword', 'newPassword', 'code']),
       message: z.string(),
     })
   ),
@@ -49,33 +52,34 @@ export const useCreateNewPassword = () => {
     control,
     formState: { errors },
     handleSubmit,
+    setError,
   } = useForm<FormValues>({
     defaultValues: {
       confirmPassword: '',
       newPassword: '',
-      recoveryCode: '',
+      //TODO:change default value
+      recoveryCode: 'someCode',
     },
     mode: 'onBlur',
     resolver: zodResolver(CreateNewPasswordSchema),
   })
-  const onSubmit = async (data: Omit<FormValues, 'confirmPassword'>) => {
-    console.log('submit')
 
+  const onSubmit = handleSubmit(async data => {
     try {
-      const res = await createNewPassword(data).unwrap()
+      await createNewPassword({
+        newPassword: data.newPassword,
+        recoveryCode: data.recoveryCode,
+      }).unwrap()
 
-      if (res.status === 200) {
-        toast.success('Password has been changed')
-      }
-    } catch (error) {
-      const parsed = badRequestSchema.safeParse(error)
-
-      console.log(parsed)
-      if (parsed.success) {
-        toast.error(parsed.data.messages[0].message)
-      }
+      toast.success('Password has been changed successfully')
+    } catch (error: unknown) {
+      handleErrorResponse({
+        badRequestSchema,
+        error,
+        setError,
+      })
     }
-  }
+  })
 
-  return { control, errors, handleSubmit: handleSubmit(onSubmit) }
+  return { control, errors, onSubmit }
 }

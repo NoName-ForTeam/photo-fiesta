@@ -20,7 +20,7 @@ import { useCreateNewPassword } from './useCreateNewPassword'
  */
 
 export const CreateNewPassword = () => {
-  const { control, errors, handleSubmit } = useCreateNewPassword()
+  const { control, errors, onSubmit } = useCreateNewPassword()
   const classNames = {
     card: styles.card,
     description: styles.description,
@@ -34,7 +34,7 @@ export const CreateNewPassword = () => {
       <Typography className={classNames.title} variant={'h1'}>
         Create New Password
       </Typography>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={onSubmit}>
         <div className={classNames.fieldContainer}>
           <FormInput
             control={control}
