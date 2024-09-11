@@ -40,7 +40,7 @@
   }
 }
 
-@include media(360px) {
+@include mobile {
   .signup {
     display: none;
   }
