@@ -1,11 +1,12 @@
+import { useConfirmRegistrationQuery } from '@/features'
 import { bro } from '@/shared/assets'
 import { ROUTES } from '@/shared/config/routes'
 import { Button, Typography } from '@photo-fiesta/ui-lib'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 
 import styles from './confirmEmail.module.scss'
-
 /**
  * `ConfirmEmail` is a React component that displays a confirmation message after a user has verified their email.
  * It includes a heading, a short message, and a button to navigate to the sign-in page.
@@ -25,6 +26,10 @@ import styles from './confirmEmail.module.scss'
  */
 
 export const ConfirmEmail = () => {
+  const router = useRouter()
+  const confirmationCode = router.query.code as string
+  const { error, isLoading } = useConfirmRegistrationQuery({ confirmationCode }, { skip: !router })
+
   const classNames = {
     button: styles.btn,
     description: styles.description,
@@ -33,6 +38,18 @@ export const ConfirmEmail = () => {
     root: styles.root,
     title: styles.title,
   } as const
+
+  if (isLoading) {
+    return <div>Loading...</div>
+  }
+
+  if (error) {
+    if ('message' in error) {
+      console.error('Error message:', error.message)
+    } else {
+      console.error('Error:', error)
+    }
+  }
 
   return (
     <div className={classNames.root}>

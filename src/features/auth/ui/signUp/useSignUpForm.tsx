@@ -1,8 +1,9 @@
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { toast } from 'react-toastify'
 
-import { SentEmail } from '@/features/auth/ui'
-import { PASSWORD_REGEX, USERNAME_REGEX } from '@/shared/config'
+import { useSignUpMutation } from '@/features/auth'
+import { PASSWORD_REGEX, USERNAME_REGEX } from '@/shared/config/regex-constants'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
@@ -21,7 +22,7 @@ const signUpSchema = z
         PASSWORD_REGEX,
         'Password must contain 0-9, a-z, A-Z, ! " # $ % & \' ( ) * + , - . / : ; < = > ? @ [ \\ ] ^ _` { | } ~}'
       ),
-    username: z
+    userName: z
       .string()
       .min(6, 'Username must be at least 6 characters long')
       .max(30, 'Username must not exceed 30 characters')
@@ -36,34 +37,74 @@ const signUpSchema = z
     path: ['agreeWithTerms'],
   })
 
+const badRequestSchema = z.object({
+  messages: z.array(
+    z.object({ field: z.enum(['email', 'password', 'userName']), message: z.string() })
+  ),
+})
+
 export type FormValues = z.infer<typeof signUpSchema>
 
 export const useSignUpForm = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(false)
   const [userEmail, setUserEmail] = useState('')
+  const [signUp] = useSignUpMutation()
 
   const {
     control,
     formState: { errors },
     handleSubmit,
     reset,
+    setError,
   } = useForm<FormValues>({
+    defaultValues: {
+      agreeWithTerms: false,
+      confirmPassword: '',
+      email: '',
+      password: '',
+      userName: '',
+    },
     mode: 'onBlur',
     resolver: zodResolver(signUpSchema),
   })
 
-  const onSubmit = (data: FormValues) => {
-    //toDo: connect to api
-    setUserEmail(data.email)
-    setIsModalOpen(true)
-    reset()
+  const onSubmit = handleSubmit(data => {
+    signUp({ email: data.email, password: data.password, userName: data.userName })
+      .unwrap()
+      .then(() => {
+        toast.success('Sign-up successful!')
+        setUserEmail(data.email)
+        setIsOpen(true)
+        reset()
+      })
+      .catch(e => {
+        const parsed = badRequestSchema.safeParse(e.data)
+
+        if (parsed.success) {
+          parsed.data.messages.forEach(m => setError(m.field, { message: m.message }))
+        } else if ('error' in e) {
+          toast.error(e.error)
+        } else if ('message' in e) {
+          toast.error(e.message)
+        } else {
+          const message = JSON.stringify(e) ?? 'Some error'
+
+          toast.error(message)
+        }
+      })
+  })
+
+  const onCloseModalHandler = () => {
+    setIsOpen(false)
+    reset({ agreeWithTerms: false, confirmPassword: '', email: '', password: '', userName: '' })
   }
 
-  const closeModal = () => {
-    setIsModalOpen(false)
+  return {
+    control,
+    errors,
+    isOpen,
+    onCloseModalHandler,
+    onSubmit,
+    userEmail,
   }
-
-  const renderModal = () => <SentEmail closeModal={closeModal} email={userEmail} />
-
-  return { control, errors, handleSubmit, isModalOpen, onSubmit, renderModal }
 }

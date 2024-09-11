@@ -1,12 +1,12 @@
 import { Controller, FieldErrors } from 'react-hook-form'
 
+import { AuthCard } from '@/features'
 import { ROUTES } from '@/shared/config/routes'
 import { Button, Input, Typography } from '@photo-fiesta/ui-lib'
 import Link from 'next/link'
 
 import styles from './signIn.module.scss'
 
-import { AuthCard } from '../authCard'
 import { FormInputs, useSignIn } from './useSignIn'
 
 /**
