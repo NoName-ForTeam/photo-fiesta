@@ -1,20 +1,28 @@
+import {
+  ConfirmRegistration,
+  CreateNewPasswordData,
+  SignInData,
+  SignUpData,
+  SuccessSignInResponse,
+} from '@/features'
 import { baseApi } from '@/shared/api'
 import { API_URLS } from '@/shared/config/apiURLs'
-
-import { CreateNewPasswordData, SignUpData } from './auth.types'
 
 /**
  * API service for authentication-related endpoints.
  * This service provides methods for user registration and other authentication tasks.
- *
- * @example
- * const [signUpPage, { isLoading, error }] = useSignUpMutation();
- * signUpPage({ email: 'test@example.com', password: 'password123' });
  */
 
 export const authApi = baseApi.injectEndpoints({
   endpoints: builder => {
     return {
+      confirmRegistration: builder.query<void, ConfirmRegistration>({
+        query: params => ({
+          body: params,
+          method: 'POST',
+          url: 'v1/auth/registration-confirmation',
+        }),
+      }),
       /**Mutation for user create new password */
       createNewPassword: builder.mutation<void, CreateNewPasswordData>({
         invalidatesTags: ['Auth'],
@@ -25,8 +33,27 @@ export const authApi = baseApi.injectEndpoints({
         }),
       }),
       /**
+       * Mutation for user sign-in (login).
+       * Sends a POST request to the login endpoint with the provided sign-in data.
+       *  @example
+       * const [signIn] = useSignInMutation();
+       * signIn({ email: 'user@example.com', password: 'password123' });
+       */
+      signIn: builder.mutation<SuccessSignInResponse, SignInData>({
+        invalidatesTags: ['Auth'],
+        query: params => ({
+          body: params,
+          method: 'POST',
+          //TODO: add url constant
+          url: 'v1/auth/login',
+        }),
+      }),
+      /**
        * Mutation for user sign-up (registration).
        * Sends a POST request to the registration endpoint with the provided sign-up data.
+       * @example
+       * const [signUpPage, { isLoading, error }] = useSignUpMutation();
+       * signUpPage({ email: 'test@example.com', password: 'password123' });
        */
       signUp: builder.mutation<void, SignUpData>({
         invalidatesTags: ['Auth'],
@@ -40,4 +67,9 @@ export const authApi = baseApi.injectEndpoints({
   },
 })
 
-export const { useCreateNewPasswordMutation, useSignUpMutation } = authApi
+export const {
+  useConfirmRegistrationQuery,
+  useCreateNewPasswordMutation,
+  useSignInMutation,
+  useSignUpMutation,
+} = authApi

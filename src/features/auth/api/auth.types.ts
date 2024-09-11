@@ -4,6 +4,19 @@ export type SignUpData = {
   userName: string
 }
 
+export type SignInData = {
+  email: string
+  password: string
+}
+
+export type SuccessSignInResponse = {
+  accessToken: string
+}
+
+export type ConfirmRegistration = {
+  confirmationCode: string
+}
+
 export type CreateNewPasswordData = {
   newPassword: string
   recoveryCode: string

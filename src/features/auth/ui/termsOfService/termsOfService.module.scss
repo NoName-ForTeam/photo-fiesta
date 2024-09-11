@@ -8,6 +8,8 @@
   display: flex;
   gap: 6px;
 
+  /* stylelint-disable-next-line value-no-vendor-prefix */
+  width: -moz-fit-content;
   width: fit-content;
   margin: 24px 0;
 
@@ -41,7 +43,7 @@
 }
 
 @include mobile {
-  .signup {
+  .signUp {
     display: none;
   }
 

@@ -32,6 +32,7 @@ const Layout = ({ children }: PropsWithChildren) => {
 
   return (
     <>
+      {/*{isAuthMe? &&  <Header isLoggedIn={isLoggedIn} onChangeLanguage={onChangeLanguage} />}*/}
       <Header isLoggedIn={isLoggedIn} onChangeLanguage={onChangeLanguage} />
       <div className={style.authLayout}>{children}</div>
     </>

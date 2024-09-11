@@ -6,6 +6,7 @@
     "dev": "next dev",
     "prebuild": "rimraf dist",
     "build": "next build",
+    "build:production": "next build",
     "start": "next start",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0 --no-error-on-unmatched-pattern --fix",
     "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx,json,css,scss}\" && stylelint --fix \"src/**/*.{css,less,scss,sass,sss}\"",
@@ -27,7 +28,7 @@
   "dependencies": {
     "@fontsource/inter": "^5.0.20",
     "@hookform/resolvers": "^3.9.0",
-    "@photo-fiesta/ui-lib": "^0.0.7",
+    "@photo-fiesta/ui-lib": "^0.0.9",
     "@reduxjs/toolkit": "^2.2.7",
     "clsx": "^2.1.1",
     "next": "14.2.5",
