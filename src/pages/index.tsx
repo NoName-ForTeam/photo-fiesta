@@ -1,3 +1,4 @@
+import { ROUTES } from '@/shared/config'
 import { Button } from '@photo-fiesta/ui-lib'
 import Link from 'next/link'
 
@@ -22,12 +23,12 @@ export default function Home() {
             padding: '20px',
           }}
         >
-          <Button asChild style={{ margin: '30px' }}>
-            <Link href={'/auth/signUpPage'}>Sign Up</Link>
-          </Button>
-          <Button asChild style={{ margin: '30px' }}>
-            <Link href={'/auth/signInPage'}>Log In</Link>
-          </Button>
+          <Link href={ROUTES.SIGN_UP}>
+            <Button style={{ margin: '30px' }}>Sign Up</Button>
+          </Link>
+          <Link href={'/auth/signInPage'}>
+            <Button style={{ margin: '30px' }}>Log In</Button>
+          </Link>
         </div>
       </main>
     </>

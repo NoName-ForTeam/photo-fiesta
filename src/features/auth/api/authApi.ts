@@ -1,6 +1,5 @@
+import { ConfirmRegistrationType, SignInData, SignUpData, SuccessSignInResponse } from '@/features'
 import { baseApi } from '@/shared/api'
-
-import { SignInData, SignUpData, SuccessSignInResponse } from './auth.types'
 
 /**
  * API service for authentication-related endpoints.
@@ -10,6 +9,13 @@ import { SignInData, SignUpData, SuccessSignInResponse } from './auth.types'
 export const authApi = baseApi.injectEndpoints({
   endpoints: builder => {
     return {
+      confirmRegistration: builder.query<void, ConfirmRegistrationType>({
+        query: params => ({
+          body: params,
+          method: 'POST',
+          url: 'v1/auth/registration-confirmation',
+        }),
+      }),
       /**
        * Mutation for user sign-in (login).
        * Sends a POST request to the login endpoint with the provided sign-in data.
@@ -46,4 +52,4 @@ export const authApi = baseApi.injectEndpoints({
   },
 })
 
-export const { useSignInMutation, useSignUpMutation } = authApi
+export const { useConfirmRegistrationQuery, useSignInMutation, useSignUpMutation } = authApi
