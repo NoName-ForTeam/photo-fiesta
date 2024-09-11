@@ -53,7 +53,6 @@ export const useSignUpForm = () => {
   const {
     control,
     formState: { errors },
-    getValues,
     handleSubmit,
     reset,
     setError,
@@ -70,20 +69,15 @@ export const useSignUpForm = () => {
   })
 
   const onSubmit = handleSubmit(data => {
-    console.log('Data to be sent:', data)
-    // signUp(data)
     signUp({ email: data.email, password: data.password, userName: data.userName })
       .unwrap()
       .then(() => {
-        console.log('then', data)
         toast.success('Sign-up successful!')
         setUserEmail(data.email)
         setIsOpen(true)
         reset()
-        console.log('after reset', getValues())
       })
       .catch(e => {
-        console.log('Server error:', e)
         const parsed = badRequestSchema.safeParse(e.data)
 
         if (parsed.success) {

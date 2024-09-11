@@ -1,4 +1,4 @@
-import { ConfirmRegistrationType, SignInData, SignUpData, SuccessSignInResponse } from '@/features'
+import { ConfirmRegistration, SignInData, SignUpData, SuccessSignInResponse } from '@/features'
 import { baseApi } from '@/shared/api'
 
 /**
@@ -9,7 +9,7 @@ import { baseApi } from '@/shared/api'
 export const authApi = baseApi.injectEndpoints({
   endpoints: builder => {
     return {
-      confirmRegistration: builder.query<void, ConfirmRegistrationType>({
+      confirmRegistration: builder.query<void, ConfirmRegistration>({
         query: params => ({
           body: params,
           method: 'POST',

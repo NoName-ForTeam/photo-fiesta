@@ -24,6 +24,6 @@ export type SuccessSignInResponse = {
   accessToken: string
 }
 
-export type ConfirmRegistrationType = {
+export type ConfirmRegistration = {
   confirmationCode: string
 }
