@@ -1,4 +1,10 @@
-import { ConfirmRegistration, SignInData, SignUpData, SuccessSignInResponse } from '@/features'
+import {
+  ConfirmRegistration,
+  ResendLink,
+  SignInData,
+  SignUpData,
+  SuccessSignInResponse,
+} from '@/features'
 import { baseApi } from '@/shared/api'
 
 /**
@@ -14,6 +20,13 @@ export const authApi = baseApi.injectEndpoints({
           body: params,
           method: 'POST',
           url: 'v1/auth/registration-confirmation',
+        }),
+      }),
+      resendLink: builder.mutation<void, ResendLink>({
+        query: params => ({
+          body: params,
+          method: 'POST',
+          url: 'v1/auth/registration-email-resending',
         }),
       }),
       /**
@@ -52,4 +65,9 @@ export const authApi = baseApi.injectEndpoints({
   },
 })
 
-export const { useConfirmRegistrationQuery, useSignInMutation, useSignUpMutation } = authApi
+export const {
+  useConfirmRegistrationQuery,
+  useResendLinkMutation,
+  useSignInMutation,
+  useSignUpMutation,
+} = authApi

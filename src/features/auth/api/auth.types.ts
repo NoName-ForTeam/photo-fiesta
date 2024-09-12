@@ -15,9 +15,11 @@ export type ErrorMessage = {
 }
 
 export type ErrorResponse = {
-  error: string
-  messages: ErrorMessage[]
-  statusCode: number
+  data: {
+    error: string
+    messages: { field: string; message: string }[]
+    statusCode: number
+  }
 }
 
 export type SuccessSignInResponse = {
@@ -26,4 +28,8 @@ export type SuccessSignInResponse = {
 
 export type ConfirmRegistration = {
   confirmationCode: string
+}
+export type ResendLink = {
+  baseUrl?: string
+  email: string
 }
