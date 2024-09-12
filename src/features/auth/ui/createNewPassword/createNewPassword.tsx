@@ -8,7 +8,7 @@ import { useCreateNewPassword } from './useCreateNewPassword'
  * CreateNewPassword Component
  *
  * This component renders a form that allows the user to create a new password by providing
- * a new password and its confirmation. It is used in the password recovery process.
+ * a new password and its confirmation. It is used in the password createNewPassword process.
  *
  * @component
  * @example

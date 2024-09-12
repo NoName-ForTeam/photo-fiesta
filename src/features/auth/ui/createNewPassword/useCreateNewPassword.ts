@@ -5,6 +5,7 @@ import { useCreateNewPasswordMutation } from '@/features'
 import { PASSWORD_REGEX } from '@/shared/config'
 import { handleErrorResponse } from '@/shared/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useRouter } from 'next/router'
 import { z } from 'zod'
 
 const CreateNewPasswordSchema = z
@@ -48,6 +49,10 @@ const badRequestSchema = z.object({
 
 export const useCreateNewPassword = () => {
   const [createNewPassword] = useCreateNewPasswordMutation()
+  const router = useRouter()
+  // TODO: check code null or undefined
+  const code = router.query.code
+
   const {
     control,
     formState: { errors },
@@ -58,7 +63,7 @@ export const useCreateNewPassword = () => {
       confirmPassword: '',
       newPassword: '',
       //TODO:change default value
-      recoveryCode: 'someCode',
+      recoveryCode: '',
     },
     mode: 'onBlur',
     resolver: zodResolver(CreateNewPasswordSchema),
@@ -68,7 +73,7 @@ export const useCreateNewPassword = () => {
     try {
       await createNewPassword({
         newPassword: data.newPassword,
-        recoveryCode: data.recoveryCode,
+        recoveryCode: code as string,
       }).unwrap()
 
       toast.success('Password has been changed successfully')

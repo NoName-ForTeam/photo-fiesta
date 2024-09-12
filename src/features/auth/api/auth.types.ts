@@ -22,6 +22,11 @@ export type CreateNewPasswordData = {
   recoveryCode: string
 }
 
+export type PasswordRecoveryData = {
+  email: string
+  recaptcha: string
+}
+
 export type ErrorResponse = {
   /** The data object containing error details */
   data: {
