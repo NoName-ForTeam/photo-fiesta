@@ -45,7 +45,6 @@ export const useForgotPassword = () => {
     if (!recaptcha) {
       return
     }
-    //debugger
     recoveryPassword({ email, recaptcha })
       .unwrap()
       .then(() => {

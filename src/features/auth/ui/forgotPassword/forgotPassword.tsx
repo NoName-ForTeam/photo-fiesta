@@ -62,7 +62,7 @@ export const ForgotPassword = () => {
             Enter your email address and we will send you further instructions
           </Typography>
           {isLinkSent && (
-            <Typography variant={'text14'}>
+            <Typography className={classNames.afterInfo} variant={'text14'}>
               The link has been sent by email. If you don’t receive an email send link again
             </Typography>
           )}
