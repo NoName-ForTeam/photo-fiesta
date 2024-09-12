@@ -32,7 +32,7 @@ export type ErrorResponse = {
   data: {
     /** A general error message or error type */
     error: string
-    /** An array of specific error messages for different fields */
+    /** An array of specific error messages for different fiel ds */
     messages: { field: string; message: string }[]
     /** The HTTP status code of the error */
     statusCode: number
