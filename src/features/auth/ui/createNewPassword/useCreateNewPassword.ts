@@ -1,7 +1,7 @@
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 
-import { useCreateNewPasswordMutation } from '@/features/auth'
+import { useCreateNewPasswordMutation } from '@/features'
 import { PASSWORD_REGEX } from '@/shared/config'
 import { handleErrorResponse } from '@/shared/utils'
 import { zodResolver } from '@hookform/resolvers/zod'

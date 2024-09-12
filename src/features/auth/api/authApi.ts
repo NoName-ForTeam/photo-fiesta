@@ -6,7 +6,7 @@ import {
   SuccessSignInResponse,
 } from '@/features'
 import { baseApi } from '@/shared/api'
-import { API_URLS } from '@/shared/config/apiURLs'
+import { API_URLS } from '@/shared/config'
 
 /**
  * API service for authentication-related endpoints.
