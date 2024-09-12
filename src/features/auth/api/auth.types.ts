@@ -20,6 +20,7 @@ export type ConfirmRegistration = {
 export type ResendLink = {
   baseUrl?: string
   email: string
+}
 
 export type CreateNewPasswordData = {
   newPassword: string

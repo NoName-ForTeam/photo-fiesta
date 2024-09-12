@@ -1,7 +1,7 @@
 import {
   ConfirmRegistration,
-  ResendLink,
   CreateNewPasswordData,
+  ResendLink,
   SignInData,
   SignUpData,
   SuccessSignInResponse,
@@ -24,13 +24,6 @@ export const authApi = baseApi.injectEndpoints({
           url: 'v1/auth/registration-confirmation',
         }),
       }),
-      resendLink: builder.mutation<void, ResendLink>({
-        query: params => ({
-          body: params,
-          method: 'POST',
-          url: 'v1/auth/registration-email-resending',
-        }),
-      }),
       /**Mutation for user create new password */
       createNewPassword: builder.mutation<void, CreateNewPasswordData>({
         invalidatesTags: ['Auth'],
@@ -38,6 +31,13 @@ export const authApi = baseApi.injectEndpoints({
           body: params,
           method: 'POST',
           url: API_URLS.AUTH.NEW_PASSWORD,
+        }),
+      }),
+      resendLink: builder.mutation<void, ResendLink>({
+        query: params => ({
+          body: params,
+          method: 'POST',
+          url: 'v1/auth/registration-email-resending',
         }),
       }),
       /**
@@ -77,8 +77,8 @@ export const authApi = baseApi.injectEndpoints({
 
 export const {
   useConfirmRegistrationQuery,
-  useResendLinkMutation,
   useCreateNewPasswordMutation,
+  useResendLinkMutation,
   useSignInMutation,
   useSignUpMutation,
 } = authApi
