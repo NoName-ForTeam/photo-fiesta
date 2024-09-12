@@ -72,7 +72,7 @@ export const ExpiredEmail = ({ email }: Props) => {
           Looks like the verification link has expired. Not to worry, we can send the link again
         </Typography>
       </div>
-      <Button asChild className={classNames.btn} onClick={onResendLink}>
+      <Button className={classNames.btn} onClick={onResendLink}>
         Resend verification link
       </Button>
       <Image alt={'expired'} className={classNames.img} src={rafiki} />
