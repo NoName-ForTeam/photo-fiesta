@@ -20,7 +20,7 @@ import { useCreateNewPassword } from './useCreateNewPassword'
  */
 
 export const CreateNewPassword = () => {
-  const { control, handleSubmit, onSubmit } = useCreateNewPassword()
+  const { control, errors, onSubmit } = useCreateNewPassword()
   const classNames = {
     card: styles.card,
     description: styles.description,
@@ -34,7 +34,7 @@ export const CreateNewPassword = () => {
       <Typography className={classNames.title} variant={'h1'}>
         Create New Password
       </Typography>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={onSubmit}>
         <div className={classNames.fieldContainer}>
           <FormInput
             control={control}
@@ -44,6 +44,7 @@ export const CreateNewPassword = () => {
           />
           <FormInput
             control={control}
+            errorMessage={errors.newPassword?.message}
             label={'Password confirmation'}
             name={'confirmPassword'}
             variant={'password'}
@@ -52,7 +53,7 @@ export const CreateNewPassword = () => {
         <Typography as={'p'} className={classNames.description} variant={'text14'}>
           Your password must be between 6 and 20 characters
         </Typography>
-        <Button className={classNames.submitBtn} fullWidth>
+        <Button className={classNames.submitBtn} fullWidth type={'submit'}>
           Create new password
         </Button>
       </form>
