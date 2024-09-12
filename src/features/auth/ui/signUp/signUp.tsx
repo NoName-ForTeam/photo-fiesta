@@ -30,13 +30,13 @@ export const SignUp = () => {
           Sign Up
         </Typography>
         <span className={classNames.iconsBox}>
-          <Button asChild type={'button'} variant={'link'}>
+          <Button asChild type={'button'} variant={'icon-link'}>
             {/*TODO: check path for links*/}
             <Link href={'#'}>
               <GoogleSvgrepoCom1 className={classNames.icon} />
             </Link>
           </Button>
-          <Button asChild type={'button'} variant={'link'}>
+          <Button asChild type={'button'} variant={'icon-link'}>
             {/*TODO: check path for links*/}
             <Link href={'#'}>
               <GithubSvgrepoCom31 className={classNames.icon} />
