@@ -1,6 +1,6 @@
 import { ExpiredEmail, useConfirmRegistrationQuery } from '@/features'
 import { bro } from '@/shared/assets'
-import { ROUTES } from '@/shared/config/routes'
+import { ROUTES } from '@/shared/config'
 import { Button, Typography } from '@photo-fiesta/ui-lib'
 import Image from 'next/image'
 import Link from 'next/link'

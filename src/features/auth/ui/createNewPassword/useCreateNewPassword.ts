@@ -1,6 +1,9 @@
 import { useForm } from 'react-hook-form'
+import { toast } from 'react-toastify'
 
+import { useCreateNewPasswordMutation } from '@/features'
 import { PASSWORD_REGEX } from '@/shared/config'
+import { handleErrorResponse } from '@/shared/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
@@ -22,6 +25,8 @@ const CreateNewPasswordSchema = z
         PASSWORD_REGEX,
         'Password must contain 0-9, a-z, A-Z, ! " # $ % & \' ( ) * + , - . / : ; < = > ? @ [ \\ ] ^ _` { | } ~}'
       ),
+    //TODO: maybe change condition for recovery code
+    recoveryCode: z.string().min(1, 'Recovery code is required'),
   })
   .refine(data => data.newPassword === data.confirmPassword, {
     message: 'The password must match the new password',
@@ -30,18 +35,51 @@ const CreateNewPasswordSchema = z
 
 type FormValues = z.infer<typeof CreateNewPasswordSchema>
 
+const badRequestSchema = z.object({
+  messages: z.array(
+    z.object({
+      /**
+       * *the 'recoveryCode' field is replaced by the 'code' field in response from the backend */
+      field: z.enum(['confirmPassword', 'newPassword', 'code']),
+      message: z.string(),
+    })
+  ),
+})
+
 export const useCreateNewPassword = () => {
-  const { control, handleSubmit } = useForm<FormValues>({
+  const [createNewPassword] = useCreateNewPasswordMutation()
+  const {
+    control,
+    formState: { errors },
+    handleSubmit,
+    setError,
+  } = useForm<FormValues>({
     defaultValues: {
       confirmPassword: '',
       newPassword: '',
+      //TODO:change default value
+      recoveryCode: 'someCode',
     },
+    mode: 'onBlur',
     resolver: zodResolver(CreateNewPasswordSchema),
   })
 
-  const onSubmit = () => {
-    // TODO:add logic
-  }
+  const onSubmit = handleSubmit(async data => {
+    try {
+      await createNewPassword({
+        newPassword: data.newPassword,
+        recoveryCode: data.recoveryCode,
+      }).unwrap()
 
-  return { control, handleSubmit, onSubmit }
+      toast.success('Password has been changed successfully')
+    } catch (error: unknown) {
+      handleErrorResponse({
+        badRequestSchema,
+        error,
+        setError,
+      })
+    }
+  })
+
+  return { control, errors, onSubmit }
 }

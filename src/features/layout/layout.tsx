@@ -20,6 +20,7 @@ import style from './layout.module.scss'
  *   </Layout>
  * )
  */
+
 // eslint-disable-next-line react-refresh/only-export-components
 const Layout = ({ children }: PropsWithChildren) => {
   //toDO isLoggedIn & onChangeLanguage

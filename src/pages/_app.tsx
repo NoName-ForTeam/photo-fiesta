@@ -3,6 +3,7 @@ import type { AppProps } from 'next/app'
 
 import type { ReactElement, ReactNode } from 'react'
 import { Provider } from 'react-redux'
+import { ToastContainer } from 'react-toastify'
 
 import { store } from '@/shared/store'
 
@@ -12,6 +13,7 @@ import '@fontsource/inter/500.css'
 import '@fontsource/inter/600.css'
 import '@fontsource/inter/700.css'
 import '@photo-fiesta/ui-lib/style.css'
+import 'react-toastify/dist/ReactToastify.css'
 
 export type NextPageWithLayout<P = object, IP = P> = {
   getLayout?: (page: ReactElement) => ReactNode
@@ -27,6 +29,7 @@ export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   return getLayout(
     <Provider store={store}>
       <Component {...pageProps} />
+      <ToastContainer />
     </Provider>
   )
 }
