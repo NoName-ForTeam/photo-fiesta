@@ -1,4 +1,4 @@
-import { useConfirmRegistrationQuery } from '@/features'
+import { ExpiredEmail, useConfirmRegistrationQuery } from '@/features'
 import { bro } from '@/shared/assets'
 import { ROUTES } from '@/shared/config'
 import { Button, Typography } from '@photo-fiesta/ui-lib'
@@ -28,6 +28,7 @@ import styles from './confirmEmail.module.scss'
 export const ConfirmEmail = () => {
   const router = useRouter()
   const confirmationCode = router.query.code as string
+  const email = router.query.email as string
   const { error, isLoading } = useConfirmRegistrationQuery({ confirmationCode }, { skip: !router })
 
   const classNames = {
@@ -44,11 +45,7 @@ export const ConfirmEmail = () => {
   }
 
   if (error) {
-    if ('message' in error) {
-      console.error('Error message:', error.message)
-    } else {
-      console.error('Error:', error)
-    }
+    return <ExpiredEmail email={email} />
   }
 
   return (
