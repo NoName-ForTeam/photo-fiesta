@@ -21,7 +21,7 @@ export const authApi = baseApi.injectEndpoints({
         query: params => ({
           body: params,
           method: 'POST',
-          url: 'v1/auth/registration-confirmation',
+          url: API_URLS.AUTH.REGISTRATION_CONFIRMATION,
         }),
       }),
       /**Mutation for user create new password */
@@ -37,7 +37,7 @@ export const authApi = baseApi.injectEndpoints({
         query: params => ({
           body: params,
           method: 'POST',
-          url: 'v1/auth/registration-email-resending',
+          url: API_URLS.AUTH.REGISTRATION_EMAIL_RESENDING,
         }),
       }),
       /**
