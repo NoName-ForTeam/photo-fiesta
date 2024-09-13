@@ -17,6 +17,11 @@ export type ConfirmRegistration = {
   confirmationCode: string
 }
 
+export type ResendLink = {
+  baseUrl?: string
+  email: string
+}
+
 export type CreateNewPasswordData = {
   newPassword: string
   recoveryCode: string
