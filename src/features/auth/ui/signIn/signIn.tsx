@@ -21,7 +21,7 @@ import { FormInputs, useSignIn } from './useSignIn'
  */
 
 export const SignIn = () => {
-  const { control, errors, handleSubmit } = useSignIn()
+  const { control, errors, onSubmit } = useSignIn()
   const classNames = {
     container: styles.container,
     form: styles.form,
@@ -34,7 +34,7 @@ export const SignIn = () => {
       footerText={"Don't have an account?"}
       title={'Sign In'}
     >
-      <form className={classNames.form} onSubmit={handleSubmit}>
+      <form className={classNames.form} onSubmit={onSubmit}>
         <div className={classNames.container}>
           <Controller
             control={control}
