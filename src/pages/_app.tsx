@@ -5,9 +5,9 @@ import type { ReactElement, ReactNode } from 'react'
 import { Provider } from 'react-redux'
 import { ToastContainer } from 'react-toastify'
 
-import { store } from '@/shared/store'
+import { store } from '@/app/store'
 
-import '@/shared/styles/index.scss'
+import '@/app/styles/index.scss'
 import '@fontsource/inter/400.css'
 import '@fontsource/inter/500.css'
 import '@fontsource/inter/600.css'
