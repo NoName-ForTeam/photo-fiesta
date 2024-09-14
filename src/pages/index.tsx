@@ -26,7 +26,7 @@ export default function Home() {
           <Button asChild style={{ margin: '30px' }}>
             <Link href={ROUTES.SIGN_UP}>Sign Up</Link>
           </Button>
-          <Button style={{ margin: '30px' }}>
+          <Button asChild style={{ margin: '30px' }}>
             <Link href={ROUTES.SIGN_IN}>Log In</Link>
           </Button>
         </div>
