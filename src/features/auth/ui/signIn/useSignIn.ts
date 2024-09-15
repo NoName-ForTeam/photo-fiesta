@@ -1,6 +1,7 @@
 import { useForm } from 'react-hook-form'
 
 import { SuccessSignInResponse, useSignInMutation } from '@/features'
+import { ROUTES } from '@/shared/config'
 import {
   commonEmailSchema,
   commonPasswordSchema,
@@ -45,7 +46,7 @@ export const useSignIn = () => {
       //TODO: temporary solution to use local storage
       localStorage.setItem('signInToken', response.accessToken)
       // TODO: add redirect to home page and use routing constants
-      router.push('/home')
+      router.push(ROUTES.HOME)
     } catch (error: unknown) {
       handleErrorResponse<FormInputs>({
         badRequestSchema,
