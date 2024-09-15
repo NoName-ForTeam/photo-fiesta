@@ -1,7 +1,7 @@
 export const ROUTES = {
   CREATE_NEW_PASSWORD: '/auth/recovery',
   FORGOT_PASSWORD: '/auth/forgotPasswordPage',
-  HOME: '/homePage',
+  HOME: '/home',
   PRIVACY_POLICY: '/auth/privacyPolicyPage',
   PROFILE: '/profile',
   SIGN_IN: '/auth/signInPage',
