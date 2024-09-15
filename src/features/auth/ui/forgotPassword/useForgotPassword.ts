@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form'
 
 import process from 'process'
 
-import { usePasswordRecoveryMutation } from '@/features'
+import { ErrorResponse, usePasswordRecoveryMutation } from '@/features'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
@@ -21,6 +21,7 @@ export const useForgotPassword = () => {
     formState: { errors },
     getValues,
     handleSubmit,
+    setError,
   } = useForm<FormValues>({
     defaultValues: {
       email: '',
@@ -51,7 +52,9 @@ export const useForgotPassword = () => {
         setModalOpen(true)
         setLinkSent(true)
       })
-      .catch()
+      .catch((error: ErrorResponse) => {
+        setError('email', { message: error.data.messages[0].message })
+      })
   })
 
   return {

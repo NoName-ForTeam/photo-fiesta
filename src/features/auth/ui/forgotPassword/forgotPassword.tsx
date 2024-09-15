@@ -34,12 +34,15 @@ export const ForgotPassword = () => {
     siteKey,
   } = useForgotPassword()
   const classNames = {
+    actionsContainter: styles.actionsContainter,
     afterInfo: styles.afterInfo,
     card: styles.card,
+    container: styles.container,
     description: styles.description,
     field: styles.field,
     form: styles.form,
     link: styles.link,
+    recaptcha: styles.recaptcha,
     title: styles.title,
   } as const
 
@@ -66,13 +69,21 @@ export const ForgotPassword = () => {
               The link has been sent by email. If you don’t receive an email send link again
             </Typography>
           )}
-          <Button fullWidth>Send Link</Button>
-        </form>
-        <Button asChild className={classNames.link} variant={'link'}>
-          <Link href={ROUTES.SIGN_IN}>Back to Sign In</Link>
-        </Button>
+          <div className={classNames.container}>
+            <div className={classNames.actionsContainter}>
+              <Button fullWidth>Send Link</Button>
+              <Button asChild className={classNames.link} variant={'link'}>
+                <Link href={ROUTES.SIGN_IN}>Back to Sign In</Link>
+              </Button>
+            </div>
 
-        <ReCaptcha onVerify={reCaptchaHandler} siteKey={siteKey!} />
+            <ReCaptcha
+              className={classNames.recaptcha}
+              onVerify={reCaptchaHandler}
+              siteKey={siteKey!}
+            />
+          </div>
+        </form>
       </Card>
 
       <SentEmail closeModal={closeModal} email={getValues('email')} open={isModalOpen} />
