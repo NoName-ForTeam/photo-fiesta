@@ -1,30 +1,23 @@
 import { useForm } from 'react-hook-form'
 
 import { SuccessSignInResponse, useSignInMutation } from '@/features'
-import { PASSWORD_REGEX } from '@/shared/config'
-import { handleErrorResponse } from '@/shared/utils'
+import {
+  commonEmailSchema,
+  commonPasswordSchema,
+  createBadRequestSchema,
+  handleErrorResponse,
+} from '@/shared/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/router'
 import { z } from 'zod'
 
 export type FormInputs = z.infer<typeof signInSchema>
 const signInSchema = z.object({
-  email: z.string().email('Invalid email address'),
-  password: z
-    .string()
-    .min(6, 'Password must be at least 6 characters')
-    .max(20, 'Password must be at most 20 characters')
-    .regex(PASSWORD_REGEX),
+  email: commonEmailSchema,
+  password: commonPasswordSchema,
 })
 
-const badRequestSchema = z.object({
-  messages: z.array(
-    z.object({
-      field: z.enum(['email', 'password']),
-      message: z.string(),
-    })
-  ),
-})
+const badRequestSchema = createBadRequestSchema(['email', 'password'])
 
 export const useSignIn = () => {
   const router = useRouter()

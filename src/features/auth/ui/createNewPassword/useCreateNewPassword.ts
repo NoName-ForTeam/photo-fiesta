@@ -2,30 +2,16 @@ import { useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 
 import { useCreateNewPasswordMutation } from '@/features'
-import { PASSWORD_REGEX, ROUTES } from '@/shared/config'
-import { handleErrorResponse } from '@/shared/utils'
+import { ROUTES } from '@/shared/config'
+import { commonPasswordSchema, createBadRequestSchema, handleErrorResponse } from '@/shared/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/router'
 import { z } from 'zod'
 
 const CreateNewPasswordSchema = z
   .object({
-    confirmPassword: z
-      .string()
-      .min(6, 'Password must be at least 6 characters')
-      .max(20, 'Password must be no more than 20 characters')
-      .regex(
-        PASSWORD_REGEX,
-        'Password must contain 0-9, a-z, A-Z, ! " # $ % & \' ( ) * + , - . / : ; < = > ? @ [ \\ ] ^ _` { | } ~}'
-      ),
-    newPassword: z
-      .string()
-      .min(6, 'Password must be at least 6 characters')
-      .max(20, 'Password must be no more than 20 characters')
-      .regex(
-        PASSWORD_REGEX,
-        'Password must contain 0-9, a-z, A-Z, ! " # $ % & \' ( ) * + , - . / : ; < = > ? @ [ \\ ] ^ _` { | } ~}'
-      ),
+    confirmPassword: commonPasswordSchema,
+    newPassword: commonPasswordSchema,
     //TODO: maybe change condition for recovery code
     recoveryCode: z.string().min(1, 'Recovery code is required'),
   })
@@ -36,16 +22,9 @@ const CreateNewPasswordSchema = z
 
 type FormValues = z.infer<typeof CreateNewPasswordSchema>
 
-const badRequestSchema = z.object({
-  messages: z.array(
-    z.object({
-      /**
-       * *the 'recoveryCode' field is replaced by the 'code' field in response from the backend */
-      field: z.enum(['confirmPassword', 'newPassword', 'code']),
-      message: z.string(),
-    })
-  ),
-})
+/**
+ * *the 'recoveryCode' field is replaced by the 'code' field in response from the backend */
+const badRequestSchema = createBadRequestSchema(['confirmPassword', 'newPassword', 'code'])
 
 export const useCreateNewPassword = () => {
   const [createNewPassword] = useCreateNewPasswordMutation()

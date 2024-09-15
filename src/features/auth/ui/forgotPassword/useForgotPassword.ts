@@ -1,16 +1,16 @@
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { toast } from 'react-toastify'
 
 import process from 'process'
 
 import { ErrorResponse, usePasswordRecoveryMutation } from '@/features'
+import { checkErrorMessages, commonEmailSchema } from '@/shared/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
-const emailSchema = z.string().email('The email must match the format example@example.com')
-
 const forgotPasswordSchema = z.object({
-  email: emailSchema,
+  email: commonEmailSchema,
 })
 
 export type FormValues = z.infer<typeof forgotPasswordSchema>
@@ -43,8 +43,10 @@ export const useForgotPassword = () => {
   }
 
   const onSubmit = handleSubmit(async ({ email }) => {
-    // TODO: add logic with show error by toast
+    // TODO: maybe change logic with show error by toast
     if (!recaptcha) {
+      toast.error('Please complete the reCAPTCHA verification.')
+
       return
     }
     try {
@@ -54,7 +56,7 @@ export const useForgotPassword = () => {
     } catch (err) {
       const error = err as ErrorResponse
 
-      setError('email', { message: error.data.messages[0].message })
+      checkErrorMessages(error, setError)
     }
   })
 
