@@ -2,6 +2,7 @@ import { baseApi } from '@/app/api'
 import {
   ConfirmRegistration,
   CreateNewPasswordData,
+  PasswordRecoveryData,
   ResendLink,
   SignInData,
   SignUpData,
@@ -33,6 +34,13 @@ export const authApi = baseApi.injectEndpoints({
           url: API_URLS.AUTH.NEW_PASSWORD,
         }),
       }),
+      passwordRecovery: builder.mutation<void, PasswordRecoveryData>({
+        query: params => ({
+          body: params,
+          method: 'POST',
+          url: API_URLS.AUTH.PASSWORD_RECOVERY,
+    }),
+  }),
       resendLink: builder.mutation<void, ResendLink>({
         query: params => ({
           body: params,
@@ -78,6 +86,7 @@ export const authApi = baseApi.injectEndpoints({
 export const {
   useConfirmRegistrationQuery,
   useCreateNewPasswordMutation,
+  usePasswordRecoveryMutation,
   useResendLinkMutation,
   useSignInMutation,
   useSignUpMutation,

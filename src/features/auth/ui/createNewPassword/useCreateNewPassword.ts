@@ -2,9 +2,10 @@ import { useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 
 import { useCreateNewPasswordMutation } from '@/features'
-import { PASSWORD_REGEX } from '@/shared/config'
+import { PASSWORD_REGEX, ROUTES } from '@/shared/config'
 import { handleErrorResponse } from '@/shared/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useRouter } from 'next/router'
 import { z } from 'zod'
 
 const CreateNewPasswordSchema = z
@@ -48,6 +49,9 @@ const badRequestSchema = z.object({
 
 export const useCreateNewPassword = () => {
   const [createNewPassword] = useCreateNewPasswordMutation()
+  const router = useRouter()
+  const code = router.query.code ?? 'test_code'
+
   const {
     control,
     formState: { errors },
@@ -57,8 +61,7 @@ export const useCreateNewPassword = () => {
     defaultValues: {
       confirmPassword: '',
       newPassword: '',
-      //TODO:change default value
-      recoveryCode: 'someCode',
+      recoveryCode: code as string,
     },
     mode: 'onBlur',
     resolver: zodResolver(CreateNewPasswordSchema),
@@ -68,10 +71,11 @@ export const useCreateNewPassword = () => {
     try {
       await createNewPassword({
         newPassword: data.newPassword,
-        recoveryCode: data.recoveryCode,
+        recoveryCode: code as string,
       }).unwrap()
 
       toast.success('Password has been changed successfully')
+      void router.push(ROUTES.SIGN_IN)
     } catch (error: unknown) {
       handleErrorResponse({
         badRequestSchema,

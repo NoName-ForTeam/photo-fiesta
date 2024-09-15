@@ -1,0 +1,26 @@
+.container {
+  color: var(--light-100);
+}
+
+.error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  max-width: var(--width-recaptcha);
+  padding: 8px;
+
+  border: 1px solid var(--danger-400);
+}
+
+.errorText {
+  align-self: flex-start;
+
+  margin-top: 13px;
+
+  font-size: 0.625rem;
+  line-height: 11.72px;
+  color: var(--danger-400);
+}

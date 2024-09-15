@@ -1,5 +1,9 @@
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 
+import process from 'process'
+
+import { ErrorResponse, usePasswordRecoveryMutation } from '@/features'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
@@ -15,7 +19,9 @@ export const useForgotPassword = () => {
   const {
     control,
     formState: { errors },
+    getValues,
     handleSubmit,
+    setError,
   } = useForm<FormValues>({
     defaultValues: {
       email: '',
@@ -23,14 +29,45 @@ export const useForgotPassword = () => {
     resolver: zodResolver(forgotPasswordSchema),
   })
 
-  const onSubmit = () => {
-    // TODO: add logic
+  const RECAPTCHA_KEY = process.env.NEXT_PUBLIC_RECAPTCHA_ENTERPRISE_API_KEY
+
+  const [recoveryPassword] = usePasswordRecoveryMutation()
+  const [recaptcha, setRecaptcha] = useState('')
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isLinkSent, setIsLinkSent] = useState(false)
+
+  const closeModal = () => setIsModalOpen(false)
+
+  const reCaptchaHandler = (token: null | string) => {
+    setRecaptcha(token!)
   }
 
+  const onSubmit = handleSubmit(async ({ email }) => {
+    // TODO: add logic with show error by toast
+    if (!recaptcha) {
+      return
+    }
+    try {
+      await recoveryPassword({ email, recaptcha }).unwrap()
+      setIsModalOpen(true)
+      setIsLinkSent(true)
+    } catch (err) {
+      const error = err as ErrorResponse
+
+      setError('email', { message: error.data.messages[0].message })
+    }
+  })
+
   return {
+    RECAPTCHA_KEY,
+    closeModal,
     control,
     errors,
-    handleSubmit,
+    getValues,
+    isLinkSent,
+    isModalOpen,
     onSubmit,
+    reCaptchaHandler,
+    setIsLinkSent,
   }
 }
