@@ -1,6 +1,6 @@
 import { SentEmail } from '@/features'
 import { ROUTES } from '@/shared/config'
-import { ReCaptcha } from '@/shared/ui/reCaptcha/reCaptcha'
+import { ReCaptcha } from '@/shared/ui'
 import { Button, Card, FormInput, Typography } from '@photo-fiesta/ui-lib'
 import Link from 'next/link'
 
@@ -35,7 +35,7 @@ export const ForgotPassword = () => {
     setIsLinkSent,
   } = useForgotPassword()
   const classNames = {
-    actionsContainter: styles.actionsContainter,
+    actionsContainer: styles.actionsContainer,
     afterInfo: styles.afterInfo,
     card: styles.card,
     container: styles.container,
@@ -79,7 +79,7 @@ export const ForgotPassword = () => {
             </Typography>
           )}
           <div className={classNames.container}>
-            <div className={classNames.actionsContainter}>
+            <div className={classNames.actionsContainer}>
               {button}
               <Button asChild className={classNames.link} variant={'link'}>
                 <Link href={ROUTES.SIGN_IN}>Back to Sign In</Link>

@@ -50,7 +50,6 @@ const badRequestSchema = z.object({
 export const useCreateNewPassword = () => {
   const [createNewPassword] = useCreateNewPasswordMutation()
   const router = useRouter()
-  // TODO: check code null or undefined
   const code = router.query.code ?? 'test_code'
 
   const {
