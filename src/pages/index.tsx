@@ -23,12 +23,12 @@ export default function Home() {
             padding: '20px',
           }}
         >
-          <Link href={ROUTES.SIGN_UP}>
-            <Button style={{ margin: '30px' }}>Sign Up</Button>
-          </Link>
-          <Link href={'/auth/signInPage'}>
-            <Button style={{ margin: '30px' }}>Log In</Button>
-          </Link>
+          <Button asChild style={{ margin: '30px' }}>
+            <Link href={ROUTES.SIGN_UP}>Sign Up</Link>
+          </Button>
+          <Button asChild style={{ margin: '30px' }}>
+            <Link href={ROUTES.SIGN_IN}>Log In</Link>
+          </Button>
         </div>
       </main>
     </>

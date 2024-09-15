@@ -1,17 +1,77 @@
+import { useState } from 'react'
+import { toast } from 'react-toastify'
+
+import { ErrorResponse, SentEmail, useResendLinkMutation } from '@/features'
 import { rafiki } from '@/shared/assets'
 import { Button, Card, Typography } from '@photo-fiesta/ui-lib'
 import Image from 'next/image'
-import Link from 'next/link'
 
 import styles from './expiredEmail.module.scss'
 
-export const ExpiredEmail = () => {
+type Props = {
+  email: string
+}
+/**
+ * `ExpiredEmail` is a React functional component that displays a message when an email verification link
+ * has expired. It provides a button to resend the verification link and shows a modal upon
+ * successful resending. The component also handles errors and displays an error message if resending fails.
+ *
+ * @component
+ * @example
+ *
+ * function App() {
+ *   return (
+ *     <div>
+ *       <ExpiredEmail email="user@example.com" />
+ *     </div>
+ *   )
+ * }
+ */
+
+export const ExpiredEmail = ({ email }: Props) => {
+  const [isOpen, setIsOpen] = useState(false)
+  const [resendLink, { error, isLoading }] = useResendLinkMutation()
+
+  //TODO: temporary solution for error handling
+  let serverError = 'An unknown error occurred'
+
+  if (error && (error as ErrorResponse).data) {
+    const errorData = (error as ErrorResponse).data
+
+    if (errorData.messages) {
+      if (typeof errorData.messages === 'string') {
+        serverError = errorData.messages
+      } else if (Array.isArray(errorData.messages) && errorData.messages.length > 0) {
+        serverError = errorData.messages[0].message || serverError
+      }
+    } else if (errorData.error) {
+      serverError = errorData.error
+    }
+  }
+
   const classNames = {
     btn: styles.btn,
     card: styles.card,
     content: styles.content,
     img: styles.img,
   } as const
+
+  const onResendLink = async () => {
+    try {
+      await resendLink({ email }).unwrap()
+      setIsOpen(true)
+    } catch (e) {
+      toast.error(serverError)
+    }
+  }
+
+  if (isLoading) {
+    return <div>Loading...</div>
+  }
+
+  const onCloseModalHandler = () => {
+    setIsOpen(false)
+  }
 
   return (
     <Card className={classNames.card}>
@@ -23,11 +83,11 @@ export const ExpiredEmail = () => {
           Looks like the verification link has expired. Not to worry, we can send the link again
         </Typography>
       </div>
-      <Button asChild className={classNames.btn}>
-        {/*TODO: check path for links*/}
-        <Link href={'#'}>Resend verification link</Link>
+      <Button className={classNames.btn} onClick={onResendLink}>
+        Resend verification link
       </Button>
       <Image alt={'expired'} className={classNames.img} src={rafiki} />
+      <SentEmail closeModal={onCloseModalHandler} email={email} open={isOpen} />
     </Card>
   )
 }

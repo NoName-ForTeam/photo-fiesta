@@ -17,6 +17,11 @@ export type ConfirmRegistration = {
   confirmationCode: string
 }
 
+export type ResendLink = {
+  baseUrl?: string
+  email: string
+}
+
 export type CreateNewPasswordData = {
   newPassword: string
   recoveryCode: string
@@ -32,8 +37,8 @@ export type ErrorResponse = {
   data: {
     /** A general error message or error type */
     error: string
-    /** An array of specific error messages for different fields */
-    messages: { field: string; message: string }[]
+    /** An array of specific error messages for different fields or a single string message */
+    messages: { field: string; message: string }[] | string
     /** The HTTP status code of the error */
     statusCode: number
   }

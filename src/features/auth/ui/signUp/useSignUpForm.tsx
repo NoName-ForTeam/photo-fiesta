@@ -4,6 +4,7 @@ import { toast } from 'react-toastify'
 
 import { useSignUpMutation } from '@/features'
 import { PASSWORD_REGEX, USERNAME_REGEX } from '@/shared/config'
+import { handleErrorResponse } from '@/shared/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
@@ -77,20 +78,8 @@ export const useSignUpForm = () => {
         setIsOpen(true)
         reset()
       })
-      .catch(e => {
-        const parsed = badRequestSchema.safeParse(e.data)
-
-        if (parsed.success) {
-          parsed.data.messages.forEach(m => setError(m.field, { message: m.message }))
-        } else if ('error' in e) {
-          toast.error(e.error)
-        } else if ('message' in e) {
-          toast.error(e.message)
-        } else {
-          const message = JSON.stringify(e) ?? 'Some error'
-
-          toast.error(message)
-        }
+      .catch(error => {
+        handleErrorResponse<FormValues>({ badRequestSchema, error, setError })
       })
   })
 

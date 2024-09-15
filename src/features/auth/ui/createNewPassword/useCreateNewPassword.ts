@@ -80,6 +80,7 @@ export const useCreateNewPassword = () => {
       handleErrorResponse({
         badRequestSchema,
         error,
+        isToast: true,
         setError,
       })
     }

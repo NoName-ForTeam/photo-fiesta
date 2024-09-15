@@ -49,13 +49,13 @@ export const AuthCard = ({
       <div className={classNames.header}>
         <Typography variant={'h1'}>{title}</Typography>
         <div className={classNames.links}>
-          <Button asChild variant={'link'}>
+          <Button asChild variant={'icon-link'}>
             {/**TODO: add link to google*/}
             <Link href={'#'} passHref>
               <GoogleSvgrepoCom1 className={classNames.icons} />
             </Link>
           </Button>
-          <Button asChild variant={'link'}>
+          <Button asChild variant={'icon-link'}>
             {/**TODO: add link to github*/}
             <Link href={'#'} passHref>
               <GithubSvgrepoCom31 className={classNames.icons} />

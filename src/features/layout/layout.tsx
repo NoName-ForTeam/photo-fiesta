@@ -1,6 +1,6 @@
 import { PropsWithChildren, ReactNode } from 'react'
 
-import { Header } from '@photo-fiesta/ui-lib'
+import { Header } from '@/shared/ui'
 
 import style from './layout.module.scss'
 
@@ -23,17 +23,9 @@ import style from './layout.module.scss'
 
 // eslint-disable-next-line react-refresh/only-export-components
 const Layout = ({ children }: PropsWithChildren) => {
-  //toDO isLoggedIn & onChangeLanguage
-  const isLoggedIn = true
-  const onChangeLanguage = (value: string) => {
-    // eslint-disable-next-line no-console
-    console.log(`Language changed to ${value}`)
-  }
-
   return (
     <>
-      {/*{isAuthMe? &&  <Header isLoggedIn={isLoggedIn} onChangeLanguage={onChangeLanguage} />}*/}
-      <Header isLoggedIn={isLoggedIn} onChangeLanguage={onChangeLanguage} />
+      <Header />
       <div className={style.authLayout}>{children}</div>
     </>
   )
