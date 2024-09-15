@@ -1,5 +1,5 @@
 import { SentEmail } from '@/features'
-import { ROUTES } from '@/shared/config/routes'
+import { ROUTES } from '@/shared/config'
 import { ReCaptcha } from '@/shared/ui/reCaptcha/reCaptcha'
 import { Button, Card, FormInput, Typography } from '@photo-fiesta/ui-lib'
 import Link from 'next/link'
@@ -23,6 +23,7 @@ import { useForgotPassword } from './useForgotPassword'
 
 export const ForgotPassword = () => {
   const {
+    RECAPTCHA_KEY,
     closeModal,
     control,
     errors,
@@ -31,7 +32,7 @@ export const ForgotPassword = () => {
     isModalOpen,
     onSubmit,
     reCaptchaHandler,
-    siteKey,
+    setIsLinkSent,
   } = useForgotPassword()
   const classNames = {
     actionsContainter: styles.actionsContainter,
@@ -45,6 +46,14 @@ export const ForgotPassword = () => {
     recaptcha: styles.recaptcha,
     title: styles.title,
   } as const
+
+  const button = isLinkSent ? (
+    <Button fullWidth onClick={() => setIsLinkSent(false)}>
+      Send Link Again
+    </Button>
+  ) : (
+    <Button fullWidth>Send Link</Button>
+  )
 
   return (
     <>
@@ -71,17 +80,19 @@ export const ForgotPassword = () => {
           )}
           <div className={classNames.container}>
             <div className={classNames.actionsContainter}>
-              <Button fullWidth>Send Link</Button>
+              {button}
               <Button asChild className={classNames.link} variant={'link'}>
                 <Link href={ROUTES.SIGN_IN}>Back to Sign In</Link>
               </Button>
             </div>
 
-            <ReCaptcha
-              className={classNames.recaptcha}
-              onVerify={reCaptchaHandler}
-              siteKey={siteKey!}
-            />
+            {!isLinkSent && (
+              <ReCaptcha
+                className={classNames.recaptcha}
+                onVerify={reCaptchaHandler}
+                siteKey={RECAPTCHA_KEY!}
+              />
+            )}
           </div>
         </form>
       </Card>
