@@ -12,8 +12,8 @@
 }
 
 .header {
-  display: flex;
-  justify-content: space-between;
+  @include modal-header;
+
   margin-bottom: 30px;
   padding: 0 24px;
 
@@ -52,15 +52,5 @@
 }
 
 .icon {
-  cursor: pointer;
-  width: var(--svg-size);
-  height: var(--svg-size);
-
-  &:hover {
-    color: var(--light-900);
-  }
-
-  &:active {
-    color: var(--light-100);
-  }
+  @include modal-close;
 }
