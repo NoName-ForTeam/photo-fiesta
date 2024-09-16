@@ -1,9 +1,7 @@
-import { ConfirmEmail, getAuthLayout } from '@/features'
+import { ConfirmEmail } from '@/features'
 
 const ConfirmEmailPage = () => {
   return <ConfirmEmail />
 }
 
 export default ConfirmEmailPage
-
-ConfirmEmailPage.getLayout = getAuthLayout

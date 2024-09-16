@@ -1,4 +1,5 @@
 import {
+  AuthMeResponse,
   ConfirmRegistration,
   CreateNewPasswordData,
   ResendLink,
@@ -17,6 +18,10 @@ import { API_URLS } from '@/shared/config'
 export const authApi = baseApi.injectEndpoints({
   endpoints: builder => {
     return {
+      authMe: builder.query<AuthMeResponse, void>({
+        providesTags: ['Auth'],
+        query: () => 'v1/auth/me',
+      }),
       confirmRegistration: builder.query<void, ConfirmRegistration>({
         query: params => ({
           body: params,
@@ -76,8 +81,10 @@ export const authApi = baseApi.injectEndpoints({
 })
 
 export const {
+  useAuthMeQuery,
   useConfirmRegistrationQuery,
   useCreateNewPasswordMutation,
+  useLazyAuthMeQuery,
   useResendLinkMutation,
   useSignInMutation,
   useSignUpMutation,

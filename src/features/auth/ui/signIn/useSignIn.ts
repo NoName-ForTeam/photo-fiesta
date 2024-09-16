@@ -1,9 +1,10 @@
 import { useForm } from 'react-hook-form'
+import { toast } from 'react-toastify'
 
-import { SuccessSignInResponse, useSignInMutation } from '@/features'
+import { useLazyAuthMeQuery, useSignInMutation } from '@/features'
 import { PASSWORD_REGEX } from '@/shared/config'
+import { Storage } from '@/shared/utils/storage'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { FetchBaseQueryError } from '@reduxjs/toolkit/query'
 import { useRouter } from 'next/router'
 import { z } from 'zod'
 
@@ -20,11 +21,10 @@ const signInSchema = z.object({
 export const useSignIn = () => {
   const router = useRouter()
   const {
-    clearErrors,
     control,
     formState: { errors },
     handleSubmit,
-    setError,
+    // setError,
   } = useForm<FormInputs>({
     defaultValues: {
       email: '',
@@ -34,55 +34,82 @@ export const useSignIn = () => {
     resolver: zodResolver(signInSchema),
   })
   const [signIn] = useSignInMutation()
+  const [getMe] = useLazyAuthMeQuery()
+  const onSubmit = handleSubmit(data => {
+    signIn(data)
+      .unwrap()
+      .then(async res => {
+        Storage.setToken(res.accessToken)
+        const tokenPayload = res.accessToken.split('.')?.[1]
+        const decodedPayload = atob(tokenPayload)
+        let parsed
 
-  const onSubmitForm = async (data: FormInputs) => {
-    clearErrors()
-    try {
-      const response = (await signIn(data).unwrap()) as unknown as SuccessSignInResponse
-
-      //TODO: temporary solution to use local storage
-      localStorage.setItem('signInToken', response.accessToken)
-      // TODO: add redirect to home page and use routing constants
-      router.push('/home')
-    } catch (err) {
-      if (isFetchBaseQueryError(err)) {
-        const error = err as FetchBaseQueryError
-
-        if (error.status === 400) {
-          {
-            /**TODO: check response data and add error message*/
-          }
-          setError('email', {
-            //TODO:temporary solution to add error message
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            //@ts-expect-error
-            message: error.data.messages ?? 'Incorrect input data',
-            type: 'manual',
-          })
-        } else if (error.status === 401) {
-          setError('email', { message: 'Unauthorized', type: 'manual' })
-        } else if (error.status === 429) {
-          setError('email', {
-            message: 'More than 5 attempts from one IP-address during 10 seconds',
-            type: 'manual',
-          })
-        } else {
-          setError('email', { message: 'An error occurred. Please try again.', type: 'manual' })
+        try {
+          parsed = JSON.parse(decodedPayload)
+        } catch {
+          parsed = {}
         }
-      } else {
-        setError('email', { message: 'An unexpected error occurred.', type: 'manual' })
-      }
-      console.error('Login failed', err)
-    }
-  }
+
+        let userId
+
+        if (parsed?.userId) {
+          userId = parsed.userId
+        } else {
+          const meRes = await getMe()
+
+          userId = meRes?.data?.userId
+        }
+
+        if (!userId) {
+          return
+        }
+
+        void router.replace(`/profile/${userId}`)
+      })
+      .catch(e => {
+        const message = e?.data?.messages ?? 'Something went wrong'
+
+        toast.error(message)
+      })
+    // catch (err) {
+    //   if (isFetchBaseQueryError(err)) {
+    //     const error = err as FetchBaseQueryError
+    //
+    //     if (error.status === 400) {
+    //       {
+    //         /**TODO: check response data and add error message*/
+    //       }
+    //       setError('email', {
+    //         //TODO:temporary solution to add error message
+    //         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    //         //@ts-expect-error
+    //         message: error.data.messages ?? 'Incorrect input data',
+    //         type: 'manual',
+    //       })
+    //     } else if (error.status === 401) {
+    //       setError('email', { message: 'Unauthorized', type: 'manual' })
+    //     } else if (error.status === 429) {
+    //       setError('email', {
+    //         message: 'More than 5 attempts from one IP-address during 10 seconds',
+    //         type: 'manual',
+    //       })
+    //     } else {
+    //       setError('email', { message: 'An error occurred. Please try again.', type: 'manual' })
+    //     }
+    //   } else {
+    //     setError('email', { message: 'An unexpected error occurred.', type: 'manual' })
+    //   }
+    //   console.error('Login failed', err)
+    // }
+  })
+
+  // if (isAuthMe) {
+  //   void router.replace(`/profile/${isAuthMe.userId}`)
+  // }
 
   return {
     control,
     errors,
-    handleSubmit: handleSubmit(onSubmitForm),
+    onSubmit,
   }
-}
-
-function isFetchBaseQueryError(error: unknown): error is FetchBaseQueryError {
-  return typeof error === 'object' && error != null && 'status' in error
 }

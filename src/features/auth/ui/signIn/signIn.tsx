@@ -1,13 +1,12 @@
 import { Controller, FieldErrors } from 'react-hook-form'
 
 import { AuthCard } from '@/features'
+import { FormInputs, useSignIn } from '@/features/auth/ui/signIn/useSignIn'
 import { ROUTES } from '@/shared/config'
 import { Button, Input, Typography } from '@photo-fiesta/ui-lib'
 import Link from 'next/link'
 
 import styles from './signIn.module.scss'
-
-import { FormInputs, useSignIn } from './useSignIn'
 
 /**
  * SignIn component for user authentication.
@@ -21,7 +20,7 @@ import { FormInputs, useSignIn } from './useSignIn'
  */
 
 export const SignIn = () => {
-  const { control, errors, handleSubmit } = useSignIn()
+  const { control, errors, onSubmit } = useSignIn()
   const classNames = {
     container: styles.container,
     form: styles.form,
@@ -34,7 +33,7 @@ export const SignIn = () => {
       footerText={"Don't have an account?"}
       title={'Sign In'}
     >
-      <form className={classNames.form} onSubmit={handleSubmit}>
+      <form className={classNames.form} onSubmit={onSubmit}>
         <div className={classNames.container}>
           <Controller
             control={control}

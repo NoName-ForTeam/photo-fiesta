@@ -38,3 +38,10 @@ export type ErrorResponse = {
     statusCode: number
   }
 }
+
+export type AuthMeResponse = {
+  email: string
+  isBlocked: boolean
+  userId: number
+  userName: string
+}

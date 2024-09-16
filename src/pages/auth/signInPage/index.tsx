@@ -1,4 +1,4 @@
-import { SignIn, getAuthLayout } from '@/features'
+import { SignIn } from '@/features'
 
 /**
  * SignInPage component renders the sign-in page of the application.
@@ -9,7 +9,3 @@ const SignInPage = () => {
 }
 
 export default SignInPage
-/**
- * Applies the authentication layout to the SignInPage component.
- */
-SignInPage.getLayout = getAuthLayout
