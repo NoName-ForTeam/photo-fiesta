@@ -1,14 +1,13 @@
-import { ComponentPropsWithoutRef, ElementRef, forwardRef, useState } from 'react'
+import { ComponentPropsWithoutRef, ElementRef, forwardRef } from 'react'
 
-import { FlagRussia, FlagUnitedKingdom, MoreHorizontal, OutlineBell } from '@/shared/assets'
+import { MoreHorizontal, OutlineBell } from '@/shared/assets'
 import { ROUTES } from '@/shared/config'
-import { Button, Select, SelectItem, Typography } from '@photo-fiesta/ui-lib'
+import { LanguageSelect } from '@/shared/ui'
+import { Button, Typography } from '@photo-fiesta/ui-lib'
 import clsx from 'clsx'
 import Link from 'next/link'
 
 import styles from './header.module.scss'
-
-type Language = 'en' | 'ru'
 
 export type HeaderProps = {
   isAuth?: boolean
@@ -24,12 +23,6 @@ export type HeaderProps = {
 
 export const Header = forwardRef<ElementRef<'div'>, HeaderProps>(
   ({ className, isAuth = true, ...rest }, ref) => {
-    const [lang, setLang] = useState<Language>('en')
-
-    const handleChangeLang = (value: Language) => {
-      setLang(value)
-    }
-
     const classNames = {
       bell: styles.bell,
       buttonsContainer: styles.buttonsContainer,
@@ -51,20 +44,7 @@ export const Header = forwardRef<ElementRef<'div'>, HeaderProps>(
         <div className={classNames.buttonsContainer}>
           {/**TODO: add dropdown menu using icon for desktop*/}
           {isAuth && <OutlineBell className={classNames.bell} />}
-          <Select className={classNames.select} onValueChange={handleChangeLang} value={lang}>
-            <SelectItem value={'ru'}>
-              <div className={classNames.selectItem}>
-                <FlagRussia className={styles.flag} />
-                <span className={classNames.lang}>Russian</span>
-              </div>
-            </SelectItem>
-            <SelectItem value={'en'}>
-              <div className={classNames.selectItem}>
-                <FlagUnitedKingdom className={classNames.flag} />
-                <span className={classNames.lang}>English</span>{' '}
-              </div>
-            </SelectItem>
-          </Select>
+          <LanguageSelect className={classNames.select} />
           {/**TODO: add dropdown menu using icon for mobile*/}
           {isAuth && <MoreHorizontal className={classNames.more} />}
           {!isAuth && (

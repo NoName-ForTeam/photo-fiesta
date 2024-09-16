@@ -2,6 +2,7 @@ import { Controller, FieldErrors } from 'react-hook-form'
 
 import { AuthCard } from '@/features'
 import { ROUTES } from '@/shared/config'
+import { useTranslation } from '@/shared/utils/hooks/useTranslation'
 import { Button, Input, Typography } from '@photo-fiesta/ui-lib'
 import Link from 'next/link'
 
@@ -21,6 +22,7 @@ import { FormInputs, useSignIn } from './useSignIn'
  */
 
 export const SignIn = () => {
+  const { t } = useTranslation()
   const { control, errors, onSubmit } = useSignIn()
   const classNames = {
     container: styles.container,
@@ -30,9 +32,9 @@ export const SignIn = () => {
   return (
     <AuthCard
       footerLinkHref={ROUTES.SIGN_UP}
-      footerLinkText={'Sign Up'}
-      footerText={"Don't have an account?"}
-      title={'Sign In'}
+      footerLinkText={t.auth.signUp}
+      footerText={t.auth.haveAccount}
+      title={t.auth.signIn}
     >
       <form className={classNames.form} onSubmit={onSubmit}>
         <div className={classNames.container}>
@@ -40,7 +42,11 @@ export const SignIn = () => {
             control={control}
             name={'email'}
             render={({ field }) => (
-              <Input label={'Email'} placeholder={'Enter your email'} {...field} />
+              <Input
+                label={t.auth.email}
+                placeholder={t.getPlaceholder('почтовый адрес')}
+                {...field}
+              />
             )}
           />
           <Controller
@@ -48,8 +54,8 @@ export const SignIn = () => {
             name={'password'}
             render={({ field }) => (
               <Input
-                label={'Password'}
-                placeholder={'Enter your password'}
+                label={t.auth.password}
+                placeholder={t.getPlaceholder('пароль')}
                 variant={'password'}
                 {...field}
               />
@@ -68,20 +74,22 @@ type ErrorMessageProps = {
 }
 
 const ErrorMessage = ({ errors }: ErrorMessageProps) => {
+  const { t } = useTranslation()
   const classNames = {
     errorMessage: styles.errorMessage,
   } as const
 
   return (
     <Typography className={classNames.errorMessage} variant={'text14'}>
-      {errors.email?.message ||
-        errors.password?.message ||
-        'The email or password are incorrect. Try again please'}
+      {(errors.email?.message && t.auth.emailType) ||
+        (errors.password?.message && t.auth.passwordMustContain) ||
+        t.auth.incorrectFields}
     </Typography>
   )
 }
 
 const FormButtons = () => {
+  const { t } = useTranslation()
   const classNames = {
     button: styles.button,
     password: styles.password,
@@ -91,11 +99,11 @@ const FormButtons = () => {
     <div className={classNames.button}>
       <Button asChild className={classNames.password} variant={'link'}>
         <Link href={ROUTES.FORGOT_PASSWORD}>
-          <Typography variant={'text14'}>Forgot Password</Typography>
+          <Typography variant={'text14'}>{t.auth.forgotPassword}</Typography>
         </Link>
       </Button>
       <Button type={'submit'} variant={'primary'}>
-        Sign in
+        {t.auth.signIn}
       </Button>
     </div>
   )

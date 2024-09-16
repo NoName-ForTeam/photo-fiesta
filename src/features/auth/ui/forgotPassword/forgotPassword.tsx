@@ -1,6 +1,7 @@
 import { SentEmail } from '@/features'
 import { ROUTES } from '@/shared/config'
 import { ReCaptcha } from '@/shared/ui'
+import { useTranslation } from '@/shared/utils/hooks/useTranslation'
 import { Button, Card, FormInput, Typography } from '@photo-fiesta/ui-lib'
 import Link from 'next/link'
 
@@ -22,6 +23,7 @@ import { useForgotPassword } from './useForgotPassword'
  */
 
 export const ForgotPassword = () => {
+  const { t } = useTranslation()
   const {
     RECAPTCHA_KEY,
     closeModal,
@@ -49,17 +51,17 @@ export const ForgotPassword = () => {
 
   const button = isLinkSent ? (
     <Button fullWidth onClick={() => setIsLinkSent(false)}>
-      Send Link Again
+      {t.auth.sendLinkAgain}
     </Button>
   ) : (
-    <Button fullWidth>Send Link</Button>
+    <Button fullWidth>{t.auth.sendLink}</Button>
   )
 
   return (
     <>
       <Card className={classNames.card}>
         <Typography className={classNames.title} variant={'h1'}>
-          Forgot Password
+          {t.auth.forgotPassword}
         </Typography>
         <form className={classNames.form} onSubmit={onSubmit}>
           <FormInput
@@ -71,18 +73,18 @@ export const ForgotPassword = () => {
             placeholder={'Epam@epam.com'}
           />
           <Typography className={classNames.description} variant={'text14'}>
-            Enter your email address and we will send you further instructions
+            {t.auth.enterEmailInstructions}
           </Typography>
           {isLinkSent && (
             <Typography className={classNames.afterInfo} variant={'text14'}>
-              The link has been sent by email. If you don’t receive an email send link again
+              {t.auth.linkSentByEmail}
             </Typography>
           )}
           <div className={classNames.container}>
             <div className={classNames.actionsContainer}>
               {button}
               <Button asChild className={classNames.link} variant={'link'}>
-                <Link href={ROUTES.SIGN_IN}>Back to Sign In</Link>
+                <Link href={ROUTES.SIGN_IN}>{t.auth.backToSignUp}</Link>
               </Button>
             </div>
 
