@@ -37,36 +37,19 @@ export const useSignIn = () => {
   })
   const [signIn] = useSignInMutation()
   const [getMe] = useLazyAuthMeQuery()
+  // const { data: dataMe } = useAuthMeQuery()
   const onSubmit = handleSubmit(data => {
     signIn(data)
       .unwrap()
       .then(async res => {
         Storage.setToken(res.accessToken)
-        const tokenPayload = res.accessToken.split('.')?.[1]
-        const decodedPayload = atob(tokenPayload)
-        let parsed
-
-        try {
-          parsed = JSON.parse(decodedPayload)
-        } catch {
-          parsed = {}
-        }
-
-        let userId
-
-        if (parsed?.userId) {
-          userId = parsed.userId
-        } else {
-          const meRes = await getMe()
-
-          userId = meRes?.data?.userId
-        }
+        const meRes = await getMe()
+        const userId = meRes?.data?.userId
 
         if (!userId) {
           return
         }
-
-        void router.replace(`/profile/${userId}`)
+        router.replace(`/profile/${userId}`)
       })
       .catch(error => {
         handleErrorResponse<FormInputs>({
@@ -76,6 +59,48 @@ export const useSignIn = () => {
         })
       })
   })
+  // .then(async res => {
+  //   Storage.setToken(res.accessToken)
+  //   const tokenPayload = res.accessToken.split('.')?.[1]
+  //   const decodedPayload = atob(tokenPayload)
+  //   let parsed
+  //
+  //   try {
+  //     parsed = JSON.parse(decodedPayload)
+  //   } catch {
+  //     parsed = {}
+  //   }
+  //
+  //   let userId
+  //
+  //   if (parsed?.userId) {
+  //     userId = parsed.userId
+  //   } else {
+  //     const meRes = await getMe()
+  //
+  //     userId = meRes?.data?.userId
+  //   }
+  //
+  //   if (!userId) {
+  //     return
+  //   }
+  //
+  //   void router.replace(`/profile/${userId}`)
+  // })
+  // .catch(error => {
+  //   handleErrorResponse<FormInputs>({
+  //     badRequestSchema,
+  //     error,
+  //     setError,
+  //   })
+  // })
+  // })
+
+  // if (dataMe) {
+  //   void router.replace(`/profile/${dataMe.userId}`)
+  //
+  //   return null
+  // }
 
   return {
     control,
