@@ -1,5 +1,6 @@
 import { ReactNode } from 'react'
 
+import { useAuthMeQuery } from '@/features'
 import { Header } from '@/shared/ui'
 import { Sidebars } from '@photo-fiesta/ui-lib'
 import { useRouter } from 'next/router'
@@ -24,26 +25,16 @@ import style from './layout.module.scss'
  */
 
 export const Layout = ({ children }: { children: ReactNode }) => {
-  // const { data: isAuthMe, isLoading } = useAuthMeQuery()
   const router = useRouter()
 
-  //toDO isLoggedIn & onChangeLanguage
-  const isLoggedIn = true
-  // const onChangeLanguage = (value: string) => {
-  //   // eslint-disable-next-line no-console
-  //   console.log(`Language changed to ${value}`)
-  // }
   const isProfilePage = router.pathname.startsWith('/profile')
-
-  //   // Обрабатываем состояния загрузки и ошибок
-  // if (isLoading) {
-  //   return <div>Loading...</div>
-  // }
+  const { data: authData } = useAuthMeQuery()
+  const isAuthMe = isProfilePage && !!authData
 
   return (
     <>
-      <Header />
-      {isLoggedIn && isProfilePage && <Sidebars />}
+      <Header isAuth={isAuthMe} />
+      {isAuthMe && <Sidebars />}
       <div className={style.authLayout}>{children}</div>
     </>
   )

@@ -1,12 +1,11 @@
 import { useForm } from 'react-hook-form'
-import { toast } from 'react-toastify'
 
 import { useLazyAuthMeQuery, useSignInMutation } from '@/features'
 import {
   commonEmailSchema,
   commonPasswordSchema,
-  // createBadRequestSchema,
-  // handleErrorResponse,
+  createBadRequestSchema,
+  handleErrorResponse,
 } from '@/shared/utils'
 import { Storage } from '@/shared/utils/storage'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -19,16 +18,15 @@ const signInSchema = z.object({
   password: commonPasswordSchema,
 })
 
-// const badRequestSchema = createBadRequestSchema(['email', 'password'])
+const badRequestSchema = createBadRequestSchema(['email', 'password'])
 
 export const useSignIn = () => {
   const router = useRouter()
   const {
-    // clearErrors,
     control,
     formState: { errors },
     handleSubmit,
-    // setError,
+    setError,
   } = useForm<FormInputs>({
     defaultValues: {
       email: '',
@@ -70,54 +68,14 @@ export const useSignIn = () => {
 
         void router.replace(`/profile/${userId}`)
       })
-      .catch(e => {
-        const message = e?.data?.messages ?? 'Something went wrong'
-
-        toast.error(message)
+      .catch(error => {
+        handleErrorResponse<FormInputs>({
+          badRequestSchema,
+          error,
+          setError,
+        })
       })
-    //   .catch (error: unknown)
-    // {
-    //     handleErrorResponse<FormInputs>({
-    //         badRequestSchema,
-    //         error,
-    //         setError,
-    //     })
-    // }
-    // catch (err) {
-    //   if (isFetchBaseQueryError(err)) {
-    //     const error = err as FetchBaseQueryError
-    //
-    //     if (error.status === 400) {
-    //       {
-    //         /**TODO: check response data and add error message*/
-    //       }
-    //       setError('email', {
-    //         //TODO:temporary solution to add error message
-    //         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    //         //@ts-expect-error
-    //         message: error.data.messages ?? 'Incorrect input data',
-    //         type: 'manual',
-    //       })
-    //     } else if (error.status === 401) {
-    //       setError('email', { message: 'Unauthorized', type: 'manual' })
-    //     } else if (error.status === 429) {
-    //       setError('email', {
-    //         message: 'More than 5 attempts from one IP-address during 10 seconds',
-    //         type: 'manual',
-    //       })
-    //     } else {
-    //       setError('email', { message: 'An error occurred. Please try again.', type: 'manual' })
-    //     }
-    //   } else {
-    //     setError('email', { message: 'An unexpected error occurred.', type: 'manual' })
-    //   }
-    //   console.error('Login failed', err)
-    // }
   })
-
-  // if (isAuthMe) {
-  //   void router.replace(`/profile/${isAuthMe.userId}`)
-  // }
 
   return {
     control,
@@ -125,7 +83,3 @@ export const useSignIn = () => {
     onSubmit,
   }
 }
-
-// function isFetchBaseQueryError(error: unknown): error is FetchBaseQueryError {
-//   return typeof error === 'object' && error != null && 'status' in error
-// }
