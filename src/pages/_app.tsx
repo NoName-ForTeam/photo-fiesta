@@ -3,10 +3,10 @@ import type { AppProps } from 'next/app'
 import { Provider } from 'react-redux'
 import { ToastContainer } from 'react-toastify'
 
+import { wrapper } from '@/app/store'
 import { Layout } from '@/features'
-import { wrapper } from '@/shared/store'
 
-import '@/shared/styles/index.scss'
+import '@/app/styles/index.scss'
 import '@fontsource/inter/400.css'
 import '@fontsource/inter/500.css'
 import '@fontsource/inter/600.css'

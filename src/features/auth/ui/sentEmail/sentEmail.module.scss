@@ -1,4 +1,4 @@
-@use '@/shared/styles/mixins' as *;
+@use '@/app/styles/mixins' as *;
 
 .container {
   display: flex;
@@ -15,6 +15,7 @@
   display: flex;
   justify-content: space-between;
   margin-bottom: 30px;
+  padding: 0 24px;
 
   @include mobile {
     padding: 12px;

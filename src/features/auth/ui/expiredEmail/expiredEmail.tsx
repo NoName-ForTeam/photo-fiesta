@@ -31,7 +31,23 @@ type Props = {
 export const ExpiredEmail = ({ email }: Props) => {
   const [isOpen, setIsOpen] = useState(false)
   const [resendLink, { error, isLoading }] = useResendLinkMutation()
-  const serverError = (error as ErrorResponse)?.data?.messages?.[0]?.message
+
+  //TODO: temporary solution for error handling
+  let serverError = 'An unknown error occurred'
+
+  if (error && (error as ErrorResponse).data) {
+    const errorData = (error as ErrorResponse).data
+
+    if (errorData.messages) {
+      if (typeof errorData.messages === 'string') {
+        serverError = errorData.messages
+      } else if (Array.isArray(errorData.messages) && errorData.messages.length > 0) {
+        serverError = errorData.messages[0].message || serverError
+      }
+    } else if (errorData.error) {
+      serverError = errorData.error
+    }
+  }
 
   const classNames = {
     btn: styles.btn,
@@ -45,12 +61,7 @@ export const ExpiredEmail = ({ email }: Props) => {
       await resendLink({ email }).unwrap()
       setIsOpen(true)
     } catch (e) {
-      if (serverError) {
-        toast.error(serverError)
-      } else {
-        console.error('Unhandled error:', e)
-        toast.error('Some error')
-      }
+      toast.error(serverError)
     }
   }
 

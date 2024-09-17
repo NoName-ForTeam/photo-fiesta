@@ -1,5 +1,5 @@
 export const ROUTES = {
-  CREATE_NEW_PASSWORD: '/auth/createNewPasswordPage',
+  CREATE_NEW_PASSWORD: '/auth/recovery',
   FORGOT_PASSWORD: '/auth/forgotPasswordPage',
   HOME: '/home',
   PRIVACY_POLICY: '/auth/privacyPolicyPage',

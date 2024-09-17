@@ -1,6 +1,7 @@
 import { ReactNode } from 'react'
 
-import { Header, Sidebars } from '@photo-fiesta/ui-lib'
+import { Header } from '@/shared/ui'
+import { Sidebars } from '@photo-fiesta/ui-lib'
 import { useRouter } from 'next/router'
 
 import style from './layout.module.scss'
@@ -28,10 +29,10 @@ export const Layout = ({ children }: { children: ReactNode }) => {
 
   //toDO isLoggedIn & onChangeLanguage
   const isLoggedIn = true
-  const onChangeLanguage = (value: string) => {
-    // eslint-disable-next-line no-console
-    console.log(`Language changed to ${value}`)
-  }
+  // const onChangeLanguage = (value: string) => {
+  //   // eslint-disable-next-line no-console
+  //   console.log(`Language changed to ${value}`)
+  // }
   const isProfilePage = router.pathname.startsWith('/profile')
 
   //   // Обрабатываем состояния загрузки и ошибок
@@ -41,7 +42,7 @@ export const Layout = ({ children }: { children: ReactNode }) => {
 
   return (
     <>
-      <Header isLoggedIn={isLoggedIn} onChangeLanguage={onChangeLanguage} />
+      <Header />
       {isLoggedIn && isProfilePage && <Sidebars />}
       <div className={style.authLayout}>{children}</div>
     </>

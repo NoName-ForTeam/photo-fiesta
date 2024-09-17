@@ -1,0 +1,102 @@
+@use '@/app/styles/mixins' as *;
+
+.header {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  height: var(--header-height);
+  padding: 12px 64px;
+
+  @include mobile {
+    padding: 12px 15px;
+  }
+
+  &::after {
+    content: '';
+
+    position: absolute;
+    right: 20px;
+    bottom: 0;
+    left: 20px;
+
+    height: 1px;
+
+    background-color: var(--dark-300);
+  }
+}
+
+.logo {
+  text-decoration: none;
+}
+
+.buttonsContainer {
+  display: flex;
+  gap: 45px;
+  align-items: center;
+
+  @include mobile {
+    gap: 24px;
+  }
+}
+
+.select {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+
+  min-width: 163px;
+  max-height: 36px;
+
+  @include mobile {
+    min-width: 30px;
+    padding: 0;
+    border: none;
+  }
+}
+
+.selectItem {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.bell {
+  width: 24px;
+  height: 24px;
+
+  @include mobile {
+    display: none;
+  }
+}
+
+.loginButtons {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+
+  @include mobile {
+    display: none;
+  }
+}
+
+.more {
+  display: none;
+
+  @include mobile {
+    display: block;
+  }
+}
+
+.lang {
+  @include mobile {
+    display: none;
+  }
+}
+
+.flag {
+  width: 24px;
+  height: 24px;
+}

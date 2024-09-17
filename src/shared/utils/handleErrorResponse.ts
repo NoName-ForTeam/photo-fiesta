@@ -11,41 +11,46 @@ const errorMessageSchema = z.object({
 })
 
 type ErrorMessage = z.infer<typeof errorMessageSchema>
-type ErrorHandlerParams<T extends FieldValues> = {
+
+type ErrorHandlerParams<T extends FieldValues = FieldValues> = {
   badRequestSchema: ZodSchema
   error: unknown
+  /**
+   * Determines whether to show toast notifications for errors if parsed.success is true.
+   * @default false
+   */
+  isToast?: boolean
   setError: UseFormSetError<T>
 }
 
 export function handleErrorResponse<T extends FieldValues>({
   badRequestSchema,
   error,
+  isToast = false,
   setError,
 }: ErrorHandlerParams<T>) {
   if (isValidErrorResponse(error)) {
     const parsed = badRequestSchema.safeParse(error.data)
 
     if (parsed.success) {
-      parsed.data.messages.forEach((m: ErrorMessage) => {
-        /**
-         * *the recoveryCode field is replaced by the code field
-         * *in response from the backend
-         */
-        if (m.field === 'code') {
-          setError('recoveryCode' as FieldPath<T>, { message: m.message })
-        } else {
-          setError(m.field as FieldPath<T>, { message: m.message })
-        }
-      })
-      /** show first error message */
-      toast.error(parsed.data.messages[0].message)
+      if (Array.isArray(parsed.data.messages)) {
+        parsed.data.messages.forEach((m: ErrorMessage) => {
+          if (m.field === 'code') {
+            setError('recoveryCode' as FieldPath<T>, { message: m.message })
+          } else {
+            setError(m.field as FieldPath<T>, { message: m.message })
+          }
+        })
+        /** show first error message */
+
+        isToast && toast.error(parsed.data.messages[0].message)
+      } else if (typeof parsed.data.messages === 'string') {
+        toast.error(parsed.data.messages)
+      }
     } else {
-      /**
-       * If the data does not match the schema, but there is a message property,
-       * we display that message. Otherwise, we show a generic error message.
-       */
-      if ('message' in error.data && typeof error.data.message === 'string') {
-        toast.error(error.data.message)
+      //if error.data.messages is not array or string show error message
+      if ('messages' in error.data) {
+        toast.error(error.data.messages as string)
       } else {
         toast.error('Invalid server response')
       }

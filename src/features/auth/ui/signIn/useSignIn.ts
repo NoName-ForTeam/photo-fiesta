@@ -2,7 +2,12 @@ import { useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 
 import { useLazyAuthMeQuery, useSignInMutation } from '@/features'
-import { PASSWORD_REGEX } from '@/shared/config'
+import {
+  commonEmailSchema,
+  commonPasswordSchema,
+  // createBadRequestSchema,
+  // handleErrorResponse,
+} from '@/shared/utils'
 import { Storage } from '@/shared/utils/storage'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/router'
@@ -10,17 +15,16 @@ import { z } from 'zod'
 
 export type FormInputs = z.infer<typeof signInSchema>
 const signInSchema = z.object({
-  email: z.string().email('Invalid email address'),
-  password: z
-    .string()
-    .min(6, 'Password must be at least 6 characters')
-    .max(20, 'Password must be at most 20 characters')
-    .regex(PASSWORD_REGEX),
+  email: commonEmailSchema,
+  password: commonPasswordSchema,
 })
+
+// const badRequestSchema = createBadRequestSchema(['email', 'password'])
 
 export const useSignIn = () => {
   const router = useRouter()
   const {
+    // clearErrors,
     control,
     formState: { errors },
     handleSubmit,
@@ -71,6 +75,14 @@ export const useSignIn = () => {
 
         toast.error(message)
       })
+    //   .catch (error: unknown)
+    // {
+    //     handleErrorResponse<FormInputs>({
+    //         badRequestSchema,
+    //         error,
+    //         setError,
+    //     })
+    // }
     // catch (err) {
     //   if (isFetchBaseQueryError(err)) {
     //     const error = err as FetchBaseQueryError
@@ -113,3 +125,7 @@ export const useSignIn = () => {
     onSubmit,
   }
 }
+
+// function isFetchBaseQueryError(error: unknown): error is FetchBaseQueryError {
+//   return typeof error === 'object' && error != null && 'status' in error
+// }

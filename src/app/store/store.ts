@@ -1,4 +1,4 @@
-import { baseApi } from '@/shared/api'
+import { baseApi } from '@/app/api'
 import { combineSlices, configureStore } from '@reduxjs/toolkit'
 import { createWrapper } from 'next-redux-wrapper'
 

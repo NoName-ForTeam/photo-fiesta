@@ -1,13 +1,14 @@
+import { baseApi } from '@/app/api'
 import {
   AuthMeResponse,
   ConfirmRegistration,
   CreateNewPasswordData,
+  PasswordRecoveryData,
   ResendLink,
   SignInData,
   SignUpData,
   SuccessSignInResponse,
 } from '@/features'
-import { baseApi } from '@/shared/api'
 import { API_URLS } from '@/shared/config'
 
 /**
@@ -36,6 +37,13 @@ export const authApi = baseApi.injectEndpoints({
           body: params,
           method: 'POST',
           url: API_URLS.AUTH.NEW_PASSWORD,
+        }),
+      }),
+      passwordRecovery: builder.mutation<void, PasswordRecoveryData>({
+        query: params => ({
+          body: params,
+          method: 'POST',
+          url: API_URLS.AUTH.PASSWORD_RECOVERY,
         }),
       }),
       resendLink: builder.mutation<void, ResendLink>({
@@ -85,6 +93,7 @@ export const {
   useConfirmRegistrationQuery,
   useCreateNewPasswordMutation,
   useLazyAuthMeQuery,
+  usePasswordRecoveryMutation,
   useResendLinkMutation,
   useSignInMutation,
   useSignUpMutation,

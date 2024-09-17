@@ -1,3 +1,6 @@
+import { SentEmail } from '@/features'
+import { ROUTES } from '@/shared/config'
+import { ReCaptcha } from '@/shared/ui'
 import { Button, Card, FormInput, Typography } from '@photo-fiesta/ui-lib'
 import Link from 'next/link'
 
@@ -19,40 +22,82 @@ import { useForgotPassword } from './useForgotPassword'
  */
 
 export const ForgotPassword = () => {
-  const { control, errors, handleSubmit, onSubmit } = useForgotPassword()
+  const {
+    RECAPTCHA_KEY,
+    closeModal,
+    control,
+    errors,
+    getValues,
+    isLinkSent,
+    isModalOpen,
+    onSubmit,
+    reCaptchaHandler,
+    setIsLinkSent,
+  } = useForgotPassword()
   const classNames = {
+    actionsContainer: styles.actionsContainer,
+    afterInfo: styles.afterInfo,
     card: styles.card,
+    container: styles.container,
     description: styles.description,
     field: styles.field,
     form: styles.form,
     link: styles.link,
+    recaptcha: styles.recaptcha,
     title: styles.title,
   } as const
 
-  return (
-    <Card className={classNames.card}>
-      <Typography className={classNames.title} variant={'h1'}>
-        Forgot Password
-      </Typography>
-      <form className={classNames.form} onSubmit={handleSubmit(onSubmit)}>
-        <FormInput
-          className={classNames.field}
-          control={control}
-          errorMessage={errors.email?.message}
-          label={'Email'}
-          name={'email'}
-          placeholder={'Epam@epam.com'}
-        />
-        <Typography className={classNames.description} variant={'text14'}>
-          Enter your email address and we will send you further instructions
-        </Typography>
-        <Button fullWidth>Send Link</Button>
-      </form>
-      <Button asChild className={classNames.link} variant={'link'}>
-        <Link href={'/auth/signInPage'}>Back to Sign In</Link>
-      </Button>
+  const button = isLinkSent ? (
+    <Button fullWidth onClick={() => setIsLinkSent(false)}>
+      Send Link Again
+    </Button>
+  ) : (
+    <Button fullWidth>Send Link</Button>
+  )
 
-      {/*TODO: add recaptcha and modal*/}
-    </Card>
+  return (
+    <>
+      <Card className={classNames.card}>
+        <Typography className={classNames.title} variant={'h1'}>
+          Forgot Password
+        </Typography>
+        <form className={classNames.form} onSubmit={onSubmit}>
+          <FormInput
+            className={classNames.field}
+            control={control}
+            errorMessage={errors.email?.message}
+            label={'Email'}
+            name={'email'}
+            placeholder={'Epam@epam.com'}
+          />
+          <Typography className={classNames.description} variant={'text14'}>
+            Enter your email address and we will send you further instructions
+          </Typography>
+          {isLinkSent && (
+            <Typography className={classNames.afterInfo} variant={'text14'}>
+              The link has been sent by email. If you don’t receive an email send link again
+            </Typography>
+          )}
+          <div className={classNames.container}>
+            <div className={classNames.actionsContainer}>
+              {button}
+              <Button asChild className={classNames.link} variant={'link'}>
+                <Link href={ROUTES.SIGN_IN}>Back to Sign In</Link>
+              </Button>
+            </div>
+
+            {!isLinkSent && (
+              <ReCaptcha
+                className={classNames.recaptcha}
+                onVerify={reCaptchaHandler}
+                siteKey={RECAPTCHA_KEY!}
+              />
+            )}
+          </div>
+        </form>
+      </Card>
+
+      <SentEmail closeModal={closeModal} email={getValues('email')} open={isModalOpen} />
+    </>
   )
 }
