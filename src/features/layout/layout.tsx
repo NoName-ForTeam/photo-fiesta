@@ -1,4 +1,4 @@
-import { ReactNode } from 'react'
+import { ReactNode, useEffect } from 'react'
 
 import { useAuthMeQuery } from '@/features'
 import { Header } from '@/shared/ui'
@@ -26,15 +26,22 @@ import style from './layout.module.scss'
 
 export const Layout = ({ children }: { children: ReactNode }) => {
   const router = useRouter()
+  const { isError, isLoading, isSuccess } = useAuthMeQuery()
 
-  const isProfilePage = router.pathname.startsWith('/profile')
-  const { data: authData } = useAuthMeQuery()
-  const isAuthMe = isProfilePage && !!authData
+  useEffect(() => {
+    if (isError) {
+      console.error(isError)
+    }
+  }, [isError, router])
+
+  if (isLoading) {
+    return <div>Loading...</div>
+  }
 
   return (
     <>
-      <Header isAuth={isAuthMe} />
-      {isAuthMe && <Sidebars />}
+      <Header isAuth={isSuccess} />
+      {isSuccess && <Sidebars />}
       <div className={style.authLayout}>{children}</div>
     </>
   )
