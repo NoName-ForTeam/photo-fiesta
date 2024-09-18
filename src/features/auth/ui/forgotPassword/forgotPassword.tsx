@@ -1,7 +1,7 @@
 import { SentEmail } from '@/features'
 import { ROUTES } from '@/shared/config'
 import { ReCaptcha } from '@/shared/ui'
-import { useTranslation } from '@/shared/utils/hooks/useTranslation'
+import { useTranslation } from '@/shared/utils'
 import { Button, Card, FormInput, Typography } from '@photo-fiesta/ui-lib'
 import Link from 'next/link'
 

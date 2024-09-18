@@ -1,4 +1,4 @@
-import { useTranslation } from '@/shared/utils/hooks/useTranslation'
+import { useTranslation } from '@/shared/utils'
 import { Button, Card, FormInput, Typography } from '@photo-fiesta/ui-lib'
 
 import styles from './createNewPassword.module.scss'

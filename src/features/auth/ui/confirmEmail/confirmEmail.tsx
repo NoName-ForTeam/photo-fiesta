@@ -1,7 +1,7 @@
 import { ExpiredEmail, useConfirmRegistrationQuery } from '@/features'
 import { bro } from '@/shared/assets'
 import { ROUTES } from '@/shared/config'
-import { useTranslation } from '@/shared/utils/hooks/useTranslation'
+import { useTranslation } from '@/shared/utils'
 import { Button, Typography } from '@photo-fiesta/ui-lib'
 import Image from 'next/image'
 import Link from 'next/link'

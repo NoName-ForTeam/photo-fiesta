@@ -1,7 +1,6 @@
-import { FC, Fragment } from 'react'
+import { Fragment } from 'react'
 
-const tagsRegex = /(<\d+>[^<>]*<\/\d+>)/
-const openCloseTagRegex = /<(\d+)>([^<>]*)<\/(\d+)>/
+import { openCloseTagRegex, tagsRegex } from '@/shared/config'
 
 type TransType = {
   /**
@@ -26,7 +25,7 @@ type TransType = {
  *   }}
  * />
  */
-export const Trans: FC<TransType> = props => {
+export const Trans = (props: TransType) => {
   return <>{interpolateTags(props)}</>
 }
 

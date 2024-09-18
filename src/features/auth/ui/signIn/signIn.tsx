@@ -2,7 +2,7 @@ import { Controller, FieldErrors } from 'react-hook-form'
 
 import { AuthCard } from '@/features'
 import { ROUTES } from '@/shared/config'
-import { useTranslation } from '@/shared/utils/hooks/useTranslation'
+import { useTranslation } from '@/shared/utils'
 import { Button, Input, Typography } from '@photo-fiesta/ui-lib'
 import Link from 'next/link'
 

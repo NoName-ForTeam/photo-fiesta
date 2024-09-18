@@ -3,7 +3,7 @@ import { toast } from 'react-toastify'
 
 import { ErrorResponse, SentEmail, useResendLinkMutation } from '@/features'
 import { rafiki } from '@/shared/assets'
-import { useTranslation } from '@/shared/utils/hooks/useTranslation'
+import { useTranslation } from '@/shared/utils'
 import { Button, Card, Typography } from '@photo-fiesta/ui-lib'
 import Image from 'next/image'
 

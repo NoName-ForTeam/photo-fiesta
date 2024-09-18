@@ -4,6 +4,17 @@ import { useRouter } from 'next/router'
 
 import styles from './languageSelect.module.scss'
 
+/**
+ * LanguageSelect component allows users to switch between languages.
+ *
+ * This component renders a dropdown selection for language options,
+ * which updates the application's locale and navigates to the same
+ * page with the selected language applied.
+ *
+ * @example
+ * <LanguageSelect className="my-custom-class" />
+ */
+
 export const LanguageSelect = ({ className }: { className: string }) => {
   const { asPath, locale, pathname, push, query } = useRouter()
 
@@ -13,6 +24,11 @@ export const LanguageSelect = ({ className }: { className: string }) => {
     selectItem: styles.selectItem,
   }
 
+  /**
+   * Handles changing the current language by updating the locale in the router.
+   *
+   * @param {string} locale - The locale string to switch to ('ru' or 'en').
+   */
   const onChangeLanguage = (locale: string) => {
     void push({ pathname, query }, asPath, { locale })
   }

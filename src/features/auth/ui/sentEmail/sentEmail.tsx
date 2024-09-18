@@ -1,5 +1,5 @@
 import { CloseOutline } from '@/shared/assets'
-import { useTranslation } from '@/shared/utils/hooks/useTranslation'
+import { useTranslation } from '@/shared/utils'
 import {
   Button,
   Modal,

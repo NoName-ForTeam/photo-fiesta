@@ -1,5 +1,5 @@
 import { ArrowBackOutline } from '@/shared/assets'
-import { useTranslation } from '@/shared/utils/hooks/useTranslation'
+import { useTranslation } from '@/shared/utils'
 import { Typography } from '@photo-fiesta/ui-lib'
 import Link from 'next/link'
 
