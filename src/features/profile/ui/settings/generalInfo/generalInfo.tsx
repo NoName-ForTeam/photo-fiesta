@@ -1,7 +1,6 @@
-import { ChangeEvent, ComponentPropsWithoutRef, useEffect, useRef, useState } from 'react'
+import { ComponentPropsWithoutRef, useState } from 'react'
 
 import { CloseOutline, ImageOutline } from '@/shared/assets'
-import { ALLOWED_FORMATS, MAX_FILE_SIZE } from '@/shared/config'
 import { CustomDatePicker } from '@/shared/ui'
 import {
   Button,
@@ -18,9 +17,16 @@ import Image from 'next/image'
 
 import styles from './generalInfo.module.scss'
 
+import { useModalAddPhoto } from './useModalAddPhoto'
+
 export type GeneralInfoProps = ComponentPropsWithoutRef<'div'>
+/**
+ * GeneralInfo component for displaying and editing user information
+ * @example
+ * <GeneralInfo className="custom-class" />
+ */
 export const GeneralInfo = ({ className }: GeneralInfoProps) => {
-  const [isOpen, setIsOpen] = useState(true)
+  const [isOpen, setIsOpen] = useState(false)
   const [image, setImage] = useState<null | string>(null)
 
   const classNames = {
@@ -89,7 +95,10 @@ type PhotoPreviewProps = {
   preview: string
   size: number
 }
-
+/**
+ * PhotoPreview component for displaying a user's profile photo or placeholder
+ * <PhotoPreview image="https://example.com/photo.jpg" preview="previewClass" size={192} />
+ */
 export const PhotoPreview = ({ image, preview, size }: PhotoPreviewProps) => {
   const classNames = {
     icon: styles.icon,
@@ -103,6 +112,7 @@ export const PhotoPreview = ({ image, preview, size }: PhotoPreviewProps) => {
       {image ? (
         <div className={classNames.imageWrapper}>
           {/** *width and height are required for the image to be displayed in next */}
+          {/** *TODO: add button as red circle with X icon to remove image in profile settings*/}
           <Image alt={'Uploaded'} height={size} src={image} width={size} />
         </div>
       ) : (
@@ -117,24 +127,15 @@ export const PhotoPreview = ({ image, preview, size }: PhotoPreviewProps) => {
 //MODAL
 type ModalAddPhotoProps = {
   handleCloseModal: () => void
-  //image: null | string
   isOpen: boolean
   setImage: (image: null | string) => void
 }
-
+/**
+ * ModalAddPhoto component for adding or changing a profile photo
+ */
 const ModalAddPhoto = ({ handleCloseModal, isOpen, setImage }: ModalAddPhotoProps) => {
-  const fileInputRef = useRef<HTMLInputElement>(null)
-  const [error, setError] = useState<null | string>(null)
-  const [selectedImage, setSelectedImage] = useState<null | string>(null)
-  const [isSaved, setIsSaved] = useState(false)
-
-  useEffect(() => {
-    if (isOpen) {
-      setSelectedImage(null)
-      setError(null)
-      setIsSaved(false)
-    }
-  }, [isOpen])
+  const { error, fileInputRef, handleClick, handleFileChange, handleSave, isSaved, selectedImage } =
+    useModalAddPhoto({ handleCloseModal, isOpen, setImage })
 
   const classNames = {
     block: styles.block,
@@ -145,46 +146,6 @@ const ModalAddPhoto = ({ handleCloseModal, isOpen, setImage }: ModalAddPhotoProp
     main: styles.main,
     save: styles.save,
   } as const
-  const handleClick = () => {
-    fileInputRef.current?.click()
-  }
-
-  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]
-
-    if (file) {
-      if (file.size > MAX_FILE_SIZE) {
-        setError('Photo size must be less than 10 MB!')
-        setSelectedImage(null)
-
-        return
-      }
-
-      if (!ALLOWED_FORMATS.includes(file.type)) {
-        setError('The format of the uploaded photo must be PNG and JPEG')
-        setSelectedImage(null)
-
-        return
-      }
-
-      const reader = new FileReader()
-
-      reader.onload = e => {
-        setSelectedImage(e.target?.result as string)
-        setError(null)
-      }
-      reader.readAsDataURL(file)
-    }
-    event.target.value = ''
-  }
-  const handleSave = () => {
-    if (selectedImage) {
-      setImage(selectedImage)
-      setError(null)
-      setIsSaved(true)
-      handleCloseModal()
-    }
-  }
 
   return (
     <Modal open={isOpen}>
@@ -201,7 +162,7 @@ const ModalAddPhoto = ({ handleCloseModal, isOpen, setImage }: ModalAddPhotoProp
               Error!{' '}
             </Typography>
             <Typography as={'span'} variant={'text14'}>
-              Error! Photo size must be less than 10 MB!
+              Error! {error}
             </Typography>
           </div>
           <div className={classNames.block}>

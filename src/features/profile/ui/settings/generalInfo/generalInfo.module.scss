@@ -16,6 +16,8 @@
   background-color: var(--dark-500);
 }
 
+/*** GENERAL INFO ***/
+
 .root {
   display: flex;
   gap: 40px;
@@ -34,47 +36,8 @@
   padding-top: 24px;
 }
 
-.imagePreview {
-  @include image-preview(192px);
-
-  border-radius: 50%;
-}
-
-.imageWrapper {
-  position: absolute;
-
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  width: 100%;
-  height: 100%;
-
-  & > img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
-  }
-}
-
-.placeholder {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  width: 100%;
-  height: 100%;
-}
-
 .uploadButton {
   margin-top: 24px;
-}
-
-.icon {
-  width: var(--photo-icon-size);
-  height: var(--photo-icon-size);
 }
 
 .form {
@@ -131,6 +94,47 @@
 
 .submit {
   align-self: flex-end;
+}
+
+/*** PHOTO PREVIEW ***/
+
+.imageWrapper {
+  position: absolute;
+
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  height: 100%;
+
+  & > img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+}
+
+.placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  height: 100%;
+}
+
+.imagePreview {
+  @include image-preview(192px);
+
+  border-radius: 50%;
+}
+
+.icon {
+  width: var(--photo-icon-size);
+  height: var(--photo-icon-size);
 }
 
 /*** MODAL ***/
