@@ -1,6 +1,9 @@
-import { PropsWithChildren, ReactNode } from 'react'
+import { ReactNode, useEffect } from 'react'
 
+import { useAuthMeQuery } from '@/features'
 import { Header } from '@/shared/ui'
+import { Sidebars } from '@photo-fiesta/ui-lib'
+import { useRouter } from 'next/router'
 
 import style from './layout.module.scss'
 
@@ -21,26 +24,25 @@ import style from './layout.module.scss'
  * )
  */
 
-// eslint-disable-next-line react-refresh/only-export-components
-const Layout = ({ children }: PropsWithChildren) => {
+export const Layout = ({ children }: { children: ReactNode }) => {
+  const router = useRouter()
+  const { isError, isLoading, isSuccess } = useAuthMeQuery()
+
+  useEffect(() => {
+    if (isError) {
+      console.error(isError)
+    }
+  }, [isError, router])
+
+  if (isLoading) {
+    return <div>Loading...</div>
+  }
+
   return (
     <>
-      <Header />
+      <Header isAuth={isSuccess} />
+      {isSuccess && <Sidebars />}
       <div className={style.authLayout}>{children}</div>
     </>
   )
-}
-
-/**
- * `getAuthLayout` is a helper function that applies the `Layout` to a given page.
- *
- * @param {ReactNode} page - The page component to be wrapped by the `Layout`.
- * @returns {JSX.Element} The page component wrapped in the `Layout`.
- *
- * @example
- * SignUpPage.getLayout = getAuthLayout
- */
-
-export const getAuthLayout = (page: ReactNode) => {
-  return <Layout>{page}</Layout>
 }

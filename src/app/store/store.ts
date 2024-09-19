@@ -1,15 +1,14 @@
 import { baseApi } from '@/app/api'
-import { configureStore } from '@reduxjs/toolkit'
-import { setupListeners } from '@reduxjs/toolkit/query'
+import { combineSlices, configureStore } from '@reduxjs/toolkit'
+import { createWrapper } from 'next-redux-wrapper'
 
-export const store = configureStore({
-  middleware: getDefaultMiddleware => getDefaultMiddleware().concat(baseApi.middleware),
-  reducer: {
-    [baseApi.reducerPath]: baseApi.reducer,
-  },
-})
+const makeStore = () =>
+  configureStore({
+    middleware: getDefaultMiddleware => getDefaultMiddleware().concat(baseApi.middleware),
+    reducer: combineSlices(baseApi),
+  })
 
-export type AppDispatch = typeof store.dispatch
-export type RootState = ReturnType<typeof store.getState>
+// export an assembled wrapper
+export const wrapper = createWrapper<AppStore>(makeStore)
 
-setupListeners(store.dispatch)
+export type AppStore = ReturnType<typeof makeStore>
