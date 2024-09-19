@@ -30,11 +30,13 @@ export const Layout = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     if (isError) {
+      // TODO: add logic for handle error
       console.error(isError)
     }
   }, [isError, router])
 
   if (isLoading) {
+    // TODO: add logic for show loading
     return <div>Loading...</div>
   }
 
