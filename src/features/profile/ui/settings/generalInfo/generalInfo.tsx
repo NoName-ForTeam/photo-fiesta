@@ -1,4 +1,4 @@
-import { ChangeEvent, ComponentPropsWithoutRef, useRef, useState } from 'react'
+import { ChangeEvent, ComponentPropsWithoutRef, useEffect, useRef, useState } from 'react'
 
 import { CloseOutline, ImageOutline } from '@/shared/assets'
 import { ALLOWED_FORMATS, MAX_FILE_SIZE } from '@/shared/config'
@@ -67,7 +67,7 @@ export const GeneralInfo = ({ className }: GeneralInfoProps) => {
             placeholder={'City'}
           ></Select>
         </div>
-
+        {/**TODO: add textarea and resolve problem with z-index*/}
         {/* <div className={classNames.textareaBlock}>
           <TextArea
             className={classNames.textarea}
@@ -77,12 +77,7 @@ export const GeneralInfo = ({ className }: GeneralInfoProps) => {
         </div> */}
         <Button className={classNames.submit}>Save Changes</Button>
       </form>
-      <ModalAddPhoto
-        handleCloseModal={handleCloseModal}
-        image={image}
-        isOpen={isOpen}
-        setImage={setImage}
-      />
+      <ModalAddPhoto handleCloseModal={handleCloseModal} isOpen={isOpen} setImage={setImage} />
     </div>
   )
 }
@@ -122,14 +117,25 @@ export const PhotoPreview = ({ image, preview, size }: PhotoPreviewProps) => {
 //MODAL
 type ModalAddPhotoProps = {
   handleCloseModal: () => void
-  image: null | string
+  //image: null | string
   isOpen: boolean
   setImage: (image: null | string) => void
 }
 
-const ModalAddPhoto = ({ handleCloseModal, image, isOpen, setImage }: ModalAddPhotoProps) => {
+const ModalAddPhoto = ({ handleCloseModal, isOpen, setImage }: ModalAddPhotoProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [error, setError] = useState<null | string>(null)
+  const [selectedImage, setSelectedImage] = useState<null | string>(null)
+  const [isSaved, setIsSaved] = useState(false)
+
+  useEffect(() => {
+    if (isOpen) {
+      setSelectedImage(null)
+      setError(null)
+      setIsSaved(false)
+    }
+  }, [isOpen])
+
   const classNames = {
     block: styles.block,
     close: styles.close,
@@ -149,12 +155,14 @@ const ModalAddPhoto = ({ handleCloseModal, image, isOpen, setImage }: ModalAddPh
     if (file) {
       if (file.size > MAX_FILE_SIZE) {
         setError('Photo size must be less than 10 MB!')
+        setSelectedImage(null)
 
         return
       }
 
       if (!ALLOWED_FORMATS.includes(file.type)) {
         setError('The format of the uploaded photo must be PNG and JPEG')
+        setSelectedImage(null)
 
         return
       }
@@ -162,10 +170,19 @@ const ModalAddPhoto = ({ handleCloseModal, image, isOpen, setImage }: ModalAddPh
       const reader = new FileReader()
 
       reader.onload = e => {
-        setImage(e.target?.result as string)
+        setSelectedImage(e.target?.result as string)
         setError(null)
       }
       reader.readAsDataURL(file)
+    }
+    event.target.value = ''
+  }
+  const handleSave = () => {
+    if (selectedImage) {
+      setImage(selectedImage)
+      setError(null)
+      setIsSaved(true)
+      handleCloseModal()
     }
   }
 
@@ -188,7 +205,7 @@ const ModalAddPhoto = ({ handleCloseModal, image, isOpen, setImage }: ModalAddPh
             </Typography>
           </div>
           <div className={classNames.block}>
-            <PhotoPreview image={image} preview={styles.photoPreview} size={228} />
+            <PhotoPreview image={selectedImage} preview={styles.photoPreview} size={228} />
             <input
               accept={'image/*'}
               hidden
@@ -196,12 +213,16 @@ const ModalAddPhoto = ({ handleCloseModal, image, isOpen, setImage }: ModalAddPh
               ref={fileInputRef}
               type={'file'}
             />
-            {false && (
+            {!selectedImage && !isSaved && (
               <Button fullWidth onClick={handleClick}>
                 Select from Computer
               </Button>
             )}
-            {true && <Button className={classNames.save}>Save</Button>}
+            {selectedImage && !error && !isSaved && (
+              <Button className={classNames.save} onClick={handleSave}>
+                Save
+              </Button>
+            )}
           </div>
         </div>
       </ModalContent>
