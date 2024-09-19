@@ -7,6 +7,7 @@ const ProfilePage = () => {
   const userId = router.query.userId
 
   if (!isSuccess) {
+    // TODO: add logic for show loading
     return <div>Loading...</div>
   }
 
