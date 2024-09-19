@@ -1,4 +1,5 @@
 import { CloseOutline } from '@/shared/assets'
+import { useTranslation } from '@/shared/utils'
 import {
   Button,
   Modal,
@@ -18,6 +19,7 @@ export type SentEmailProps = {
   open: boolean
 }
 export const SentEmail = ({ closeModal, email, open }: SentEmailProps) => {
+  const { t } = useTranslation()
   const classNames = {
     container: styles.container,
     content: styles.content,
@@ -34,7 +36,7 @@ export const SentEmail = ({ closeModal, email, open }: SentEmailProps) => {
       <ModalContent className={classNames.content}>
         <ModalHeader className={classNames.header}>
           <ModalTitle>
-            <Typography variant={'h1'}>Email sent</Typography>
+            <Typography variant={'h1'}>{t.auth.emailSent}</Typography>
           </ModalTitle>
           <ModalClose onClick={closeModal}>
             <CloseOutline className={classNames.icon} />
@@ -42,10 +44,10 @@ export const SentEmail = ({ closeModal, email, open }: SentEmailProps) => {
         </ModalHeader>
         <div className={classNames.container}>
           <Typography className={classNames.description} variant={'text16'}>
-            We have sent a link to confirm your email to {finalEmail}
+            {t.auth.emailSentText(finalEmail)}
           </Typography>
           <ModalFooter className={classNames.footer}>
-            <Button onClick={closeModal}>OK</Button>
+            <Button onClick={closeModal}></Button>
           </ModalFooter>
         </div>
       </ModalContent>

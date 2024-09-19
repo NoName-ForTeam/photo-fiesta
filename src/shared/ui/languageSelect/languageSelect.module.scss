@@ -1,0 +1,18 @@
+@use '../../../app/styles/mixins' as *;
+
+.selectItem {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.lang {
+  @include mobile {
+    display: none;
+  }
+}
+
+.flag {
+  width: 24px;
+  height: 24px;
+}

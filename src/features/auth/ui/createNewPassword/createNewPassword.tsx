@@ -1,3 +1,4 @@
+import { useTranslation } from '@/shared/utils'
 import { Button, Card, FormInput, Typography } from '@photo-fiesta/ui-lib'
 
 import styles from './createNewPassword.module.scss'
@@ -19,6 +20,7 @@ import { useCreateNewPassword } from './useCreateNewPassword'
  */
 
 export const CreateNewPassword = () => {
+  const { t } = useTranslation()
   const { control, errors, onSubmit } = useCreateNewPassword()
   const classNames = {
     card: styles.card,
@@ -31,29 +33,29 @@ export const CreateNewPassword = () => {
   return (
     <Card className={classNames.card}>
       <Typography className={classNames.title} variant={'h1'}>
-        Create New Password
+        {t.auth.createNewPassword}
       </Typography>
       <form onSubmit={onSubmit}>
         <div className={classNames.fieldContainer}>
           <FormInput
             control={control}
-            label={'New password'}
+            label={t.auth.newPassword}
             name={'newPassword'}
             variant={'password'}
           />
           <FormInput
             control={control}
             errorMessage={errors.newPassword?.message}
-            label={'Password confirmation'}
+            label={t.auth.confirmPassword}
             name={'confirmPassword'}
             variant={'password'}
           />
         </div>
         <Typography as={'p'} className={classNames.description} variant={'text14'}>
-          Your password must be between 6 and 20 characters
+          {t.auth.passwordRequirements(6, 20)}
         </Typography>
         <Button className={classNames.submitBtn} fullWidth type={'submit'}>
-          Create new password
+          {t.auth.createNewPassword}
         </Button>
       </form>
     </Card>

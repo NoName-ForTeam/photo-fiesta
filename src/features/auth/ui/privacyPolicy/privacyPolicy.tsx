@@ -1,10 +1,12 @@
 import { ArrowBackOutline } from '@/shared/assets'
+import { useTranslation } from '@/shared/utils'
 import { Typography } from '@photo-fiesta/ui-lib'
 import Link from 'next/link'
 
 import styles from './privacyPolicy.module.scss'
 
 export const PrivacyPolicy = () => {
+  const { t } = useTranslation()
   const classNames = {
     container: styles.container,
     link: styles.link,
@@ -25,10 +27,10 @@ export const PrivacyPolicy = () => {
     <div className={classNames.container}>
       <Link className={classNames.link} href={'/'}>
         <ArrowBackOutline className={classNames.svg} />
-        <Typography className={classNames.signUp}>Back to Sign Up</Typography>
+        <Typography className={classNames.signUp}>{t.auth.backToSignUp}</Typography>
       </Link>
       <div className={classNames.terms}>
-        <Typography as={'h1'}>Privacy Policy</Typography>
+        <Typography as={'h1'}>{t.auth.privacyPolicy}</Typography>
         <Typography>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
           ut labore et dolore magna aliqua. Fames ac turpis egestas integer eget aliquet nibh. Amet
