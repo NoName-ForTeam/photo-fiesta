@@ -1,15 +1,15 @@
-import { ComponentPropsWithoutRef, useState } from 'react'
+import { ComponentPropsWithoutRef } from 'react'
 
 import { CloseOutline, ImageOutline } from '@/shared/assets'
-import { CustomDatePicker } from '@/shared/ui'
+import { FormDatePicker } from '@/shared/ui'
 import {
   Button,
-  Input,
+  FormInput,
+  FormSelect,
   Modal,
   ModalClose,
   ModalContent,
   ModalHeader,
-  Select,
   Typography,
 } from '@photo-fiesta/ui-lib'
 import clsx from 'clsx'
@@ -17,6 +17,7 @@ import Image from 'next/image'
 
 import styles from './generalInfo.module.scss'
 
+import { useGeneralInfo } from './useGeneralInfo'
 import { useModalAddPhoto } from './useModalAddPhoto'
 
 export type GeneralInfoProps = ComponentPropsWithoutRef<'div'>
@@ -26,8 +27,8 @@ export type GeneralInfoProps = ComponentPropsWithoutRef<'div'>
  * <GeneralInfo className="custom-class" />
  */
 export const GeneralInfo = ({ className }: GeneralInfoProps) => {
-  const [isOpen, setIsOpen] = useState(false)
-  const [image, setImage] = useState<null | string>(null)
+  const { control, errors, handleCloseModal, handleOpenModal, image, isOpen, onSubmit, setImage } =
+    useGeneralInfo()
 
   const classNames = {
     container: styles.container,
@@ -41,13 +42,6 @@ export const GeneralInfo = ({ className }: GeneralInfoProps) => {
     uploadButton: styles.uploadButton,
   } as const
 
-  const handleCloseModal = () => {
-    setIsOpen(false)
-  }
-  const handleOpenModal = () => {
-    setIsOpen(true)
-  }
-
   return (
     <div className={clsx(classNames.root, className)}>
       <div className={classNames.container}>
@@ -56,31 +50,46 @@ export const GeneralInfo = ({ className }: GeneralInfoProps) => {
           Add a Profile Photo
         </Button>
       </div>
-      <form className={classNames.form} onSubmit={() => {}}>
-        <Input label={'Username*'} placeholder={'Enter your username'} />
-        <Input label={'First name*'} placeholder={'Enter your first name'} />
-        <Input label={'Last name*'} placeholder={'Enter your last name'} />
-        <CustomDatePicker />
+      <form className={classNames.form} onSubmit={onSubmit}>
+        <FormInput
+          control={control}
+          errorMessage={errors.userName?.message}
+          label={'Username*'}
+          name={'userName'}
+          placeholder={'Enter your username'}
+          type={'text'}
+        />
+        <FormInput
+          control={control}
+          errorMessage={errors.firstName?.message}
+          label={'First name*'}
+          name={'firstName'}
+          placeholder={'Enter your first name'}
+          type={'text'}
+        />
+        <FormInput
+          control={control}
+          errorMessage={errors.lastName?.message}
+          label={'Last name*'}
+          name={'lastName'}
+          placeholder={'Enter your last name'}
+          type={'text'}
+        />
+
+        <FormDatePicker
+          control={control}
+          errorMessage={errors.dateOfBirth?.message}
+          label={'Date of birth*'}
+          name={'dateOfBirth'}
+        />
         <div className={classNames.selectBlock}>
-          <Select
-            className={classNames.select}
-            label={'Select your country'}
-            placeholder={'Country'}
-          ></Select>
-          <Select
-            className={classNames.select}
-            label={'Select your city'}
-            placeholder={'City'}
-          ></Select>
+          <FormSelect control={control} label={'Select your country'} name={'country'} />
+          <FormSelect control={control} label={'Select your city'} name={'city'} />
         </div>
         {/**TODO: add textarea and resolve problem with z-index*/}
-        {/* <div className={classNames.textareaBlock}>
-          <TextArea
-            className={classNames.textarea}
-            label={'About me'}
-            placeholder={'Enter your about me'}
-          />
-        </div> */}
+        <div className={classNames.textareaBlock}>
+          {/* <FormTextArea control={control} label={'About me'} name={'aboutMe'} /> */}
+        </div>
         <Button className={classNames.submit}>Save Changes</Button>
       </form>
       <ModalAddPhoto handleCloseModal={handleCloseModal} isOpen={isOpen} setImage={setImage} />
