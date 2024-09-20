@@ -1,9 +1,7 @@
-import { ReactNode, useEffect } from 'react'
+import { ReactNode } from 'react'
 
 import { useAuthMeQuery } from '@/features'
-import { Header } from '@/shared/ui'
-import { Sidebars } from '@photo-fiesta/ui-lib'
-import { useRouter } from 'next/router'
+import { Header, Sidebar } from '@/shared/ui'
 
 import style from './layout.module.scss'
 
@@ -25,26 +23,21 @@ import style from './layout.module.scss'
  */
 
 export const Layout = ({ children }: { children: ReactNode }) => {
-  const router = useRouter()
-  const { isError, isLoading, isSuccess } = useAuthMeQuery()
+  const { data: authData } = useAuthMeQuery()
 
-  useEffect(() => {
-    if (isError) {
-      // TODO: add logic for handle error
-      console.error(isError)
-    }
-  }, [isError, router])
-
-  if (isLoading) {
-    // TODO: add logic for show loading
-    return <div>Loading...</div>
-  }
+  const isSuccess = !!authData
 
   return (
     <>
       <Header isAuth={isSuccess} />
-      {isSuccess && <Sidebars />}
-      <div className={style.authLayout}>{children}</div>
+      <div className={style.wrapper}>
+        {isSuccess && (
+          <div className={style.sidebar}>
+            <Sidebar />
+          </div>
+        )}
+        <main className={style.main}>{children}</main>
+      </div>
     </>
   )
 }
