@@ -11,3 +11,17 @@
     justify-content: flex-start;
   }
 }
+
+.wrapper {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.sidebar {
+  flex: 0 0 250px; // ширина сайдбара
+}
+
+.layout {
+  flex: 1;
+  margin: 0 auto; // центрирование основной страницы
+}
