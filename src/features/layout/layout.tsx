@@ -36,7 +36,7 @@ export const Layout = ({ children }: { children: ReactNode }) => {
             <Sidebar />
           </div>
         )}
-        <main className={style.layout}>{children}</main>
+        <main className={style.main}>{children}</main>
       </div>
     </>
   )

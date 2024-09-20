@@ -15,13 +15,15 @@
 .wrapper {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
 }
 
 .sidebar {
   flex: 0 0 250px; // ширина сайдбара
 }
 
-.layout {
+.main {
   flex: 1;
   margin: 0 auto; // центрирование основной страницы
 }
