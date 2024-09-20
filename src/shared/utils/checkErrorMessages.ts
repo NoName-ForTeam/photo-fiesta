@@ -2,7 +2,7 @@
 import { UseFormSetError } from 'react-hook-form'
 import { toast } from 'react-toastify'
 
-import { ErrorResponse } from '@/features'
+import { ErrorResponse } from '@/shared/api'
 
 export const checkErrorMessages = (
   error: ErrorResponse,

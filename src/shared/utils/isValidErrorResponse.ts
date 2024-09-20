@@ -1,4 +1,4 @@
-import { ErrorResponse } from '@/features/auth'
+import { ErrorResponse } from '@/shared/api'
 
 /**
  * Checks if the given error object matches the structure of an ErrorResponse.
