@@ -1,3 +1,7 @@
+import { useState } from 'react'
+
+import { LogoutModal } from '@/features/auth/ui/logout/logoutModal/logoutModal'
+import { useLogout } from '@/features/auth/ui/logout/useLogout'
 import {
   BookmarkOutline,
   HomeOutline,
@@ -14,6 +18,18 @@ import Link from 'next/link'
 import styles from './sidebar.module.scss'
 
 export const Sidebar = () => {
+  const [isModalOpen, setModalOpen] = useState(false)
+  const logout = useLogout()
+
+  const confirmLogout = () => {
+    logout()
+    setModalOpen(false)
+  }
+
+  const closeModal = () => {
+    setModalOpen(false)
+  }
+
   return (
     <div>
       <Sidebars>
@@ -64,12 +80,15 @@ export const Sidebar = () => {
           </Link>
         </div>
         <div className={styles.icons}>
-          <SidebarsElement>
+          <SidebarsElement onClick={() => setModalOpen(true)}>
             <LogOut />
             Log Out
           </SidebarsElement>
         </div>
       </Sidebars>
+      {isModalOpen && (
+        <LogoutModal closeModal={closeModal} confirmLogout={confirmLogout} open={isModalOpen} />
+      )}
     </div>
   )
 }

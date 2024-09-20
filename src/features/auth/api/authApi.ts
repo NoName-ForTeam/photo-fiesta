@@ -39,6 +39,14 @@ export const authApi = baseApi.injectEndpoints({
           url: API_URLS.AUTH.NEW_PASSWORD,
         }),
       }),
+      logout: builder.mutation<void, void>({
+        invalidatesTags: ['Auth'],
+        query: params => ({
+          body: params,
+          method: 'POST',
+          url: 'v1/auth/logout',
+        }),
+      }),
       passwordRecovery: builder.mutation<void, PasswordRecoveryData>({
         query: params => ({
           body: params,
@@ -93,6 +101,7 @@ export const {
   useConfirmRegistrationQuery,
   useCreateNewPasswordMutation,
   useLazyAuthMeQuery,
+  useLogoutMutation,
   usePasswordRecoveryMutation,
   useResendLinkMutation,
   useSignInMutation,
