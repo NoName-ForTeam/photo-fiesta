@@ -28,6 +28,7 @@ export const en = {
     missingRecaptchaKey: 'Missing recaptcha key',
     newPassword: 'New password',
     noAccount: 'Don’t have an account?',
+    ok: 'Ok',
     password: 'Password',
     passwordMatch: 'The passwords must match',
     passwordMustContain:

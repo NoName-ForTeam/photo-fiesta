@@ -32,6 +32,7 @@ export const ru: LocaleType = {
     missingRecaptchaKey: 'Отсутствует ключ рекапчи',
     newPassword: 'Новый пароль',
     noAccount: 'Нет аккаунта?',
+    ok: 'ДА',
     password: 'Пароль',
     passwordMatch: 'Пароли должны совпадать',
     passwordMustContain:
