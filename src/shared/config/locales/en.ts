@@ -1,6 +1,4 @@
-import { LocaleType } from './ru'
-
-export const en: LocaleType = {
+export const en = {
   auth: {
     backToSignIn: 'Back to Sign In',
     backToSignUp: 'Back to Sign Up',
@@ -52,3 +50,5 @@ export const en: LocaleType = {
   },
   getPlaceholder: (title: string) => `Enter your ${title}`,
 }
+
+export type LocaleType = typeof en
