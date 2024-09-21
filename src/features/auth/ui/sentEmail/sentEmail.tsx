@@ -47,7 +47,7 @@ export const SentEmail = ({ closeModal, email, open }: SentEmailProps) => {
             {t.auth.emailSentText(finalEmail)}
           </Typography>
           <ModalFooter className={classNames.footer}>
-            <Button onClick={closeModal}></Button>
+            <Button onClick={closeModal}>{t.auth.ok}</Button>
           </ModalFooter>
         </div>
       </ModalContent>

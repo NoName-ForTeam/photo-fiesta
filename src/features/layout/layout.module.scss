@@ -24,6 +24,10 @@
 }
 
 .main {
+  display: flex;
   flex: 1;
-  margin: 0 auto; // центрирование основной страницы
+  align-items: center;
+  justify-content: center;
+
+  height: calc(100vh - var(--header-height));
 }
