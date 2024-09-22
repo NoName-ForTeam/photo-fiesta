@@ -11,3 +11,23 @@
     justify-content: flex-start;
   }
 }
+
+.wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+}
+
+.sidebar {
+  flex: 0 0 250px; // ширина сайдбара
+}
+
+.main {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+
+  height: calc(100vh - var(--header-height));
+}

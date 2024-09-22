@@ -1,5 +1,6 @@
 import { baseApi } from '@/app/api'
 import {
+  AuthMeResponse,
   ConfirmRegistration,
   CreateNewPasswordData,
   PasswordRecoveryData,
@@ -18,6 +19,10 @@ import { API_URLS } from '@/shared/config'
 export const authApi = baseApi.injectEndpoints({
   endpoints: builder => {
     return {
+      authMe: builder.query<AuthMeResponse, void>({
+        providesTags: ['Auth'],
+        query: () => 'v1/auth/me',
+      }),
       confirmRegistration: builder.query<void, ConfirmRegistration>({
         query: params => ({
           body: params,
@@ -32,6 +37,14 @@ export const authApi = baseApi.injectEndpoints({
           body: params,
           method: 'POST',
           url: API_URLS.AUTH.NEW_PASSWORD,
+        }),
+      }),
+      logout: builder.mutation<void, void>({
+        invalidatesTags: ['Auth'],
+        query: params => ({
+          body: params,
+          method: 'POST',
+          url: 'v1/auth/logout',
         }),
       }),
       passwordRecovery: builder.mutation<void, PasswordRecoveryData>({
@@ -84,8 +97,11 @@ export const authApi = baseApi.injectEndpoints({
 })
 
 export const {
+  useAuthMeQuery,
   useConfirmRegistrationQuery,
   useCreateNewPasswordMutation,
+  useLazyAuthMeQuery,
+  useLogoutMutation,
   usePasswordRecoveryMutation,
   useResendLinkMutation,
   useSignInMutation,

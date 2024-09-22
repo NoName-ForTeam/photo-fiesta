@@ -58,12 +58,6 @@
   }
 }
 
-.selectItem {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-}
-
 .bell {
   width: 24px;
   height: 24px;
@@ -89,15 +83,4 @@
   @include mobile {
     display: block;
   }
-}
-
-.lang {
-  @include mobile {
-    display: none;
-  }
-}
-
-.flag {
-  width: 24px;
-  height: 24px;
 }

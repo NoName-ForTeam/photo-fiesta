@@ -31,3 +31,22 @@ export type PasswordRecoveryData = {
   email: string
   recaptcha: string
 }
+
+export type ErrorResponse = {
+  /** The data object containing error details */
+  data: {
+    /** A general error message or error type */
+    error: string
+    /** An array of specific error messages for different fields or a single string message */
+    messages: { field: string; message: string }[] | string
+    /** The HTTP status code of the error */
+    statusCode: number
+  }
+}
+
+export type AuthMeResponse = {
+  email: string
+  isBlocked: boolean
+  userId: number
+  userName: string
+}

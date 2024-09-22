@@ -1,11 +1,10 @@
-import type { NextPage } from 'next'
 import type { AppProps } from 'next/app'
 
-import type { ReactElement, ReactNode } from 'react'
 import { Provider } from 'react-redux'
 import { ToastContainer } from 'react-toastify'
 
-import { store } from '@/app/store'
+import { wrapper } from '@/app/store'
+import { Layout } from '@/features'
 
 import '@/app/styles/index.scss'
 import '@fontsource/inter/400.css'
@@ -15,21 +14,15 @@ import '@fontsource/inter/700.css'
 import '@photo-fiesta/ui-lib/style.css'
 import 'react-toastify/dist/ReactToastify.css'
 
-export type NextPageWithLayout<P = object, IP = P> = {
-  getLayout?: (page: ReactElement) => ReactNode
-} & NextPage<P, IP>
+export default function MyApp({ Component, ...rest }: AppProps) {
+  const { props, store } = wrapper.useWrappedStore(rest)
 
-type AppPropsWithLayout = {
-  Component: NextPageWithLayout
-} & AppProps
-
-export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
-  const getLayout = Component.getLayout ?? (page => page)
-
-  return getLayout(
+  return (
     <Provider store={store}>
-      <Component {...pageProps} />
-      <ToastContainer />
+      <Layout>
+        <Component {...props.pageProps} />
+        <ToastContainer />
+      </Layout>
     </Provider>
   )
 }

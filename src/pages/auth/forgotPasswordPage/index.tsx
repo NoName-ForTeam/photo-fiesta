@@ -1,4 +1,4 @@
-import { ForgotPassword, getAuthLayout } from '@/features'
+import { ForgotPassword } from '@/features'
 
 /**
  * `SignUpPage` is a page component that renders the sign-up form for new users.
@@ -13,10 +13,3 @@ const ForgotPasswordPage = () => {
 }
 
 export default ForgotPasswordPage
-
-/**
- * Associates the `AuthLayout` with the `SignUpPage`, ensuring the page is rendered
- * within the authentication layout. This function is used by Next.js to apply the layout.
- */
-
-ForgotPasswordPage.getLayout = getAuthLayout

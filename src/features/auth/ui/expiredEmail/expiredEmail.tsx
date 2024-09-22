@@ -4,6 +4,7 @@ import { toast } from 'react-toastify'
 import { SentEmail, useResendLinkMutation } from '@/features'
 import { ErrorResponse } from '@/shared/api'
 import { rafiki } from '@/shared/assets'
+import { useTranslation } from '@/shared/utils'
 import { Button, Card, Typography } from '@photo-fiesta/ui-lib'
 import Image from 'next/image'
 
@@ -30,6 +31,7 @@ type Props = {
  */
 
 export const ExpiredEmail = ({ email }: Props) => {
+  const { t } = useTranslation()
   const [isOpen, setIsOpen] = useState(false)
   const [resendLink, { error, isLoading }] = useResendLinkMutation()
 
@@ -78,14 +80,12 @@ export const ExpiredEmail = ({ email }: Props) => {
     <Card className={classNames.card}>
       <div className={classNames.content}>
         <Typography as={'h1'} variant={'h1'}>
-          Email verification link expired
+          {t.auth.emailExpired}
         </Typography>
-        <Typography variant={'text16'}>
-          Looks like the verification link has expired. Not to worry, we can send the link again
-        </Typography>
+        <Typography variant={'text16'}>{t.auth.linkExpiredDescription}</Typography>
       </div>
       <Button className={classNames.btn} onClick={onResendLink}>
-        Resend verification link
+        {t.auth.resendLink}
       </Button>
       <Image alt={'expired'} className={classNames.img} src={rafiki} />
       <SentEmail closeModal={onCloseModalHandler} email={email} open={isOpen} />

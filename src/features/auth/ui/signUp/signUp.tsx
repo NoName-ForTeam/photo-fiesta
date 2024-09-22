@@ -1,6 +1,8 @@
 import { SentEmail } from '@/features'
 import { GithubSvgrepoCom31, GoogleSvgrepoCom1 } from '@/shared/assets'
 import { ROUTES } from '@/shared/config'
+import { Trans } from '@/shared/ui'
+import { useTranslation } from '@/shared/utils'
 import { Button, Card, FormCheckbox, FormInput, Typography } from '@photo-fiesta/ui-lib'
 import Link from 'next/link'
 
@@ -9,6 +11,7 @@ import styles from './signUp.module.scss'
 import { useSignUpForm } from './useSignUpForm'
 
 export const SignUp = () => {
+  const { t } = useTranslation()
   const { control, errors, isOpen, onCloseModalHandler, onSubmit, userEmail } = useSignUpForm()
 
   const classNames = {
@@ -28,7 +31,7 @@ export const SignUp = () => {
     <>
       <Card className={classNames.card}>
         <Typography className={classNames.titleSignUp} variant={'h1'}>
-          Sign Up
+          {t.auth.signUp}
         </Typography>
         <span className={classNames.iconsBox}>
           <Button asChild type={'button'} variant={'icon-link'}>
@@ -49,7 +52,7 @@ export const SignUp = () => {
             <FormInput
               control={control}
               errorMessage={errors.userName?.message}
-              label={'Username'}
+              label={t.auth.userName}
               name={'userName'}
               placeholder={'Epam11'}
               type={'username'}
@@ -59,7 +62,7 @@ export const SignUp = () => {
             <FormInput
               control={control}
               errorMessage={errors.email?.message}
-              label={'Email'}
+              label={t.auth.email}
               name={'email'}
               placeholder={'Epam@epam.com'}
               type={'email'}
@@ -69,7 +72,7 @@ export const SignUp = () => {
             <FormInput
               control={control}
               errorMessage={errors.password?.message}
-              label={'Password'}
+              label={t.auth.password}
               name={'password'}
               placeholder={'jk34!@#GF'}
               variant={'password'}
@@ -79,7 +82,7 @@ export const SignUp = () => {
             <FormInput
               control={control}
               errorMessage={errors.confirmPassword?.message}
-              label={'Password confirmation'}
+              label={t.auth.confirmPassword}
               name={'confirmPassword'}
               placeholder={'Confirm Password'}
               variant={'password'}
@@ -88,23 +91,35 @@ export const SignUp = () => {
           <div className={classNames.checkbox}>
             <FormCheckbox control={control} name={'agreeWithTerms'} />
             <Typography variant={'textSmall'}>
-              {' '}
-              I agree to the <Link href={ROUTES.TERMS_OF_SERVICE}>Terms of Service</Link> and{' '}
-              <Link href={ROUTES.PRIVACY_POLICY}>Privacy Policy</Link>
+              <Trans
+                tags={{
+                  1: () => (
+                    <Typography as={Link} href={ROUTES.TERMS_OF_SERVICE} variant={'link'}>
+                      {t.auth.termsOfService}
+                    </Typography>
+                  ),
+                  2: () => (
+                    <Typography as={Link} href={ROUTES.PRIVACY_POLICY} variant={'link'}>
+                      {t.auth.privacyPolicy}
+                    </Typography>
+                  ),
+                }}
+                text={t.auth.registrationAgree}
+              />
             </Typography>
           </div>
           <div className={classNames.submitBtn}>
             <Button fullWidth type={'submit'}>
-              Sign Up
+              {t.auth.signUp}
             </Button>
           </div>
         </form>
         <Typography className={classNames.haveAcc} variant={'text16'}>
-          Do you have an account?
+          {t.auth.haveAccount}
         </Typography>
         <div className={classNames.signIn}>
           <Button asChild variant={'link'}>
-            <Link href={ROUTES.SIGN_IN}>Sign In</Link>
+            <Link href={ROUTES.SIGN_IN}>{t.auth.signIn}</Link>
           </Button>
         </div>
       </Card>

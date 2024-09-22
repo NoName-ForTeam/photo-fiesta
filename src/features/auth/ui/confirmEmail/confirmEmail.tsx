@@ -1,6 +1,7 @@
 import { ExpiredEmail, useConfirmRegistrationQuery } from '@/features'
 import { bro } from '@/shared/assets'
 import { ROUTES } from '@/shared/config'
+import { useTranslation } from '@/shared/utils'
 import { Button, Typography } from '@photo-fiesta/ui-lib'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -26,6 +27,7 @@ import styles from './confirmEmail.module.scss'
  */
 
 export const ConfirmEmail = () => {
+  const { t } = useTranslation()
   const router = useRouter()
   const confirmationCode = router.query.code as string
   const email = router.query.email as string
@@ -52,15 +54,15 @@ export const ConfirmEmail = () => {
     <div className={classNames.root}>
       <div className={classNames.description}>
         <Typography as={'h1'} className={classNames.title} variant={'h1'}>
-          Congratulations!
+          {t.auth.congratulations}
         </Typography>
         <Typography as={'p'} variant={'text16'}>
-          Your email has been confirmed
+          {t.auth.emailConfirmed}
         </Typography>
       </div>
       <div className={classNames.main}>
         <Button asChild className={classNames.button}>
-          <Link href={ROUTES.SIGN_IN}>Sign In</Link>
+          <Link href={ROUTES.SIGN_IN}>{t.auth.signIn}</Link>
         </Button>
         <Image alt={'confirm'} className={classNames.img} src={bro} />
       </div>
