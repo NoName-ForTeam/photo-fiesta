@@ -31,6 +31,7 @@
   display: flex;
   flex: 0 1 196px;
   flex-direction: column;
+  gap: 24px;
   align-items: center;
 
   width: 100%;
@@ -50,12 +51,20 @@
 
   width: 100%;
   max-width: 740px;
-}
 
-.select,
-.datePicker {
-  font-size: var(--font-size-s);
-  color: var(--light-900);
+  & .select,
+  .datePicker {
+    font-size: var(--font-size-s);
+    color: var(--light-900);
+  }
+
+  & .textarea {
+    border-color: var(--dark-100);
+  }
+
+  & .submit {
+    align-self: flex-end;
+  }
 }
 
 .line {
@@ -77,10 +86,6 @@
   }
 }
 
-.textarea {
-  border-color: var(--dark-100);
-}
-
 .selectBlock {
   display: flex;
   gap: 24px;
@@ -90,10 +95,6 @@
     flex: 0 0 auto;
     width: 48.5%;
   }
-}
-
-.submit {
-  align-self: flex-end;
 }
 
 /*** PHOTO PREVIEW ***/
@@ -162,6 +163,12 @@
 
   width: 100%;
   padding: 24px 24px 96px;
+
+  & .save {
+    position: absolute;
+    right: 24px;
+    bottom: 36px;
+  }
 }
 
 .block {
@@ -194,10 +201,4 @@
 .visible {
   visibility: visible;
   opacity: 1;
-}
-
-.save {
-  position: absolute;
-  right: 24px;
-  bottom: 36px;
 }

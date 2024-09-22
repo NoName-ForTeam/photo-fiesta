@@ -73,8 +73,14 @@ export const useGeneralInfo = () => {
          * for date to back end use date of birth in ISO format: date.toISOString()
          */
       }
+
+      const submissionData = {
+        ...data,
+        dateOfBirth: data.dateOfBirth.toISOString(),
+      }
+
       // eslint-disable-next-line no-console
-      console.log(data)
+      console.log(submissionData)
     } catch (error) {
       handleErrorResponse({ badRequestSchema, error, setError })
     }

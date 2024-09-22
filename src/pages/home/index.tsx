@@ -1,4 +1,3 @@
-import { getAuthLayout } from '@/features'
 import { Typography } from '@photo-fiesta/ui-lib'
 
 //TODO: change to home page
@@ -11,5 +10,3 @@ const HomePage = () => {
 }
 
 export default HomePage
-
-HomePage.getLayout = getAuthLayout
