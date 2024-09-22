@@ -23,6 +23,18 @@
   height: var(--svg-size);
 }
 
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-bottom: 20px;
+
+  ul {
+    margin: 5px 0 0;
+    padding-left: 20px;
+  }
+}
+
 .terms {
   position: relative;
 
@@ -33,13 +45,14 @@
   max-width: 1000px;
 
   color: var(--light-100);
+  text-align: left;
+}
+
+.title {
+  margin-bottom: 25px !important;
+  font-size: 20px;
+  font-weight: bold !important;
   text-align: center;
-
-  h1 {
-    padding-bottom: 20px;
-
-    @include font(var(--font-size-xl), var(--line-height-l), var(--font-weight-bold));
-  }
 }
 
 @include mobile {

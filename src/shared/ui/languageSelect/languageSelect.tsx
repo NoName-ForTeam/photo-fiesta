@@ -35,16 +35,16 @@ export const LanguageSelect = ({ className }: { className: string }) => {
 
   return (
     <Select className={className} defaultValue={locale} onValueChange={onChangeLanguage}>
-      <SelectItem value={'ru'}>
-        <div className={classNames.selectItem}>
-          <FlagRussia className={styles.flag} />
-          <span className={classNames.lang}>Russian</span>
-        </div>
-      </SelectItem>
       <SelectItem value={'en'}>
         <div className={classNames.selectItem}>
           <FlagUnitedKingdom className={classNames.flag} />
           <span className={classNames.lang}>English</span>{' '}
+        </div>
+      </SelectItem>
+      <SelectItem value={'ru'}>
+        <div className={classNames.selectItem}>
+          <FlagRussia className={styles.flag} />
+          <span className={classNames.lang}>Russian</span>
         </div>
       </SelectItem>
     </Select>
