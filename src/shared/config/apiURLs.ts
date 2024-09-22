@@ -12,3 +12,5 @@ export const API_URLS = {
     UPDATE_TOKENS: 'v1/auth/update-tokens',
   },
 }
+
+export const POST = 'POST'

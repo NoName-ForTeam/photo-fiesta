@@ -4,10 +4,7 @@ export type SignUpData = {
   userName: string
 }
 
-export type SignInData = {
-  email: string
-  password: string
-}
+export type SignInData = Omit<SignUpData, 'userName'>
 
 export type SuccessSignInResponse = {
   accessToken: string
