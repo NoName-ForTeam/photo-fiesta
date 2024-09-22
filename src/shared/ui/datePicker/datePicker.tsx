@@ -9,6 +9,7 @@ import { enUS } from 'date-fns/locale'
 import styles from './datePicker.module.scss'
 
 export type DatePickerType = {
+  className?: string
   date?: Date | null
   disabled?: boolean
   /**
@@ -54,6 +55,7 @@ registerLocale('enUS', enUS)
  */
 
 export const CustomDatePicker = ({
+  className,
   disabled,
   endDate,
   errorMessage,
@@ -122,7 +124,7 @@ export const CustomDatePicker = ({
   const isRange = endDate !== undefined
 
   return (
-    <div className={styles.root}>
+    <div className={clsx(styles.root, className)}>
       <DatePicker
         calendarClassName={styles.calendar}
         customInput={

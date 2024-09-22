@@ -1,5 +1,7 @@
 @use '@/app/styles/mixins' as *;
 
+/* TODO: add styles for mobile */
+
 @mixin image-preview($size) {
   position: relative;
 
@@ -50,21 +52,21 @@
   max-width: 740px;
 }
 
-.select {
+.select,
+.datePicker {
   font-size: var(--font-size-s);
   color: var(--light-900);
 }
 
-.textareaBlock {
+.line {
   position: relative;
-  z-index: 1;
   margin-bottom: 48px;
 
   &::after {
     content: '';
 
     position: absolute;
-    z-index: 1;
+    z-index: -11;
     bottom: -38px;
     left: -240px;
 
@@ -76,8 +78,6 @@
 }
 
 .textarea {
-  position: relative;
-  z-index: 1;
   border-color: var(--dark-100);
 }
 

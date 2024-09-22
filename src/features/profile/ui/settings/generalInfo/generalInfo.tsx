@@ -1,15 +1,18 @@
 import { ComponentPropsWithoutRef } from 'react'
 
 import { CloseOutline, ImageOutline } from '@/shared/assets'
+import { City, Country, cities, countries } from '@/shared/config'
 import { FormDatePicker } from '@/shared/ui'
 import {
   Button,
   FormInput,
   FormSelect,
+  FormTextArea,
   Modal,
   ModalClose,
   ModalContent,
   ModalHeader,
+  SelectItem,
   Typography,
 } from '@photo-fiesta/ui-lib'
 import clsx from 'clsx'
@@ -32,15 +35,32 @@ export const GeneralInfo = ({ className }: GeneralInfoProps) => {
 
   const classNames = {
     container: styles.container,
+    datePicker: styles.datePicker,
     form: styles.form,
+    line: styles.line,
     root: styles.root,
     select: styles.select,
     selectBlock: styles.selectBlock,
     submit: styles.submit,
     textarea: styles.textarea,
-    textareaBlock: styles.textareaBlock,
     uploadButton: styles.uploadButton,
   } as const
+
+  const renderCountryOptions = (countries: Country[]) => {
+    return countries.map(country => (
+      <SelectItem key={country.id} value={country.countryEn}>
+        {country.countryEn}
+      </SelectItem>
+    ))
+  }
+
+  const renderCityOptions = (cities: City[]) => {
+    return cities.map(city => (
+      <SelectItem key={city.id} value={city.cityEn}>
+        {city.cityEn}
+      </SelectItem>
+    ))
+  }
 
   return (
     <div className={clsx(classNames.root, className)}>
@@ -77,19 +97,39 @@ export const GeneralInfo = ({ className }: GeneralInfoProps) => {
         />
 
         <FormDatePicker
+          className={classNames.datePicker}
           control={control}
           errorMessage={errors.dateOfBirth?.message}
           label={'Date of birth*'}
           name={'dateOfBirth'}
         />
         <div className={classNames.selectBlock}>
-          <FormSelect control={control} label={'Select your country'} name={'country'} />
-          <FormSelect control={control} label={'Select your city'} name={'city'} />
+          <FormSelect
+            className={classNames.select}
+            control={control}
+            defaultValue={String(countries[0].id)}
+            label={'Select your country'}
+            name={'country'}
+          >
+            {renderCountryOptions(countries)}
+          </FormSelect>
+          <FormSelect
+            className={classNames.select}
+            control={control}
+            defaultValue={String(cities[0].id)}
+            label={'Select your city'}
+            name={'city'}
+          >
+            {renderCityOptions(cities)}
+          </FormSelect>
         </div>
-        {/**TODO: add textarea and resolve problem with z-index*/}
-        <div className={classNames.textareaBlock}>
-          {/* <FormTextArea control={control} label={'About me'} name={'aboutMe'} /> */}
-        </div>
+        <FormTextArea
+          className={classNames.textarea}
+          control={control}
+          label={'About me'}
+          name={'aboutMe'}
+        />
+        <div className={classNames.line}></div>
         <Button className={classNames.submit}>Save Changes</Button>
       </form>
       <ModalAddPhoto handleCloseModal={handleCloseModal} isOpen={isOpen} setImage={setImage} />

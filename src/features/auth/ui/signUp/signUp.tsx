@@ -1,5 +1,6 @@
 import { SentEmail } from '@/features'
 import { GithubSvgrepoCom31, GoogleSvgrepoCom1 } from '@/shared/assets'
+import { ROUTES } from '@/shared/config'
 import { Button, Card, FormCheckbox, FormInput, Typography } from '@photo-fiesta/ui-lib'
 import Link from 'next/link'
 
@@ -88,9 +89,8 @@ export const SignUp = () => {
             <FormCheckbox control={control} name={'agreeWithTerms'} />
             <Typography variant={'textSmall'}>
               {' '}
-              I agree to the <Link href={'/auth/termsOfServicePage'}>
-                Terms of Service
-              </Link> and <Link href={'/auth/privacyPolicyPage'}>Privacy Policy</Link>
+              I agree to the <Link href={ROUTES.TERMS_OF_SERVICE}>Terms of Service</Link> and{' '}
+              <Link href={ROUTES.PRIVACY_POLICY}>Privacy Policy</Link>
             </Typography>
           </div>
           <div className={classNames.submitBtn}>
@@ -104,7 +104,7 @@ export const SignUp = () => {
         </Typography>
         <div className={classNames.signIn}>
           <Button asChild variant={'link'}>
-            <Link href={'/auth/signInPage'}>Sign In</Link>
+            <Link href={ROUTES.SIGN_IN}>Sign In</Link>
           </Button>
         </div>
       </Card>

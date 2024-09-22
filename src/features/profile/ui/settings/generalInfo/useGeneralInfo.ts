@@ -1,4 +1,3 @@
-// useGeneralInfo.ts
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 
@@ -21,6 +20,7 @@ const ProfileSettingsSchema = z.object({
   dateOfBirth: commonDateOfBirthSchema,
   firstName: commonFirstNameSchema,
   lastName: commonLastNameSchema,
+  //TODO: add region: get region from back end
   region: z.string(),
   userName: commonUsernameSchema,
 })
@@ -51,14 +51,15 @@ export const useGeneralInfo = () => {
     handleSubmit,
     setError,
   } = useForm<ProfileSettings>({
+    // TODO: add default values from backend
     defaultValues: {
       aboutMe: '',
       city: '',
       country: '',
-      dateOfBirth: '',
+      dateOfBirth: new Date('2000-01-01'),
       firstName: '',
       lastName: '',
-      region: '',
+      region: 'string',
       userName: '',
     },
     mode: 'onBlur',
@@ -68,7 +69,9 @@ export const useGeneralInfo = () => {
   const onSubmit = handleSubmit(async (data: ProfileSettings) => {
     try {
       {
-        /**TODO: add api call to update profile settings and post request for avatar*/
+        /**TODO: add api call to update profile settings and post request for avatar,
+         * for date to back end use date of birth in ISO format: date.toISOString()
+         */
       }
       // eslint-disable-next-line no-console
       console.log(data)

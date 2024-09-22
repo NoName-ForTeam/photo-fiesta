@@ -6,6 +6,7 @@ import {
   PASSWORD_REGEX,
   USERNAME_REGEX,
 } from '@/shared/config'
+import { differenceInYears, format, isValid } from 'date-fns'
 import { z } from 'zod'
 
 //Auth
@@ -57,4 +58,21 @@ export const commonLastNameSchema = z
   .max(50, 'Maximum number of characters 50')
   .regex(LAST_NAME_REGEX)
 
-export const commonDateOfBirthSchema = z.string().regex(DATE_OF_BIRTH_REGEX)
+export const commonDateOfBirthSchema = z
+  .date()
+  .refine(date => {
+    // check if date is valid
+    return isValid(date)
+  }, 'Invalid date')
+  .refine(date => {
+    // check date is  dd.mm.yyyy
+    const formatted = format(date, 'dd.MM.yyyy')
+
+    return DATE_OF_BIRTH_REGEX.test(formatted)
+  }, 'date of birth must be in dd.mm.yyyy format')
+  .refine(date => {
+    // check if age is 13 or more
+    const age = differenceInYears(new Date(), date)
+
+    return age >= 13
+  }, 'A user under 13 cannot create a profile.Privacy Policy')
