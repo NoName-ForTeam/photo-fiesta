@@ -1,7 +1,7 @@
 import { useDispatch } from 'react-redux'
 
 import { baseApi } from '@/app/api'
-import { Storage } from '@/shared/utils/storage'
+import { Storage } from '@/shared/utils'
 import { useRouter } from 'next/router'
 
 export const useLogout = () => {

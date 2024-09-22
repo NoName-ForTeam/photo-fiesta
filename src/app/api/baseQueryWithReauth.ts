@@ -1,4 +1,4 @@
-import { Storage } from '@/shared/utils/storage'
+import { Storage } from '@/shared/utils'
 import { BaseQueryFn, FetchArgs, FetchBaseQueryError, fetchBaseQuery } from '@reduxjs/toolkit/query'
 import { Mutex } from 'async-mutex'
 
