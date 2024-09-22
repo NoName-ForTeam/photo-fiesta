@@ -1,7 +1,22 @@
-import usePrivacy, { Privacy } from '@/features/auth/ui/privacyPolicy/usePrivacy'
 import { Typography } from '@photo-fiesta/ui-lib'
 
 import styles from './privacyPolicy.module.scss'
+
+import usePrivacy, { Privacy } from './usePrivacy'
+
+/**
+ * Зкшмфсн component renders a list of privacy.
+ * It uses the `usePrivacy` hook to fetch the list of terms and maps through them,
+ * rendering each term using the `TermsItem` component.
+ *
+ * @component
+ * @example
+ * ```tsx
+ * return (
+ *   <PrivacyList />
+ * );
+ * ```
+ */
 
 export const PrivacyList = () => {
   const terms = usePrivacy()

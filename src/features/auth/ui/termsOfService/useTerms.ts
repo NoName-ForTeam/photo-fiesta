@@ -6,6 +6,13 @@ export type Term = {
   title: string
 }
 
+/**
+ * Custom hook to retrieve structured terms of services data.
+ * Utilizes the translation function to return localized content.
+ *
+ * @returns {Term[]} Array of privacy policy sections with description, title, and optional extra points.
+ */
+
 const useTerms = () => {
   const { t } = useTranslation()
 

@@ -1,7 +1,22 @@
-import useTerms, { Term } from '@/features/auth/ui/termsOfService/useTerms'
 import { Typography } from '@photo-fiesta/ui-lib'
 
 import styles from './termsOfService.module.scss'
+
+import useTerms, { Term } from './useTerms'
+
+/**
+ * TermsList component renders a list of terms of service.
+ * It uses the `useTerms` hook to fetch the list of terms and maps through them,
+ * rendering each term using the `TermsItem` component.
+ *
+ * @component
+ * @example
+ * ```tsx
+ * return (
+ *   <TermsList />
+ * );
+ * ```
+ */
 
 export const TermsList = () => {
   const terms = useTerms()

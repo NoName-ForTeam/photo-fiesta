@@ -1,4 +1,3 @@
-import { TermsList } from '@/features/auth/ui/termsOfService/termsList'
 import { ArrowBackOutline } from '@/shared/assets'
 import { ROUTES } from '@/shared/config'
 import { useTranslation } from '@/shared/utils'
@@ -6,6 +5,8 @@ import { Typography } from '@photo-fiesta/ui-lib'
 import Link from 'next/link'
 
 import styles from './termsOfService.module.scss'
+
+import { TermsList } from './termsList'
 
 export const TermsOfService = () => {
   const { t } = useTranslation()

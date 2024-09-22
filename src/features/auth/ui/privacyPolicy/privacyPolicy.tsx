@@ -1,4 +1,3 @@
-import { PrivacyList } from '@/features/auth/ui/privacyPolicy/privacyList'
 import { ArrowBackOutline } from '@/shared/assets'
 import { ROUTES } from '@/shared/config'
 import { useTranslation } from '@/shared/utils'
@@ -6,6 +5,8 @@ import { Typography } from '@photo-fiesta/ui-lib'
 import Link from 'next/link'
 
 import styles from './privacyPolicy.module.scss'
+
+import { PrivacyList } from './privacyList'
 
 export const PrivacyPolicy = () => {
   const { t } = useTranslation()
