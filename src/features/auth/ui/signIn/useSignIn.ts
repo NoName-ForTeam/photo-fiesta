@@ -1,13 +1,13 @@
 import { useForm } from 'react-hook-form'
 
-import { SuccessSignInResponse, useSignInMutation } from '@/features'
-import { ROUTES } from '@/shared/config'
+import { useLazyAuthMeQuery, useSignInMutation } from '@/features'
 import {
   commonEmailSchema,
   commonPasswordSchema,
   createBadRequestSchema,
   handleErrorResponse,
 } from '@/shared/utils'
+import { Storage } from '@/shared/utils/storage'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/router'
 import { z } from 'zod'
@@ -23,7 +23,6 @@ const badRequestSchema = createBadRequestSchema(['email', 'password'])
 export const useSignIn = () => {
   const router = useRouter()
   const {
-    clearErrors,
     control,
     formState: { errors },
     handleSubmit,
@@ -37,23 +36,57 @@ export const useSignIn = () => {
     resolver: zodResolver(signInSchema),
   })
   const [signIn] = useSignInMutation()
+  const [getMe] = useLazyAuthMeQuery()
+  /**
+   * This function is used to submit login credentials, store the received access token,
+   * extract the `userId` from the token, and redirect the user to their profile page.
+   *
+   * - If the token contains a valid `userId`, the user is redirected to `/profile/{userId}`.
+   * - If the token doesn't contain a `userId`, an additional API call to `getMe` is made to retrieve the user's data.
+   * - In case of errors during the login process, appropriate form errors are displayed using `handleErrorResponse`.
+   */
+  const onSubmit = handleSubmit(data => {
+    signIn(data)
+      .unwrap()
+      .then(async res => {
+        // Save the access token in local storage
+        Storage.setToken(res.accessToken)
+        // Decode the token payload to get the userId
+        const tokenPayload = res.accessToken.split('.')?.[1]
+        const decodedPayload = atob(tokenPayload)
+        let parsed
 
-  const onSubmit = handleSubmit(async (data: FormInputs) => {
-    clearErrors()
-    try {
-      const response = (await signIn(data).unwrap()) as unknown as SuccessSignInResponse
+        try {
+          parsed = JSON.parse(decodedPayload)
+        } catch {
+          parsed = {}
+        }
 
-      //TODO: temporary solution to use local storage
-      localStorage.setItem('signInToken', response.accessToken)
-      // TODO: add redirect to home page and use routing constants
-      router.push(ROUTES.HOME)
-    } catch (error: unknown) {
-      handleErrorResponse<FormInputs>({
-        badRequestSchema,
-        error,
-        setError,
+        let userId
+
+        // Check if the token payload contains a userId
+        if (parsed?.userId) {
+          userId = parsed.userId
+        } else {
+          // If not, fetch the user data from the `auth/me` endpoint
+          const meRes = await getMe()
+
+          userId = meRes?.data?.userId
+        }
+        // If no userId is found, do nothing
+        if (!userId) {
+          return
+        }
+
+        void router.replace(`/profile/${userId}`)
       })
-    }
+      .catch(error => {
+        handleErrorResponse<FormInputs>({
+          badRequestSchema,
+          error,
+          setError,
+        })
+      })
   })
 
   return {
