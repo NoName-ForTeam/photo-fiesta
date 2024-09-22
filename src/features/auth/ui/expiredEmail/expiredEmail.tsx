@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { toast } from 'react-toastify'
 
-import { ErrorResponse, SentEmail, useResendLinkMutation } from '@/features'
+import { SentEmail, useResendLinkMutation } from '@/features'
+import { ErrorResponse } from '@/shared/api'
 import { rafiki } from '@/shared/assets'
 import { Button, Card, Typography } from '@photo-fiesta/ui-lib'
 import Image from 'next/image'
