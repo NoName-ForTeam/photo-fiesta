@@ -26,17 +26,22 @@ export const Layout = ({ children }: { children: ReactNode }) => {
   const { data: authData } = useAuthMeQuery()
 
   const isSuccess = !!authData
+  const classNames = {
+    main: style.main,
+    sidebar: style.sidebar,
+    wrapper: style.wrapper,
+  } as const
 
   return (
     <>
       <Header isAuth={isSuccess} />
-      <div className={style.wrapper}>
+      <div className={classNames.wrapper}>
         {isSuccess && (
-          <div className={style.sidebar}>
+          <div className={classNames.sidebar}>
             <Sidebar />
           </div>
         )}
-        <main className={style.main}>{children}</main>
+        <main className={classNames.main}>{children}</main>
       </div>
     </>
   )

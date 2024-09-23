@@ -1,6 +1,6 @@
 import { Fragment } from 'react'
 
-import { openCloseTagRegex, tagsRegex } from '@/shared/config'
+import { OPEN_CLOSE_TAG_REGEX, TAGS_REGEX } from '@/shared/config'
 
 type TransType = {
   /**
@@ -39,10 +39,10 @@ const interpolateTags = (data: TransType) => {
     return text
   }
 
-  const tokens = text.split(tagsRegex)
+  const tokens = text.split(TAGS_REGEX)
 
   return tokens.map(token => {
-    const matchResult = openCloseTagRegex.exec(token)
+    const matchResult = OPEN_CLOSE_TAG_REGEX.exec(token)
 
     if (!matchResult) {
       return token

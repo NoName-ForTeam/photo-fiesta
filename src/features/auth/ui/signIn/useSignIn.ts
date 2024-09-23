@@ -1,13 +1,14 @@
 import { useForm } from 'react-hook-form'
 
 import { useLazyAuthMeQuery, useSignInMutation } from '@/features'
+import { ROUTES } from '@/shared/config'
 import {
+  Storage,
   commonEmailSchema,
   commonPasswordSchema,
   createBadRequestSchema,
   handleErrorResponse,
 } from '@/shared/utils'
-import { Storage } from '@/shared/utils/storage'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/router'
 import { z } from 'zod'
@@ -78,7 +79,7 @@ export const useSignIn = () => {
           return
         }
 
-        void router.replace(`/profile/${userId}`)
+        void router.replace(`${ROUTES.PROFILE}/${userId}`)
       })
       .catch(error => {
         handleErrorResponse<FormInputs>({

@@ -1,5 +1,5 @@
 /**
- * Path: scr/components/
+ * Path: scr/features/profile/
  * This script automates the creation of a new React component with associated files.
  * It generates the following files for the specified component:
  * - A TypeScript component file (.tsx)
@@ -21,7 +21,7 @@
  * Example:
  * ```
  * node script.js auth Test true
- * pnpm comp auth Test true
+ * pnpm comp ui test true
  * ```
  *
  * The script also updates the main index file in the specified folder to include an export for the new component.
@@ -45,7 +45,7 @@ async function createComponent(folderName, componentName) {
   const capitalizedName = capitalizeFirstLetter(componentName, Boolean(upperCase))
   const capitalizedNameForce = capitalizeFirstLetter(componentName, true)
 
-  const dirPath = `./src/features/auth/${folderName}/${capitalizedName}`
+  const dirPath = `./src/features/profile/${folderName}/${capitalizedName}`
   const componentPath = path.join(dirPath, `${capitalizedName}.tsx`)
   const componentContent =
   `import clsx from 'clsx'
@@ -141,7 +141,7 @@ async function createComponent(folderName, componentName) {
  */
 
 async function updateMainIndex(folderName, componentName) {
-  const mainIndexPath = `./src/features/auth/${folderName}/index.ts`
+  const mainIndexPath = `./src/features/profile/${folderName}/index.ts`
   let mainIndexContent = ''
 
   try {

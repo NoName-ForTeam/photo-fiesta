@@ -1,0 +1,204 @@
+@use '@/app/styles/mixins' as *;
+
+/* TODO: add styles for mobile */
+
+@mixin image-preview($size) {
+  position: relative;
+
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: $size;
+  height: $size;
+  margin: 0;
+  padding: 0;
+
+  background-color: var(--dark-500);
+}
+
+/*** GENERAL INFO ***/
+
+.root {
+  display: flex;
+  gap: 40px;
+  width: 100%;
+  padding: 24px 65px 24px 24px;
+}
+
+.container {
+  display: flex;
+  flex: 0 1 196px;
+  flex-direction: column;
+  gap: 24px;
+  align-items: center;
+
+  width: 100%;
+  max-width: 196px;
+  padding-top: 24px;
+}
+
+.uploadButton {
+  margin-top: 24px;
+}
+
+.form {
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  gap: 24px;
+
+  width: 100%;
+  max-width: 740px;
+
+  & .select,
+  .datePicker {
+    font-size: var(--font-size-s);
+    color: var(--light-900);
+  }
+
+  & .textarea {
+    border-color: var(--dark-100);
+  }
+
+  & .submit {
+    align-self: flex-end;
+  }
+}
+
+.line {
+  position: relative;
+  margin-bottom: 48px;
+
+  &::after {
+    content: '';
+
+    position: absolute;
+    z-index: -11;
+    bottom: -38px;
+    left: -240px;
+
+    width: 132.5%;
+    height: 1px;
+
+    background-color: var(--dark-100);
+  }
+}
+
+.selectBlock {
+  display: flex;
+  gap: 24px;
+  width: 100%;
+
+  & > * {
+    flex: 0 0 auto;
+    width: 48.5%;
+  }
+}
+
+/*** PHOTO PREVIEW ***/
+
+.imageWrapper {
+  position: absolute;
+
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  height: 100%;
+
+  & > img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+}
+
+.placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  height: 100%;
+}
+
+.imagePreview {
+  @include image-preview(192px);
+
+  border-radius: 50%;
+}
+
+.icon {
+  width: var(--photo-icon-size);
+  height: var(--photo-icon-size);
+}
+
+/*** MODAL ***/
+
+.content {
+  width: 100%;
+  max-width: 492px;
+}
+
+.header {
+  @include modal-header;
+}
+
+.close {
+  @include modal-close;
+}
+
+.main {
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  align-items: center;
+
+  width: 100%;
+  padding: 24px 24px 96px;
+
+  & .save {
+    position: absolute;
+    right: 24px;
+    bottom: 36px;
+  }
+}
+
+.block {
+  display: flex;
+  flex-direction: column;
+  gap: 60px;
+  align-items: center;
+
+  width: 100%;
+  max-width: 222px;
+}
+
+.photoPreview {
+  @include image-preview(228px);
+}
+
+.error {
+  width: 100%;
+  max-width: 444px;
+  max-height: fit-content;
+  padding: 5px 41px;
+
+  text-align: center;
+
+  visibility: hidden;
+  opacity: 0;
+  background-color: var(--danger-500);
+}
+
+.visible {
+  visibility: visible;
+  opacity: 1;
+}

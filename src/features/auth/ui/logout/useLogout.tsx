@@ -1,7 +1,8 @@
 import { useDispatch } from 'react-redux'
 
 import { baseApi } from '@/app/api'
-import { Storage } from '@/shared/utils/storage'
+import { ROUTES } from '@/shared/config'
+import { Storage } from '@/shared/utils'
 import { useRouter } from 'next/router'
 
 export const useLogout = () => {
@@ -12,6 +13,6 @@ export const useLogout = () => {
     Storage.deleteToken()
     dispatch(baseApi.util.invalidateTags(['Auth']))
     dispatch(baseApi.util.resetApiState())
-    router.push('/auth/signInPage')
+    router.push(ROUTES.SIGN_IN)
   }
 }

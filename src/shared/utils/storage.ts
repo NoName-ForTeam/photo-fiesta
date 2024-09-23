@@ -1,17 +1,17 @@
-const StorageKey = {
-  token: 'access_token',
-}
-
 export class Storage {
-  static deleteToken() {
-    localStorage.removeItem(StorageKey.token)
+  private static readonly storageKey = {
+    token: 'access_token',
+  } as const
+
+  static deleteToken(): void {
+    localStorage.removeItem(this.storageKey.token)
   }
 
-  static getToken() {
-    return localStorage.getItem(StorageKey.token)
+  static getToken(): null | string {
+    return localStorage.getItem(this.storageKey.token)
   }
 
   static setToken(token: string) {
-    localStorage.setItem(StorageKey.token, token)
+    localStorage.setItem(this.storageKey.token, token)
   }
 }

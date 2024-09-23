@@ -4,7 +4,8 @@ import { toast } from 'react-toastify'
 
 import process from 'process'
 
-import { ErrorResponse, usePasswordRecoveryMutation } from '@/features'
+import { usePasswordRecoveryMutation } from '@/features'
+import { ErrorResponse } from '@/shared/api'
 import { checkErrorMessages, commonEmailSchema } from '@/shared/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'

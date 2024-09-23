@@ -12,6 +12,7 @@ import {
   Search,
   TrendingUp,
 } from '@/shared/assets'
+import { ROUTES } from '@/shared/config'
 import { Sidebars, SidebarsElement } from '@photo-fiesta/ui-lib'
 import Link from 'next/link'
 
@@ -32,33 +33,35 @@ export const Sidebar = () => {
 
   return (
     <div>
+      {/**TODO: add internalization for all elements*/}
       <Sidebars>
         <div className={styles.icons}>
-          <Link href={'/home'}>
+          <Link href={ROUTES.HOME}>
             <SidebarsElement>
               <HomeOutline />
               Home
             </SidebarsElement>
           </Link>
-          <Link href={'/create'}>
+          <Link href={ROUTES.CREATE}>
             <SidebarsElement>
               <PlusSquareOutline />
               Create
             </SidebarsElement>
           </Link>
+          {/**TODO: add route constants*/}
           <Link href={'/profile/${userId}'}>
             <SidebarsElement>
               <Person />
               My Profile
             </SidebarsElement>
           </Link>
-          <Link href={'/messenger'}>
+          <Link href={ROUTES.MESSENGER}>
             <SidebarsElement>
               <MessageCircle />
               Messenger
             </SidebarsElement>
           </Link>
-          <Link href={'/search'}>
+          <Link href={ROUTES.SEARCH}>
             <SidebarsElement>
               <Search />
               Search
@@ -66,13 +69,13 @@ export const Sidebar = () => {
           </Link>
         </div>
         <div className={styles.icons}>
-          <Link href={'/statics'}>
+          <Link href={ROUTES.STATICS}>
             <SidebarsElement>
               <TrendingUp />
               Statics
             </SidebarsElement>
           </Link>
-          <Link href={'/favorites'}>
+          <Link href={ROUTES.FAVORITES}>
             <SidebarsElement>
               <BookmarkOutline />
               Favorites

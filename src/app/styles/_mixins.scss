@@ -32,3 +32,22 @@
     @content;
   }
 }
+
+@mixin modal-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+@mixin modal-close {
+  cursor: pointer;
+  width: var(--svg-size);
+  height: var(--svg-size);
+
+  &:hover {
+    color: var(--light-900);
+  }
+
+  &:active {
+    color: var(--light-100);
+  }
+}

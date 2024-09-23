@@ -22,7 +22,7 @@
 
   @include font(var(--font-weight-bold), var(--font-size-xl), var(--line-height-l));
 
-  color: var(--color-light-100);
+  color: var(--light-100);
   text-align: center;
 }
 
@@ -38,7 +38,7 @@
 .icon {
   width: var(--signUP-icons-links);
   height: var(--signUP-icons-links);
-  color: #fff;
+  color: var(--light-100);
 }
 
 .input {
