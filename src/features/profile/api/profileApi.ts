@@ -1,5 +1,5 @@
 import { baseApi } from '@/app/api'
-import { API_URLS, POST } from '@/shared/config'
+import { API_URLS, METHOD } from '@/shared/config'
 
 import { ProfileResponse, ProfileSettings, SuccessAvatarResponse } from './profile.types'
 
@@ -12,7 +12,7 @@ export const profileApi = baseApi.injectEndpoints({
     deleteAvatar: builder.mutation<void, void>({
       invalidatesTags: ['Profile'],
       query: () => ({
-        method: POST,
+        method: METHOD.DELETE,
         url: API_URLS.PROFILE.DELETE_AVATAR,
       }),
     }),
@@ -23,7 +23,7 @@ export const profileApi = baseApi.injectEndpoints({
     deleteProfile: builder.mutation<void, void>({
       invalidatesTags: ['Profile'],
       query: () => ({
-        method: POST,
+        method: METHOD.DELETE,
         url: API_URLS.PROFILE.DELETE_PROFILE,
       }),
     }),
@@ -34,7 +34,9 @@ export const profileApi = baseApi.injectEndpoints({
      */
     deleteProfileById: builder.mutation<void, number>({
       invalidatesTags: ['Profile'],
+
       query: (userId: number) => ({
+        method: METHOD.DELETE,
         url: `${API_URLS.PROFILE.DELETE_PROFILE_BY_ID}/${userId}`,
       }),
     }),
@@ -51,11 +53,11 @@ export const profileApi = baseApi.injectEndpoints({
      * @param {ProfileSettings} params - The new profile settings.
      * @returns {Promise<ProfileResponse>}
      */
-    updateProfile: builder.mutation<ProfileResponse, ProfileSettings>({
+    updateProfile: builder.mutation<void, ProfileSettings>({
       invalidatesTags: ['Profile'],
       query: params => ({
         body: params,
-        method: POST,
+        method: METHOD.PUT,
         url: API_URLS.PROFILE.UPDATE_PROFILE,
       }),
     }),
@@ -64,11 +66,11 @@ export const profileApi = baseApi.injectEndpoints({
      * @param {File} file - The avatar image file to upload.
      * @returns {Promise<SuccessAvatarResponse>}
      */
-    uploadAvatar: builder.mutation<SuccessAvatarResponse, File>({
+    uploadAvatar: builder.mutation<SuccessAvatarResponse, FormData>({
       invalidatesTags: ['Profile'],
-      query: (file: File) => ({
-        body: file,
-        method: POST,
+      query: (formData: FormData) => ({
+        body: formData,
+        method: METHOD.POST,
         url: API_URLS.PROFILE.POST_AVATAR,
       }),
     }),

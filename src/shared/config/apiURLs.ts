@@ -23,4 +23,9 @@ export const API_URLS = {
   },
 }
 
-export const POST = 'POST'
+export const METHOD = {
+  DELETE: 'DELETE',
+  GET: 'GET',
+  POST: 'POST',
+  PUT: 'PUT',
+} as const

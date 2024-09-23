@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { toast } from 'react-toastify'
 
+import { useUpdateProfileMutation, useUploadAvatarMutation } from '@/features'
 import {
   commonAboutMeSchema,
   commonDateOfBirthSchema,
@@ -9,6 +11,7 @@ import {
   commonUsernameSchema,
   createBadRequestSchema,
   handleErrorResponse,
+  prepareImageForUpload,
 } from '@/shared/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -44,7 +47,8 @@ export type ProfileSettings = z.infer<typeof ProfileSettingsSchema>
 export const useGeneralInfo = () => {
   const [isOpen, setIsOpen] = useState(false)
   const [image, setImage] = useState<null | string>(null)
-
+  const [updateProfile] = useUpdateProfileMutation()
+  const [uploadAvatar] = useUploadAvatarMutation()
   const {
     control,
     formState: { errors },
@@ -68,21 +72,22 @@ export const useGeneralInfo = () => {
 
   const onSubmit = handleSubmit(async (data: ProfileSettings) => {
     try {
-      {
-        /**TODO: add api call to update profile settings and post request for avatar,
-         * for date to back end use date of birth in ISO format: date.toISOString()
-         */
-      }
-
       const submissionData = {
         ...data,
-        dateOfBirth: data.dateOfBirth.toISOString(),
+
+        dateOfBirth: data.dateOfBirth.toISOString(), //converts the dateOfBirth to ISO string format for backend
       }
 
-      // eslint-disable-next-line no-console
-      console.log(submissionData)
+      await updateProfile(submissionData).unwrap()
+      if (image) {
+        const formData = prepareImageForUpload(image)
+
+        await uploadAvatar(formData).unwrap()
+      }
+
+      toast.success('Profile updated successfully!')
     } catch (error) {
-      handleErrorResponse({ badRequestSchema, error, setError })
+      handleErrorResponse({ badRequestSchema, error, isToast: true, setError })
     }
   })
 

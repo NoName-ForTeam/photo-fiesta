@@ -9,7 +9,7 @@ import {
   SignUpData,
   SuccessSignInResponse,
 } from '@/features'
-import { API_URLS, POST } from '@/shared/config'
+import { API_URLS, METHOD } from '@/shared/config'
 
 /**
  * API service for authentication-related endpoints.
@@ -34,7 +34,7 @@ export const authApi = baseApi.injectEndpoints({
       confirmRegistration: builder.query<void, ConfirmRegistration>({
         query: params => ({
           body: params,
-          method: POST,
+          method: METHOD.POST,
           url: API_URLS.AUTH.REGISTRATION_CONFIRMATION,
         }),
       }),
@@ -45,7 +45,7 @@ export const authApi = baseApi.injectEndpoints({
         invalidatesTags: ['Auth'],
         query: params => ({
           body: params,
-          method: POST,
+          method: METHOD.POST,
           url: API_URLS.AUTH.NEW_PASSWORD,
         }),
       }),
@@ -56,7 +56,7 @@ export const authApi = baseApi.injectEndpoints({
         invalidatesTags: ['Auth'],
         query: params => ({
           body: params,
-          method: POST,
+          method: METHOD.POST,
           url: API_URLS.AUTH.LOGOUT,
         }),
       }),
@@ -67,7 +67,7 @@ export const authApi = baseApi.injectEndpoints({
       passwordRecovery: builder.mutation<void, PasswordRecoveryData>({
         query: params => ({
           body: params,
-          method: POST,
+          method: METHOD.POST,
           url: API_URLS.AUTH.PASSWORD_RECOVERY,
         }),
       }),
@@ -78,7 +78,7 @@ export const authApi = baseApi.injectEndpoints({
       resendLink: builder.mutation<void, ResendLink>({
         query: params => ({
           body: params,
-          method: POST,
+          method: METHOD.POST,
           url: API_URLS.AUTH.REGISTRATION_EMAIL_RESENDING,
         }),
       }),
@@ -93,7 +93,7 @@ export const authApi = baseApi.injectEndpoints({
         invalidatesTags: ['Auth'],
         query: params => ({
           body: params,
-          method: POST,
+          method: METHOD.POST,
           url: API_URLS.AUTH.LOGIN,
         }),
       }),
@@ -108,7 +108,7 @@ export const authApi = baseApi.injectEndpoints({
         invalidatesTags: ['Auth'],
         query: params => ({
           body: params,
-          method: POST,
+          method: METHOD.POST,
           url: API_URLS.AUTH.REGISTRATION,
         }),
       }),
