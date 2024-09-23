@@ -1,4 +1,4 @@
-import { API_URLS } from '@/shared/config'
+import { API_URLS, POST } from '@/shared/config'
 import { Storage } from '@/shared/utils'
 import { BaseQueryFn, FetchArgs, FetchBaseQueryError, fetchBaseQuery } from '@reduxjs/toolkit/query'
 import { Mutex } from 'async-mutex'
@@ -35,8 +35,8 @@ export const baseQueryWithReauth: BaseQueryFn<
         const refreshResult = await baseQuery(
           {
             credentials: 'include',
-            method: 'POST',
-            url: 'v1/auth/update-tokens',
+            method: POST,
+            url: API_URLS.AUTH.UPDATE_TOKENS,
           },
           api,
           extraOptions
