@@ -11,6 +11,7 @@ export const API_URLS = {
     REGISTRATION_EMAIL_RESENDING: 'v1/auth/registration-email-resending',
     UPDATE_TOKENS: 'v1/auth/update-tokens',
   },
+  BASE_URL: 'https://inctagram.work/api/',
 }
 
 export const POST = 'POST'

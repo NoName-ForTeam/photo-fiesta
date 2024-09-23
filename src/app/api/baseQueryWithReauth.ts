@@ -1,10 +1,11 @@
+import { API_URLS } from '@/shared/config'
 import { Storage } from '@/shared/utils'
 import { BaseQueryFn, FetchArgs, FetchBaseQueryError, fetchBaseQuery } from '@reduxjs/toolkit/query'
 import { Mutex } from 'async-mutex'
 
 const mutex = new Mutex()
 const baseQuery = fetchBaseQuery({
-  baseUrl: 'https://inctagram.work/api/',
+  baseUrl: API_URLS.BASE_URL,
   prepareHeaders: headers => {
     const token = Storage.getToken()
 

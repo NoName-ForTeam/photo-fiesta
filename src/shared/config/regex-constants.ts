@@ -8,5 +8,7 @@ export const DATE_OF_BIRTH_REGEX = /^(0[1-9]|[12][0-9]|3[01])\.(0[1-9]|1[012])\.
 export const ABOUT_ME_REGEX = /^[0-9A-Za-zА-Яа-я!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~\s]*$/
 export const FIRST_NAME_REGEX = /^[a-zA-Zа-яА-Я-]*$/
 export const LAST_NAME_REGEX = /^[a-zA-Zа-яА-Я-]*$/
-export const tagsRegex = /(<\d+>[^<>]*<\/\d+>)/
-export const openCloseTagRegex = /<(\d+)>([^<>]*)<\/(\d+)>/
+
+//for internalization
+export const TAGS_REGEX = /(<\d+>[^<>]*<\/\d+>)/
+export const OPEN_CLOSE_TAG_REGEX = /<(\d+)>([^<>]*)<\/(\d+)>/
