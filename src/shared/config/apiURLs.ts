@@ -12,6 +12,15 @@ export const API_URLS = {
     UPDATE_TOKENS: 'v1/auth/update-tokens',
   },
   BASE_URL: 'https://inctagram.work/api/',
+  PROFILE: {
+    DELETE_AVATAR: 'v1/users/profile/avatar',
+    DELETE_PROFILE: 'v1/users/profile',
+    //TODO: add  id v1/users/profile/{id}
+    DELETE_PROFILE_BY_ID: 'v1/users/profile/{id}',
+    GET_PROFILE: 'v1/users/profile',
+    POST_AVATAR: 'v1/users/profile/avatar',
+    UPDATE_PROFILE: 'v1/users/profile',
+  },
 }
 
 export const POST = 'POST'
