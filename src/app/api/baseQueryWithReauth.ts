@@ -3,6 +3,7 @@ import { Storage } from '@/shared/utils'
 import { BaseQueryFn, FetchArgs, FetchBaseQueryError, fetchBaseQuery } from '@reduxjs/toolkit/query'
 import { Mutex } from 'async-mutex'
 
+const { POST } = METHOD
 const mutex = new Mutex()
 const baseQuery = fetchBaseQuery({
   baseUrl: API_URLS.BASE_URL,
@@ -35,7 +36,7 @@ export const baseQueryWithReauth: BaseQueryFn<
         const refreshResult = await baseQuery(
           {
             credentials: 'include',
-            method: METHOD.POST,
+            method: POST,
             url: API_URLS.AUTH.UPDATE_TOKENS,
           },
           api,

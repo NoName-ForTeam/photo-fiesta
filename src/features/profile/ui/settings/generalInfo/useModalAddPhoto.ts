@@ -33,10 +33,11 @@ export const useModalAddPhoto = ({ handleCloseModal, isOpen, setImage }: UseModa
   }
 
   /**
-   * Handle file selection
+   * Handles the file selection event for uploading a photo.
    * @param {ChangeEvent<HTMLInputElement>} event - The file change event
    */
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+    // Get the first file from the file input
     const file = event.target.files?.[0]
 
     if (file) {
@@ -53,13 +54,19 @@ export const useModalAddPhoto = ({ handleCloseModal, isOpen, setImage }: UseModa
 
         return
       }
-
+      // Create a new FileReader instance
       const reader = new FileReader()
 
       reader.onload = e => {
         setSelectedImage(e.target?.result as string)
         setError(null)
       }
+      /**
+       *  convert the file as a data URL
+       * @example
+       * data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAIBAQIBAQICAgICAgICAwUDAwMDAwYEBAMFBwYHBwcGBwcICQsJCAgKCAcHCg0KCgsMDAwMBwkODw0MDgsMDAz/...
+       */
+
       reader.readAsDataURL(file)
     }
     event.target.value = ''

@@ -3,40 +3,39 @@ import { API_URLS, METHOD } from '@/shared/config'
 
 import { ProfileResponse, ProfileSettings, SuccessAvatarResponse } from './profile.types'
 
+const { DELETE, POST, PUT } = METHOD
+
 export const profileApi = baseApi.injectEndpoints({
   endpoints: builder => ({
     /**
      * Delete the user's avatar.
-     * @returns {Promise<void>}
      */
     deleteAvatar: builder.mutation<void, void>({
       invalidatesTags: ['Profile'],
       query: () => ({
-        method: METHOD.DELETE,
+        method: DELETE,
         url: API_URLS.PROFILE.DELETE_AVATAR,
       }),
     }),
     /**
      * Delete the user's profile.
-     * @returns {Promise<void>}
      */
     deleteProfile: builder.mutation<void, void>({
       invalidatesTags: ['Profile'],
       query: () => ({
-        method: METHOD.DELETE,
+        method: DELETE,
         url: API_URLS.PROFILE.DELETE_PROFILE,
       }),
     }),
     /**
      * Delete a profile by user ID.
      * @param {number} userId - The ID of the user whose profile is to be deleted.
-     * @returns {Promise<void>}
      */
     deleteProfileById: builder.mutation<void, number>({
       invalidatesTags: ['Profile'],
 
       query: (userId: number) => ({
-        method: METHOD.DELETE,
+        method: DELETE,
         url: `${API_URLS.PROFILE.DELETE_PROFILE_BY_ID}/${userId}`,
       }),
     }),
@@ -57,7 +56,7 @@ export const profileApi = baseApi.injectEndpoints({
       invalidatesTags: ['Profile'],
       query: params => ({
         body: params,
-        method: METHOD.PUT,
+        method: PUT,
         url: API_URLS.PROFILE.UPDATE_PROFILE,
       }),
     }),
@@ -70,7 +69,7 @@ export const profileApi = baseApi.injectEndpoints({
       invalidatesTags: ['Profile'],
       query: (formData: FormData) => ({
         body: formData,
-        method: METHOD.POST,
+        method: POST,
         url: API_URLS.PROFILE.POST_AVATAR,
       }),
     }),
