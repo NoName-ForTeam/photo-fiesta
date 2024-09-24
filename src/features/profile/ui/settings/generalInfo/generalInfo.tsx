@@ -1,27 +1,16 @@
 import { ComponentPropsWithoutRef } from 'react'
 
-import { CloseOutline, ImageOutline } from '@/shared/assets'
+import { ModalAddPhoto } from '@/features'
+import { ImageOutline } from '@/shared/assets'
 import { City, Country, cities, countries } from '@/shared/config'
 import { FormDatePicker } from '@/shared/ui'
-import {
-  Button,
-  FormInput,
-  FormSelect,
-  FormTextArea,
-  Modal,
-  ModalClose,
-  ModalContent,
-  ModalHeader,
-  SelectItem,
-  Typography,
-} from '@photo-fiesta/ui-lib'
+import { Button, FormInput, FormSelect, FormTextArea, SelectItem } from '@photo-fiesta/ui-lib'
 import clsx from 'clsx'
 import Image from 'next/image'
 
 import styles from './generalInfo.module.scss'
 
 import { useGeneralInfo } from './useGeneralInfo'
-import { useModalAddPhoto } from './useModalAddPhoto'
 
 export type GeneralInfoProps = ComponentPropsWithoutRef<'div'>
 /**
@@ -170,72 +159,5 @@ export const PhotoPreview = ({ image, preview, size }: PhotoPreviewProps) => {
         </span>
       )}
     </div>
-  )
-}
-
-//MODAL
-type ModalAddPhotoProps = {
-  handleCloseModal: () => void
-  isOpen: boolean
-  setImage: (image: null | string) => void
-}
-/**
- * ModalAddPhoto component for adding or changing a profile photo
- */
-const ModalAddPhoto = ({ handleCloseModal, isOpen, setImage }: ModalAddPhotoProps) => {
-  const { error, fileInputRef, handleClick, handleFileChange, handleSave, isSaved, selectedImage } =
-    useModalAddPhoto({ handleCloseModal, isOpen, setImage })
-
-  const classNames = {
-    block: styles.block,
-    close: styles.close,
-    content: styles.content,
-    error: clsx(styles.error, error && styles.visible),
-    header: styles.header,
-    main: styles.main,
-    save: styles.save,
-  } as const
-
-  return (
-    <Modal open={isOpen}>
-      <ModalContent className={classNames.content}>
-        <ModalHeader className={classNames.header}>
-          <Typography variant={'h1'}>Add a Profile Photo</Typography>
-          <ModalClose>
-            <CloseOutline className={classNames.close} onClick={handleCloseModal} />
-          </ModalClose>
-        </ModalHeader>
-        <div className={classNames.main}>
-          <div className={classNames.error}>
-            <Typography as={'span'} variant={'textBold16'}>
-              Error!{' '}
-            </Typography>
-            <Typography as={'span'} variant={'text14'}>
-              Error! {error}
-            </Typography>
-          </div>
-          <div className={classNames.block}>
-            <PhotoPreview image={selectedImage} preview={styles.photoPreview} size={228} />
-            <input
-              accept={'image/*'}
-              hidden
-              onChange={handleFileChange}
-              ref={fileInputRef}
-              type={'file'}
-            />
-            {!selectedImage && !isSaved && (
-              <Button fullWidth onClick={handleClick}>
-                Select from Computer
-              </Button>
-            )}
-            {selectedImage && !error && !isSaved && (
-              <Button className={classNames.save} onClick={handleSave}>
-                Save
-              </Button>
-            )}
-          </div>
-        </div>
-      </ModalContent>
-    </Modal>
   )
 }
