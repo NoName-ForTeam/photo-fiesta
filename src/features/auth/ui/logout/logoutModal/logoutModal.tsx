@@ -17,6 +17,13 @@ export type LogoutModalProps = {
   open: boolean
 }
 
+/**
+ * A modal component for confirming user logout.
+ *
+ * This component displays a modal with a title, description, and two buttons: "No" and "Yes". Clicking "No" closes the modal,
+ * while clicking "Yes" invokes the `confirmLogout` callback.
+ *
+ */
 export const LogoutModal = ({ closeModal, confirmLogout, open }: LogoutModalProps) => {
   const classNames = {
     container: styles.container,

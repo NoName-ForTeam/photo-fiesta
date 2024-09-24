@@ -27,7 +27,7 @@
   max-width: 380px;
 
   @include mobile {
-    max-width: 330px;
+    --mobile-content-width: 330px;
   }
 }
 

@@ -2,6 +2,7 @@ import { useState } from 'react'
 
 import { LogoutModal } from '@/features/auth/ui/logout/logoutModal/logoutModal'
 import { useLogout } from '@/features/auth/ui/logout/useLogout'
+import userId from '@/pages/profile/[userId]'
 import {
   BookmarkOutline,
   HomeOutline,
@@ -19,23 +20,23 @@ import Link from 'next/link'
 import styles from './sidebar.module.scss'
 
 export const Sidebar = () => {
-  const [isModalOpen, setModalOpen] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false)
   const logout = useLogout()
 
   const confirmLogout = () => {
     logout()
-    setModalOpen(false)
+    setIsModalOpen(false)
   }
 
-  const closeModal = () => {
-    setModalOpen(false)
+  const classNames = {
+    icons: styles.icons,
   }
 
   return (
     <div>
       {/**TODO: add internalization for all elements*/}
       <Sidebars>
-        <div className={styles.icons}>
+        <div className={classNames.icons}>
           <Link href={ROUTES.HOME}>
             <SidebarsElement>
               <HomeOutline />
@@ -49,7 +50,7 @@ export const Sidebar = () => {
             </SidebarsElement>
           </Link>
           {/**TODO: add route constants*/}
-          <Link href={'/profile/${userId}'}>
+          <Link href={`${ROUTES.PROFILE}/${userId}`}>
             <SidebarsElement>
               <Person />
               My Profile
@@ -68,7 +69,7 @@ export const Sidebar = () => {
             </SidebarsElement>
           </Link>
         </div>
-        <div className={styles.icons}>
+        <div className={classNames.icons}>
           <Link href={ROUTES.STATICS}>
             <SidebarsElement>
               <TrendingUp />
@@ -82,15 +83,19 @@ export const Sidebar = () => {
             </SidebarsElement>
           </Link>
         </div>
-        <div className={styles.icons}>
-          <SidebarsElement onClick={() => setModalOpen(true)}>
+        <div className={classNames.icons}>
+          <SidebarsElement onClick={() => setIsModalOpen(true)}>
             <LogOut />
             Log Out
           </SidebarsElement>
         </div>
       </Sidebars>
       {isModalOpen && (
-        <LogoutModal closeModal={closeModal} confirmLogout={confirmLogout} open={isModalOpen} />
+        <LogoutModal
+          closeModal={() => setIsModalOpen(false)}
+          confirmLogout={confirmLogout}
+          open={isModalOpen}
+        />
       )}
     </div>
   )
