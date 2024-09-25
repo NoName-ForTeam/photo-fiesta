@@ -1,0 +1,82 @@
+@use '@/app/styles/mixins' as *;
+
+.content {
+  width: 100%;
+  max-width: 492px;
+}
+
+.header {
+  @include modal-header;
+}
+
+.close {
+  @include modal-close;
+}
+
+.main {
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  align-items: center;
+
+  width: 100%;
+  padding: 24px 24px 96px;
+
+  & .save {
+    position: absolute;
+    right: 24px;
+    bottom: 36px;
+  }
+}
+
+.block {
+  display: flex;
+  flex-direction: column;
+  gap: 60px;
+  align-items: center;
+
+  width: 100%;
+  max-width: 222px;
+}
+
+.photoPreview {
+  @include image-preview(228px);
+}
+
+.error {
+  width: 100%;
+  max-width: 444px;
+  max-height: fit-content;
+  padding: 5px 41px;
+
+  text-align: center;
+
+  visibility: hidden;
+  opacity: 0;
+  background-color: var(--danger-500);
+}
+
+.visible {
+  visibility: visible;
+  opacity: 1;
+}
+
+.imageWrapper {
+  @include image-wrapper;
+}
+
+.placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  height: 100%;
+}
+
+.icon {
+  width: var(--photo-icon-size);
+  height: var(--photo-icon-size);
+}

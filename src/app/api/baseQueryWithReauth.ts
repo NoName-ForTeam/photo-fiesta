@@ -1,8 +1,9 @@
-import { API_URLS, POST } from '@/shared/config'
+import { API_URLS, METHOD } from '@/shared/config'
 import { Storage } from '@/shared/utils'
 import { BaseQueryFn, FetchArgs, FetchBaseQueryError, fetchBaseQuery } from '@reduxjs/toolkit/query'
 import { Mutex } from 'async-mutex'
 
+const { POST } = METHOD
 const mutex = new Mutex()
 const baseQuery = fetchBaseQuery({
   baseUrl: API_URLS.BASE_URL,

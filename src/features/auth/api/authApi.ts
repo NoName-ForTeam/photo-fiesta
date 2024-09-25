@@ -9,8 +9,9 @@ import {
   SignUpData,
   SuccessSignInResponse,
 } from '@/features'
-import { API_URLS, POST } from '@/shared/config'
+import { API_URLS, METHOD } from '@/shared/config'
 
+const { POST } = METHOD
 /**
  * API service for authentication-related endpoints.
  * This service provides methods for user registration and other authentication tasks.
