@@ -5,6 +5,13 @@ import MyPaymentsPage from '@/pages/profile/settings/myPaymentsPage'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@photo-fiesta/ui-lib'
 
 import styles from './settings.module.scss'
+
+/**
+ * The Settings component renders a tabbed interface for managing user profile settings.
+ * It uses the `@photo-fiesta/ui-lib` Tabs component to switch between different settings pages.
+ *
+ */
+
 export const Settings = () => {
   return (
     <div className={styles.settingsContainer}>
