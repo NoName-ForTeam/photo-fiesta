@@ -6,8 +6,8 @@
  * @param {string} $weight - Font weight (default: var(--font-weight-regular))
  *
  * @example
- *  Usage in a module.scss file:
- *  First, at the beginning of your module.scss file, add:
+ *  Usage in a settings.module.scss file:
+ *  First, at the beginning of your settings.module.scss file, add:
  * @use '@/app/styles/mixins' as * ;
  *
  *  Then use the mixin:

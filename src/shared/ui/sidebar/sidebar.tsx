@@ -30,10 +30,11 @@ export const Sidebar = () => {
 
   const classNames = {
     icons: styles.icons,
+    root: styles.sidebar,
   }
 
   return (
-    <div>
+    <div className={classNames.root}>
       {/**TODO: add internalization for all elements*/}
       <Sidebars>
         <div className={classNames.icons}>
