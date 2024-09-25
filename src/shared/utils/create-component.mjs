@@ -3,7 +3,7 @@
  * This script automates the creation of a new React component with associated files.
  * It generates the following files for the specified component:
  * - A TypeScript component file (.tsx)
- * - A SCSS module file (.module.scss)
+ * - A SCSS module file (.settings.module.scss)
  * - An index file for exporting the component
  * - A Storybook story file (.stories.tsx)
  *

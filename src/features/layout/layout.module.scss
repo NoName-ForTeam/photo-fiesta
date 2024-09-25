@@ -17,10 +17,12 @@
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
+
+  max-width: 1280px;
 }
 
 .sidebar {
-  flex: 0 0 250px; // ширина сайдбара
+  flex: 0 0 220px; // ширина сайдбара
 }
 
 .main {
@@ -29,5 +31,6 @@
   align-items: center;
   justify-content: center;
 
+  max-width: 1060px;
   height: calc(100vh - var(--header-height));
 }
