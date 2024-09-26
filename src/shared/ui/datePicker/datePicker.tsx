@@ -1,9 +1,8 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { ReactNode, forwardRef } from 'react'
 import DatePicker, { ReactDatePickerCustomHeaderProps, registerLocale } from 'react-datepicker'
 
 import { ArrowIosBackOutline, ArrowIosForwardOutline, Calendar } from '@/shared/assets'
 import clsx from 'clsx'
-import { parse } from 'date-fns'
 import { enUS } from 'date-fns/locale'
 
 import styles from './datePicker.module.scss'
@@ -59,17 +58,24 @@ export const CustomDatePicker = ({
   disabled,
   endDate,
   errorMessage,
-  inputRef,
   label,
+  onSelect,
   placeholder,
   required,
-  selectsRange = false,
   setEndDate,
   setStartDate,
   startDate,
   ...restProps
 }: DatePickerType) => {
   const showError = !!errorMessage && errorMessage.length > 0
+
+  const classNames = {
+    calendar: styles.calendar,
+    day: (): string => styles.day || '',
+    errorText: styles.errorText,
+    input: clsx(styles.input),
+    root: clsx(styles.root, className),
+  }
 
   const renderCustomHeader = ({
     date,
@@ -98,68 +104,30 @@ export const CustomDatePicker = ({
 
       setStartDate?.(start)
       setEndDate?.(end)
+      onSelect?.(start)
     } else {
       setStartDate?.(dates)
       setEndDate?.(null)
+      onSelect?.(dates)
     }
   }
-
-  const getInputValue = useCallback(() => {
-    const formatDate = (date: Date | null | undefined) => {
-      return date ? new Intl.DateTimeFormat('en-GB').format(date) : ''
-    }
-
-    if (selectsRange && startDate && endDate) {
-      return `${formatDate(startDate)} - ${formatDate(endDate)}`
-    }
-
-    return formatDate(startDate)
-  }, [selectsRange, startDate, endDate])
-
-  const [inputValue, setInputValue] = useState<string>(getInputValue())
-
-  useEffect(() => {
-    setInputValue(getInputValue())
-  }, [getInputValue])
   const isRange = endDate !== undefined
 
   return (
-    <div className={clsx(styles.root, className)}>
+    <div className={classNames.root}>
       <DatePicker
-        calendarClassName={styles.calendar}
+        calendarClassName={classNames.calendar}
+        className={classNames.input}
         customInput={
-          <div className={clsx(styles.inputContainer)}>
-            {label && (
-              <label className={styles.label}>
-                {label} {required && <span className={styles.required}>*</span>}
-              </label>
-            )}
-            <input
-              className={clsx(styles.input, { [styles.error as string]: showError })}
-              disabled={disabled}
-              onBlur={e => {
-                const newValue = e.target.value
-                const parsedDate = parse(newValue, 'dd/MM/yyyy', new Date())
-
-                if (!isNaN(parsedDate.getTime())) {
-                  setStartDate?.(parsedDate)
-                  setEndDate?.(parsedDate)
-                } else {
-                  setInputValue('')
-                }
-              }}
-              onChange={e => setInputValue(e.target.value)}
-              placeholder={placeholder}
-              ref={inputRef}
-              required={required}
-              type={'text'}
-              value={inputValue}
-            />
-            <Calendar className={clsx(styles.icon, { [styles.error as string]: showError })} />
-          </div>
+          <CustomInput
+            disabled={disabled}
+            label={label}
+            required={required}
+            showError={showError}
+          />
         }
         dateFormat={'dd/MM/yyyy'}
-        dayClassName={(): string => styles.day || ''}
+        dayClassName={classNames.day}
         disabled={disabled}
         endDate={endDate || undefined}
         locale={'enUS'}
@@ -169,14 +137,50 @@ export const CustomDatePicker = ({
         renderCustomHeader={renderCustomHeader}
         required={required}
         selected={startDate}
-        selectsMultiple={undefined}
         // @ts-expect-error toDo picker fix
         selectsRange={isRange}
         showPopperArrow={false}
         startDate={startDate || undefined}
         {...restProps}
       />
-      {showError && <p className={clsx(styles.errorText)}>{errorMessage}</p>}
+      {showError && <p className={clsx(classNames.errorText)}>{errorMessage}</p>}
     </div>
   )
 }
+
+type CustomInputProps = {
+  disabled?: boolean
+  label?: ReactNode
+  required?: boolean
+  showError: boolean
+}
+
+const CustomInput = forwardRef<HTMLInputElement, CustomInputProps>(
+  ({ disabled, label, required, showError, ...rest }, ref) => {
+    const classNames = {
+      error: styles.error,
+      icon: styles.icon,
+      input: styles.input,
+      inputContainer: styles.inputContainer,
+      label: styles.label,
+      required: styles.required,
+    }
+
+    return (
+      <div className={clsx(classNames.inputContainer)}>
+        {label && (
+          <label className={classNames.label}>
+            {label} {required && <span className={classNames.required}>*</span>}
+          </label>
+        )}
+        <input
+          className={clsx(classNames.input, { [classNames.error as string]: showError })}
+          disabled={disabled}
+          ref={ref}
+          {...rest}
+        />
+        <Calendar className={clsx(classNames.icon, { [classNames.error as string]: showError })} />
+      </div>
+    )
+  }
+)

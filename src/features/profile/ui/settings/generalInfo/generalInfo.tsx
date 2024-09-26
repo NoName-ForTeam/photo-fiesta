@@ -91,6 +91,8 @@ export const GeneralInfo = ({ className }: GeneralInfoProps) => {
           errorMessage={errors.dateOfBirth?.message}
           label={'Date of birth*'}
           name={'dateOfBirth'}
+          placeholder={'00.00.0000'}
+          rules={{ required: 'Date is required' }}
         />
         <div className={classNames.selectBlock}>
           <FormSelect
