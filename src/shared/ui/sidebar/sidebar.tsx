@@ -29,6 +29,7 @@ export const Sidebar = () => {
   }
 
   const classNames = {
+    bg: styles.bg,
     icons: styles.icons,
     root: styles.sidebar,
   }
@@ -36,7 +37,7 @@ export const Sidebar = () => {
   return (
     <div className={classNames.root}>
       {/**TODO: add internalization for all elements*/}
-      <Sidebars>
+      <Sidebars className={classNames.bg}>
         <div className={classNames.icons}>
           <Link href={ROUTES.HOME}>
             <SidebarsElement>

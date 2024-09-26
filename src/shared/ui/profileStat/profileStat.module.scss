@@ -1,0 +1,9 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.firstDigit {
+  margin-right: 6px; // отступ между первой цифрой и остальными
+}
