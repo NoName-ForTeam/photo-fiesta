@@ -1,9 +1,9 @@
 import { ComponentPropsWithoutRef } from 'react'
 
 import { useAuthMeQuery } from '@/features'
-import PostList from '@/features/post/ui/postList/PostList'
+import { PostList } from '@/features/post/ui/postList/PostList'
 import Ava from '@/shared/assets/img/avaTest.png'
-import ProfileStat from '@/shared/ui/profileStat/profileStat'
+import { ProfileStat } from '@/shared/ui/profileStat/profileStat'
 import { Button, Typography } from '@photo-fiesta/ui-lib'
 import clsx from 'clsx'
 import Image from 'next/image'
@@ -70,7 +70,7 @@ export const Profile = ({ className }: ProfileProps) => {
         <Image alt={'ava'} src={Ava} />
         <div className={classNames.info}>
           <div className={classNames.title}>
-            <Typography variant={'h1'}>URLProfiele</Typography>
+            <Typography variant={'h1'}>{authData?.userId}</Typography>
             {button}
           </div>
           <div className={classNames.counts}>

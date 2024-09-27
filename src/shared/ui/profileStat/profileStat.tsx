@@ -19,7 +19,7 @@ type ProfileStatProps = {
  * <ProfileStat counts={2764} title="Followers" />
  */
 
-const ProfileStat = ({ className, counts, title }: ProfileStatProps) => {
+export const ProfileStat = ({ className, counts, title }: ProfileStatProps) => {
   const classNames = {
     firstDigit: styles.firstDigit,
     root: clsx(styles.root, className),
@@ -43,5 +43,3 @@ const ProfileStat = ({ className, counts, title }: ProfileStatProps) => {
     </div>
   )
 }
-
-export default ProfileStat
