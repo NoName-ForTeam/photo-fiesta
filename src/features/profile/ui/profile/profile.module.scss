@@ -1,3 +1,42 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 36px 64px 0 24px;
+}
+
 .root {
   display: flex;
+  gap: 38px;
+  margin-bottom: 50px;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.counts {
+  display: flex;
+  align-items: center;
+}
+
+.firstStat {
+  margin-right: 100px;
+}
+
+.secondStat {
+  margin-right: 88px;
+}
+
+.btnContainer {
+  display: flex;
+  gap: 12px;
 }

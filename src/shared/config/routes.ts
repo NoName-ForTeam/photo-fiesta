@@ -3,6 +3,7 @@ export const ROUTES = {
   CREATE_NEW_PASSWORD: '/auth/recovery',
   FAVORITES: '/favorites',
   FORGOT_PASSWORD: '/auth/forgotPasswordPage',
+  GENERAL_INFO: '/profile/settings/generalInfoPage',
   HOME: '/home',
   MESSENGER: '/messenger',
   PRIVACY_POLICY: '/auth/privacyPolicyPage',

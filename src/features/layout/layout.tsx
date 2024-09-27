@@ -28,7 +28,6 @@ export const Layout = ({ children }: { children: ReactNode }) => {
   const isSuccess = !!authData
   const classNames = {
     main: style.main,
-    sidebar: style.sidebar,
     wrapper: style.wrapper,
   } as const
 
@@ -36,11 +35,7 @@ export const Layout = ({ children }: { children: ReactNode }) => {
     <>
       <Header isAuth={isSuccess} />
       <div className={classNames.wrapper}>
-        {isSuccess && (
-          <div className={classNames.sidebar}>
-            <Sidebar />
-          </div>
-        )}
+        {isSuccess && <Sidebar />}
         <main className={classNames.main}>{children}</main>
       </div>
     </>

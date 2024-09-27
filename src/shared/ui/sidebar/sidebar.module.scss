@@ -1,5 +1,10 @@
 .root {
-  background-color: var(--dark-700);
+  background-color: transparent;
+}
+
+.bg {
+  min-width: 220px;
+  background: transparent;
 }
 
 .icons {
