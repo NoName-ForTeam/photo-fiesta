@@ -3,6 +3,7 @@ import { ComponentPropsWithoutRef } from 'react'
 import { useAuthMeQuery } from '@/features'
 import { PostList } from '@/features/post/ui/postList/PostList'
 import Ava from '@/shared/assets/img/avaTest.png'
+import { ROUTES } from '@/shared/config'
 import { ProfileStat } from '@/shared/ui/profileStat/profileStat'
 import { Button, Typography } from '@photo-fiesta/ui-lib'
 import clsx from 'clsx'
@@ -49,7 +50,12 @@ export const Profile = ({ className }: ProfileProps) => {
   if (authData) {
     button =
       String(authData.userId) === router.query.userId ? (
-        <Button variant={'secondary'}>
+        <Button
+          onClick={() => {
+            router.push(ROUTES.GENERAL_INFO)
+          }}
+          variant={'secondary'}
+        >
           <Typography variant={'h3'}>Profile Settings</Typography>
         </Button>
       ) : (
