@@ -1,8 +1,4 @@
-import { useState } from 'react'
-
-import { LogoutModal } from '@/features/auth/ui/logout/logoutModal/logoutModal'
-import { useLogout } from '@/features/auth/ui/logout/useLogout'
-import userId from '@/pages/profile/[userId]'
+import { LogoutModal } from '@/features'
 import {
   BookmarkOutline,
   HomeOutline,
@@ -19,76 +15,71 @@ import Link from 'next/link'
 
 import styles from './sidebar.module.scss'
 
-export const Sidebar = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const logout = useLogout()
+import { useSidebar } from './useSidebar'
 
-  const confirmLogout = () => {
-    logout()
-    setIsModalOpen(false)
-  }
+/** Type representing the icon components used in the sidebar */
+type Icon = typeof HomeOutline
+type SidebarItem = {
+  href: string
+  icon: Icon
+  /**
+   * Optional override for the active state check.
+   * Used when the active state logic differs from the standard path comparison.
+   * For example, it's used for dynamic routes like user profiles.
+   */
+  isActiveOverride?: string
+  text: string
+}
+
+/**
+ * Sidebar component that displays navigation items and logout option
+ */
+export const Sidebar = () => {
+  const { confirmLogout, getProfileLink, isActive, isModalOpen, setIsModalOpen } = useSidebar()
 
   const classNames = {
     icons: styles.icons,
     root: styles.sidebar,
   }
 
+  /** Array of sidebar items to be rendered */
+  const sidebarItems: SidebarItem[] = [
+    { href: ROUTES.HOME, icon: HomeOutline, text: 'Home' },
+    { href: ROUTES.CREATE, icon: PlusSquareOutline, text: 'Create' },
+    {
+      href: getProfileLink(),
+      icon: Person,
+      isActiveOverride: `${ROUTES.PROFILE}/[userId]`,
+      text: 'My Profile',
+    },
+    { href: ROUTES.MESSENGER, icon: MessageCircle, text: 'Messenger' },
+    { href: ROUTES.SEARCH, icon: Search, text: 'Search' },
+    { href: ROUTES.STATICS, icon: TrendingUp, text: 'Statics' },
+    { href: ROUTES.FAVORITES, icon: BookmarkOutline, text: 'Favorites' },
+  ]
+
+  const renderedSidebarItems = sidebarItems.map(item => (
+    <SidebarElement
+      href={item.href}
+      icon={item.icon}
+      isActive={path => isActive(item.isActiveOverride || path)}
+      key={item.href}
+      text={item.text}
+    />
+  ))
+
   return (
     <div className={classNames.root}>
-      {/**TODO: add internalization for all elements*/}
       <Sidebars>
+        <div className={classNames.icons}>{renderedSidebarItems}</div>
         <div className={classNames.icons}>
-          <Link href={ROUTES.HOME}>
-            <SidebarsElement>
-              <HomeOutline />
-              Home
-            </SidebarsElement>
-          </Link>
-          <Link href={ROUTES.CREATE}>
-            <SidebarsElement>
-              <PlusSquareOutline />
-              Create
-            </SidebarsElement>
-          </Link>
-          {/**TODO: add route constants*/}
-          <Link href={`${ROUTES.PROFILE}/${userId}`}>
-            <SidebarsElement>
-              <Person />
-              My Profile
-            </SidebarsElement>
-          </Link>
-          <Link href={ROUTES.MESSENGER}>
-            <SidebarsElement>
-              <MessageCircle />
-              Messenger
-            </SidebarsElement>
-          </Link>
-          <Link href={ROUTES.SEARCH}>
-            <SidebarsElement>
-              <Search />
-              Search
-            </SidebarsElement>
-          </Link>
-        </div>
-        <div className={classNames.icons}>
-          <Link href={ROUTES.STATICS}>
-            <SidebarsElement>
-              <TrendingUp />
-              Statics
-            </SidebarsElement>
-          </Link>
-          <Link href={ROUTES.FAVORITES}>
-            <SidebarsElement>
-              <BookmarkOutline />
-              Favorites
-            </SidebarsElement>
-          </Link>
-        </div>
-        <div className={classNames.icons}>
-          <SidebarsElement onClick={() => setIsModalOpen(true)}>
-            <LogOut />
-            Log Out
-          </SidebarsElement>
+          <SidebarElement
+            href={''}
+            icon={LogOut}
+            isActive={() => ''}
+            onClick={() => setIsModalOpen(true)}
+            text={'Log Out'}
+          />
         </div>
       </Sidebars>
       {isModalOpen && (
@@ -101,3 +92,31 @@ export const Sidebar = () => {
     </div>
   )
 }
+
+//sidebar element
+
+type SidebarElementProps = {
+  href: string
+  icon: Icon
+  isActive: (path: string) => string
+  onClick?: () => void
+  text: string
+}
+
+/**
+ * SidebarElement component that renders a single navigation item
+ */
+const SidebarElement = ({
+  href,
+  icon: Icon,
+  isActive,
+  onClick,
+  text,
+}: SidebarElementProps): JSX.Element => (
+  <Link className={styles[isActive(href)]} href={href} onClick={onClick}>
+    <SidebarsElement>
+      <Icon />
+      {text}
+    </SidebarsElement>
+  </Link>
+)
