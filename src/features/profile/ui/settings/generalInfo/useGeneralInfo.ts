@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 
@@ -48,16 +48,15 @@ export const useGeneralInfo = () => {
   const [isOpen, setIsOpen] = useState(false)
   const [image, setImage] = useState<null | string>(null)
   const [updateProfile] = useUpdateProfileMutation()
-  const { data: profileData } = useGetProfileQuery()
+  const { data: profileData, isLoading } = useGetProfileQuery()
 
   const [uploadAvatar] = useUploadAvatarMutation()
-  const {
-    control,
-    formState: { errors },
-    handleSubmit,
-    setError,
-  } = useForm<ProfileSettings>({
-    defaultValues: {
+
+  /**
+   * Memoized default values for the form
+   */
+  const defaultValues = useMemo(
+    () => ({
       aboutMe: profileData?.aboutMe ?? '',
       city: profileData?.city ?? '',
       country: profileData?.country ?? '',
@@ -66,9 +65,18 @@ export const useGeneralInfo = () => {
         : new Date('2000-01-01'),
       firstName: profileData?.firstName ?? '',
       lastName: profileData?.lastName ?? '',
-      region: profileData?.region ?? 'string',
+      region: profileData?.region ?? '',
       userName: profileData?.userName ?? '',
-    },
+    }),
+    [profileData]
+  )
+  const {
+    control,
+    formState: { errors },
+    handleSubmit,
+    setError,
+  } = useForm<ProfileSettings>({
+    defaultValues,
     mode: 'onBlur',
     resolver: zodResolver(ProfileSettingsSchema),
   })
@@ -108,6 +116,7 @@ export const useGeneralInfo = () => {
     handleCloseModal,
     handleOpenModal,
     image,
+    isLoading,
     isOpen,
     onSubmit,
     setImage,
