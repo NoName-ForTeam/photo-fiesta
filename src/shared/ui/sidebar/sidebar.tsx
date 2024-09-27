@@ -38,6 +38,7 @@ export const Sidebar = () => {
   const { confirmLogout, getProfileLink, isActive, isModalOpen, setIsModalOpen } = useSidebar()
 
   const classNames = {
+    bg: styles.bg,
     icons: styles.icons,
     root: styles.sidebar,
   }

@@ -1,7 +1,7 @@
-import { useAuthMeQuery } from '@/features'
+import { Profile, useAuthMeQuery } from '@/features'
 
 const ProfilePage = () => {
-  const { data, isError, refetch } = useAuthMeQuery()
+  const { isError, refetch } = useAuthMeQuery()
 
   if (isError) {
     refetch()
@@ -9,8 +9,7 @@ const ProfilePage = () => {
 
   return (
     <>
-      <div>My Profile</div>
-      <div>My id is {data?.userId}</div>
+      <Profile />
     </>
   )
 }
