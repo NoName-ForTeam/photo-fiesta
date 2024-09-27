@@ -46,12 +46,18 @@ export type ProfileSettings = z.infer<typeof ProfileSettingsSchema>
 
 export const useGeneralInfo = () => {
   const [isOpen, setIsOpen] = useState(false)
-  const [image, setImage] = useState<null | string>(null)
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const [updateProfile] = useUpdateProfileMutation()
   const { data: profileData, isLoading } = useGetProfileQuery()
 
   const [uploadAvatar] = useUploadAvatarMutation()
-
+  /**
+   * if the user has an avatar, it will be displayed in the profile settings
+   * if the user has no avatar, a placeholder will be displayed
+   */
+  const [image, setImage] = useState<null | string>(
+    profileData?.avatars && profileData.avatars.length > 0 ? profileData.avatars[0].url : null
+  )
   /**
    * Memoized default values for the form
    */
@@ -82,6 +88,10 @@ export const useGeneralInfo = () => {
   })
 
   const onSubmit = handleSubmit(async (data: ProfileSettings) => {
+    /**
+     * block the submit button until the request is completed
+     */
+    setIsSubmitting(true)
     try {
       const submissionData = {
         ...data,
@@ -99,6 +109,8 @@ export const useGeneralInfo = () => {
       toast.success('Profile updated successfully!')
     } catch (error) {
       handleErrorResponse({ badRequestSchema, error, isToast: true, setError })
+    } finally {
+      setIsSubmitting(false)
     }
   })
 
@@ -118,6 +130,7 @@ export const useGeneralInfo = () => {
     image,
     isLoading,
     isOpen,
+    isSubmitting,
     onSubmit,
     setImage,
   }

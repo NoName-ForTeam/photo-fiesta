@@ -27,6 +27,7 @@ export const GeneralInfo = ({ className }: GeneralInfoProps) => {
     image,
     isLoading,
     isOpen,
+    isSubmitting,
     onSubmit,
     setImage,
   } = useGeneralInfo()
@@ -134,7 +135,9 @@ export const GeneralInfo = ({ className }: GeneralInfoProps) => {
           name={'aboutMe'}
         />
         <div className={classNames.line}></div>
-        <Button className={classNames.submit}>Save Changes</Button>
+        <Button className={classNames.submit} disabled={isSubmitting}>
+          Save Changes
+        </Button>
       </form>
       <ModalAddPhoto handleCloseModal={handleCloseModal} isOpen={isOpen} setImage={setImage} />
     </div>
