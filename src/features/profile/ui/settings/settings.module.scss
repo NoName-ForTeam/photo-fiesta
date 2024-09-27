@@ -1,7 +1,8 @@
 .settingsContainer {
   display: flex;
+  align-self: flex-start;
   width: 100%;
-  padding-left: 24px;
+  padding: 24px 0 0 24px;
 }
 
 .tabsList {

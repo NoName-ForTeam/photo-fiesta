@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 
-import { useUpdateProfileMutation, useUploadAvatarMutation } from '@/features'
+import { useGetProfileQuery, useUpdateProfileMutation, useUploadAvatarMutation } from '@/features'
 import {
   commonAboutMeSchema,
   commonDateOfBirthSchema,
@@ -48,6 +48,8 @@ export const useGeneralInfo = () => {
   const [isOpen, setIsOpen] = useState(false)
   const [image, setImage] = useState<null | string>(null)
   const [updateProfile] = useUpdateProfileMutation()
+  const { data: profileData } = useGetProfileQuery()
+
   const [uploadAvatar] = useUploadAvatarMutation()
   const {
     control,
@@ -55,16 +57,17 @@ export const useGeneralInfo = () => {
     handleSubmit,
     setError,
   } = useForm<ProfileSettings>({
-    // TODO: add default values from backend
     defaultValues: {
-      aboutMe: '',
-      city: '',
-      country: '',
-      dateOfBirth: new Date('2000-01-01'),
-      firstName: '',
-      lastName: '',
-      region: 'string',
-      userName: '',
+      aboutMe: profileData?.aboutMe ?? '',
+      city: profileData?.city ?? '',
+      country: profileData?.country ?? '',
+      dateOfBirth: profileData?.dateOfBirth
+        ? new Date(profileData.dateOfBirth)
+        : new Date('2000-01-01'),
+      firstName: profileData?.firstName ?? '',
+      lastName: profileData?.lastName ?? '',
+      region: profileData?.region ?? 'string',
+      userName: profileData?.userName ?? '',
     },
     mode: 'onBlur',
     resolver: zodResolver(ProfileSettingsSchema),
@@ -79,7 +82,7 @@ export const useGeneralInfo = () => {
       }
 
       await updateProfile(submissionData).unwrap()
-      if (image) {
+      if (image && image !== profileData?.avatars[0]?.url) {
         const formData = prepareImageForUpload(image)
 
         await uploadAvatar(formData).unwrap()

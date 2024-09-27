@@ -2,16 +2,13 @@
   background-color: transparent;
 }
 
-.bg {
-  min-width: 220px;
-  background: transparent;
-}
-
 .icons {
   display: flex;
   flex-direction: column;
   gap: 24px;
+
   margin-bottom: 60px;
+  padding-right: 50px;
 
   a {
     gap: 12px;
@@ -30,4 +27,8 @@
       outline-offset: 2px;
     }
   }
+}
+
+.search {
+  margin-bottom: 36px;
 }

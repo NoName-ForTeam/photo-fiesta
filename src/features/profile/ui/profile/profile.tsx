@@ -52,7 +52,7 @@ export const Profile = ({ className }: ProfileProps) => {
       String(authData.userId) === router.query.userId ? (
         <Button
           onClick={() => {
-            router.push(ROUTES.GENERAL_INFO)
+            router.push(ROUTES.SETTINGS)
           }}
           variant={'secondary'}
         >

@@ -11,6 +11,7 @@ import {
 } from '@/shared/assets'
 import { ROUTES } from '@/shared/config'
 import { Sidebars, SidebarsElement } from '@photo-fiesta/ui-lib'
+import clsx from 'clsx'
 import Link from 'next/link'
 
 import styles from './sidebar.module.scss'
@@ -38,9 +39,8 @@ export const Sidebar = () => {
   const { confirmLogout, getProfileLink, isActive, isModalOpen, setIsModalOpen } = useSidebar()
 
   const classNames = {
-    bg: styles.bg,
     icons: styles.icons,
-    root: styles.sidebar,
+    root: styles.root,
   }
 
   /** Array of sidebar items to be rendered */
@@ -114,7 +114,11 @@ const SidebarElement = ({
   onClick,
   text,
 }: SidebarElementProps): JSX.Element => (
-  <Link className={styles[isActive(href)]} href={href} onClick={onClick}>
+  <Link
+    className={clsx(styles[isActive(href)], text == 'Search' && styles.search)}
+    href={href}
+    onClick={onClick}
+  >
     <SidebarsElement>
       <Icon />
       {text}
