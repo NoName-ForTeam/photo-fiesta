@@ -1,3 +1,8 @@
+import styles from './devices.module.scss'
 export const Devices = () => {
-  return <div>Devices</div>
+  const classNames = {
+    root: styles.root,
+  } as const
+
+  return <div className={classNames.root}>Devices</div>
 }

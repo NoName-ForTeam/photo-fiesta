@@ -8,7 +8,7 @@
   display: flex;
   gap: 40px;
   width: 100%;
-  padding: 24px 65px 24px 24px;
+  padding-top: 24px;
 }
 
 .container {
@@ -21,10 +21,11 @@
   width: 100%;
   max-width: 196px;
   padding-top: 24px;
-}
 
-.uploadButton {
-  margin-top: 24px;
+  & .uploadButton {
+    margin-top: 24px;
+    padding: 0.375rem 1.3rem;
+  }
 }
 
 .form {
@@ -53,14 +54,13 @@
 
 .line {
   position: relative;
-  margin-bottom: 48px;
 
   &::after {
     content: '';
 
     position: absolute;
     z-index: -11;
-    bottom: -38px;
+    bottom: 0;
     left: -240px;
 
     width: 132.5%;

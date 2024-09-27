@@ -1,5 +1,10 @@
 html {
+  scroll-behavior: smooth;
+
   box-sizing: border-box;
+  max-width: 1280px;
+  margin: 0 auto;
+
   font-size: 100%;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -36,5 +41,5 @@ body {
   line-height: var(--line-height-m);
   color: var(--light-100);
 
-  background-color: var(--dark-700);
+  background-color: var(--dark-700) !important;
 }
