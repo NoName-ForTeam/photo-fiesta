@@ -10,21 +10,23 @@ import {
   Typography,
 } from '@photo-fiesta/ui-lib'
 
-import styles from './logoutModal.module.scss'
-export type LogoutModalProps = {
-  closeModal: () => void
-  confirmLogout: () => void
-  open: boolean
-}
+import styles from './confirmationModal.module.scss'
 
-/**
- * A modal component for confirming user logout.
- *
- * This component displays a modal with a title, description, and two buttons: "No" and "Yes". Clicking "No" closes the modal,
- * while clicking "Yes" invokes the `confirmLogout` callback.
- *
- */
-export const LogoutModal = ({ closeModal, confirmLogout, open }: LogoutModalProps) => {
+type ModalProps = {
+  closeModal: () => void
+  confirmation: () => void
+  content: string
+  isOpen: boolean
+  title: string
+}
+//TODO: add translations
+export const ConfirmationModal = ({
+  closeModal,
+  confirmation,
+  content,
+  isOpen,
+  title,
+}: ModalProps) => {
   const classNames = {
     container: styles.container,
     content: styles.content,
@@ -35,11 +37,11 @@ export const LogoutModal = ({ closeModal, confirmLogout, open }: LogoutModalProp
   } as const
 
   return (
-    <Modal onOpenChange={closeModal} open={open}>
+    <Modal onOpenChange={closeModal} open={isOpen}>
       <ModalContent className={classNames.content}>
         <ModalHeader className={classNames.header}>
           <ModalTitle>
-            <Typography variant={'h1'}>Log Out</Typography>
+            <Typography variant={'h1'}>{title}</Typography>
           </ModalTitle>
           <ModalClose onClick={closeModal}>
             <CloseOutline className={classNames.icon} />
@@ -47,13 +49,13 @@ export const LogoutModal = ({ closeModal, confirmLogout, open }: LogoutModalProp
         </ModalHeader>
         <div className={classNames.container}>
           <Typography className={classNames.description} variant={'text16'}>
-            Are you really want to logout of your account?
+            {content}
           </Typography>
           <ModalFooter className={classNames.footer}>
             <Button onClick={closeModal} variant={'secondary'}>
               No
             </Button>
-            <Button onClick={confirmLogout} variant={'primary'}>
+            <Button onClick={confirmation} variant={'primary'}>
               Yes
             </Button>
           </ModalFooter>

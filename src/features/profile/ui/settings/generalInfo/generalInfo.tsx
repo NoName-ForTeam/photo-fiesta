@@ -1,16 +1,16 @@
 import { ComponentPropsWithoutRef } from 'react'
 
-import { ModalAddPhoto } from '@/features'
-import { ImageOutline } from '@/shared/assets'
+import { CloseOutline, ImageOutline } from '@/shared/assets'
 import { City, Country, cities, countries } from '@/shared/config'
 import { FormDatePicker } from '@/shared/ui'
+import { ConfirmationModal, ModalAddPhoto } from '@/widgets'
 import { Button, FormInput, FormSelect, FormTextArea, SelectItem } from '@photo-fiesta/ui-lib'
 import clsx from 'clsx'
 import Image from 'next/image'
 
 import styles from './generalInfo.module.scss'
 
-import { useGeneralInfo } from './useGeneralInfo'
+import { useGeneralInfo, usePhotoPreview } from './hooks'
 
 export type GeneralInfoProps = ComponentPropsWithoutRef<'div'>
 /**
@@ -18,11 +18,14 @@ export type GeneralInfoProps = ComponentPropsWithoutRef<'div'>
  * @example
  * <GeneralInfo className="custom-class" />
  */
+
+//TODO: add translations
 export const GeneralInfo = ({ className }: GeneralInfoProps) => {
   const {
     control,
     errors,
     handleCloseModal,
+    handleDeletePhoto,
     handleOpenModal,
     image,
     isLoading,
@@ -61,6 +64,7 @@ export const GeneralInfo = ({ className }: GeneralInfoProps) => {
     ))
   }
 
+  //TODO: add custom loading component
   if (isLoading) {
     return <div>Loading...</div>
   }
@@ -68,7 +72,12 @@ export const GeneralInfo = ({ className }: GeneralInfoProps) => {
   return (
     <div className={clsx(classNames.root, className)}>
       <div className={classNames.container}>
-        <PhotoPreview image={image} preview={styles.imagePreview} size={192} />
+        <PhotoPreview
+          image={image}
+          onDeletePhoto={handleDeletePhoto}
+          preview={styles.imagePreview}
+          size={192}
+        />
         <Button className={classNames.uploadButton} onClick={handleOpenModal} variant={'outlined'}>
           Add a Profile Photo
         </Button>
@@ -148,6 +157,7 @@ export const GeneralInfo = ({ className }: GeneralInfoProps) => {
 
 type PhotoPreviewProps = {
   image: null | string
+  onDeletePhoto: () => void
   preview: string
   size: number
 }
@@ -155,26 +165,46 @@ type PhotoPreviewProps = {
  * PhotoPreview component for displaying a user's profile photo or placeholder
  * <PhotoPreview image="https://example.com/photo.jpg" preview="previewClass" size={192} />
  */
-export const PhotoPreview = ({ image, preview, size }: PhotoPreviewProps) => {
+export const PhotoPreview = ({ image, onDeletePhoto, preview, size }: PhotoPreviewProps) => {
+  const { handleCloseModal, handleConfirmation, handleOpenModal, isOpen } =
+    usePhotoPreview(onDeletePhoto)
+
   const classNames = {
+    close: styles.close,
     icon: styles.icon,
     imageWrapper: styles.imageWrapper,
     placeholder: styles.placeholder,
     preview,
+    wrapper: styles.wrapper,
   } as const
 
   return (
-    <div className={classNames.preview}>
-      {image ? (
-        <div className={classNames.imageWrapper}>
-          {/** *width and height are required for the image to be displayed in next */}
-          {/** *TODO: add button as red circle with X icon to remove image in profile settings*/}
-          <Image alt={'Uploaded'} height={size} src={image} width={size} />
-        </div>
-      ) : (
-        <span className={classNames.placeholder}>
-          <ImageOutline className={classNames.icon} />
-        </span>
+    <div className={classNames.wrapper}>
+      <div className={classNames.preview}>
+        {image ? (
+          <div className={classNames.imageWrapper}>
+            {/** *width and height are required for the image to be displayed in next */}
+            <Image alt={'Uploaded'} height={size} src={image} width={size} />
+          </div>
+        ) : (
+          <span className={classNames.placeholder}>
+            <ImageOutline className={classNames.icon} />
+          </span>
+        )}
+        {isOpen && (
+          <ConfirmationModal
+            closeModal={handleCloseModal}
+            confirmation={handleConfirmation}
+            content={'Are you sure you want to delete the photo?'}
+            isOpen={isOpen}
+            title={'Delete Photo'}
+          />
+        )}
+      </div>
+      {image && (
+        <Button asChild onClick={handleOpenModal} variant={'icon-link'}>
+          <CloseOutline className={classNames.close} />
+        </Button>
       )}
     </div>
   )

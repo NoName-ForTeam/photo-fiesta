@@ -4,7 +4,7 @@ import { Provider } from 'react-redux'
 import { ToastContainer } from 'react-toastify'
 
 import { wrapper } from '@/app/store'
-import { Layout } from '@/features'
+import { Layout } from '@/widgets'
 
 import '@/app/styles/index.scss'
 import '@fontsource/inter/400.css'

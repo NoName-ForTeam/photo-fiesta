@@ -32,7 +32,7 @@ type ModalAddPhotoProps = {
  *       }}
  *     />
  */
-
+//TODO: add translations
 export const ModalAddPhoto = ({ handleCloseModal, isOpen, setImage }: ModalAddPhotoProps) => {
   const { error, fileInputRef, handleClick, handleFileChange, handleSave, isSaved, selectedImage } =
     useModalAddPhoto({ handleCloseModal, isOpen, setImage })

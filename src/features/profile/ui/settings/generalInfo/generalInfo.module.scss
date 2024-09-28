@@ -82,6 +82,9 @@
 }
 
 /*** PHOTO PREVIEW ***/
+.wrapper {
+  position: relative;
+}
 
 .imageWrapper {
   @include image-wrapper;
@@ -105,4 +108,29 @@
 .icon {
   width: var(--photo-icon-size);
   height: var(--photo-icon-size);
+}
+
+.close {
+  cursor: pointer;
+
+  position: absolute;
+  top: 19px;
+  right: 10px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 16px;
+  height: 16px;
+
+  background-color: var(--danger-500);
+  border: none;
+  border-radius: 50%;
+
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: var(--danger-300);
+  }
 }

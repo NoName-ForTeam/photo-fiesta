@@ -27,7 +27,7 @@ export const ProfileStat = ({ className, counts, title }: ProfileStatProps) => {
   let firstDigit
   let restDigits
 
-  // Преобразуем число в строку и разделяем первую цифру
+  //transform number to string and divide the first digit
   if (counts >= 1000) {
     firstDigit = counts.toString().charAt(0)
     restDigits = counts.toString().slice(1)

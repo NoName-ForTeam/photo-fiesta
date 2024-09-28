@@ -1,6 +1,8 @@
 import { baseApi } from '@/app/api'
 import {
   AuthMeResponse,
+  CheckRecoveryCodeRequest,
+  CheckRecoveryCodeResponse,
   ConfirmRegistration,
   CreateNewPasswordData,
   PasswordRecoveryData,
@@ -8,10 +10,24 @@ import {
   SignInData,
   SignUpData,
   SuccessSignInResponse,
+  UpdateTokens,
 } from '@/features'
 import { API_URLS, METHOD } from '@/shared/config'
 
 const { POST } = METHOD
+
+const {
+  CHECK_RECOVERY_CODE,
+  LOGIN,
+  LOGOUT,
+  ME,
+  NEW_PASSWORD,
+  PASSWORD_RECOVERY,
+  REGISTRATION,
+  REGISTRATION_CONFIRMATION,
+  REGISTRATION_EMAIL_RESENDING,
+  UPDATE_TOKENS,
+} = API_URLS.AUTH
 /**
  * API service for authentication-related endpoints.
  * This service provides methods for user registration and other authentication tasks.
@@ -26,7 +42,18 @@ export const authApi = baseApi.injectEndpoints({
        */
       authMe: builder.query<AuthMeResponse, void>({
         providesTags: ['Auth'],
-        query: () => API_URLS.AUTH.ME,
+        query: () => ME,
+      }),
+      /**
+       *  check recovery code for valid
+       * @param {CheckRecoveryCodeRequest} params - The recovery code parameters.
+       */
+      checkRecoveryCode: builder.query<CheckRecoveryCodeResponse, CheckRecoveryCodeRequest>({
+        query: params => ({
+          body: params,
+          method: POST,
+          url: CHECK_RECOVERY_CODE,
+        }),
       }),
       /**
        * Query to confirm user registration.
@@ -36,7 +63,7 @@ export const authApi = baseApi.injectEndpoints({
         query: params => ({
           body: params,
           method: POST,
-          url: API_URLS.AUTH.REGISTRATION_CONFIRMATION,
+          url: REGISTRATION_CONFIRMATION,
         }),
       }),
       /**Mutation for user create new password
@@ -47,40 +74,43 @@ export const authApi = baseApi.injectEndpoints({
         query: params => ({
           body: params,
           method: POST,
-          url: API_URLS.AUTH.NEW_PASSWORD,
+          url: NEW_PASSWORD,
         }),
       }),
       /**
        * Mutation to log out the current user.
+       * in cookie client must send correct refresh Token that will be revoked after refreshing
        */
       logout: builder.mutation<void, void>({
         invalidatesTags: ['Auth'],
         query: params => ({
           body: params,
           method: POST,
-          url: API_URLS.AUTH.LOGOUT,
+          url: LOGOUT,
         }),
       }),
       /**
        * Mutation to initiate password recovery process.
+       * email should be sent with Recovery Code inside
        * @param {PasswordRecoveryData} params - The password recovery data.
        */
       passwordRecovery: builder.mutation<void, PasswordRecoveryData>({
         query: params => ({
           body: params,
           method: POST,
-          url: API_URLS.AUTH.PASSWORD_RECOVERY,
+          url: PASSWORD_RECOVERY,
         }),
       }),
       /**
        * Mutation to resend registration confirmation link.
+       * resend confirmation registration email if user exists
        * @param {ResendLink} params - The resend link parameters.
        */
       resendLink: builder.mutation<void, ResendLink>({
         query: params => ({
           body: params,
           method: POST,
-          url: API_URLS.AUTH.REGISTRATION_EMAIL_RESENDING,
+          url: REGISTRATION_EMAIL_RESENDING,
         }),
       }),
       /**
@@ -95,11 +125,12 @@ export const authApi = baseApi.injectEndpoints({
         query: params => ({
           body: params,
           method: POST,
-          url: API_URLS.AUTH.LOGIN,
+          url: LOGIN,
         }),
       }),
       /**
        * Mutation for user sign-up (registration).
+       * email with confirmation code should be sent to passed email address
        * Sends a POST request to the registration endpoint with the provided sign-up data.
        * @example
        * const [signUpPage, { isLoading, error }] = useSignUpMutation();
@@ -110,7 +141,19 @@ export const authApi = baseApi.injectEndpoints({
         query: params => ({
           body: params,
           method: POST,
-          url: API_URLS.AUTH.REGISTRATION,
+          url: REGISTRATION,
+        }),
+      }),
+      /**
+       * Mutation to update access tokens.
+       *'Generate new pair of access and refresh tokens (in cookie client must send correct refresh Token that will be revoked after refreshing) Device LastActiveDate should\n' + 'be overrode by issued Date of new refresh token',
+       */
+      updateTokens: builder.mutation<void, UpdateTokens>({
+        invalidatesTags: ['Auth'],
+        query: params => ({
+          body: params,
+          method: POST,
+          url: UPDATE_TOKENS,
         }),
       }),
     }

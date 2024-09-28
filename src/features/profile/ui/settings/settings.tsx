@@ -1,3 +1,5 @@
+import { ReactNode } from 'react'
+
 import AccountManagementsPage from '@/pages/profile/settings/accountManagementsPage'
 import DevicesPage from '@/pages/profile/settings/devicesPage'
 import GeneralInfoPage from '@/pages/profile/settings/generalInfoPage'
@@ -6,46 +8,40 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@photo-fiesta/ui-lib'
 
 import styles from './settings.module.scss'
 
+type TabConfig = {
+  content: ReactNode
+  label: string
+  value: string
+}
+
+const TABS_CONFIG: TabConfig[] = [
+  { content: <GeneralInfoPage />, label: 'General Information', value: 'generalInformation' },
+  { content: <DevicesPage />, label: 'Devices', value: 'devices' },
+  { content: <AccountManagementsPage />, label: 'Account Management', value: 'accountManagement' },
+  { content: <MyPaymentsPage />, label: 'My Payments', value: 'myPayments' },
+]
+
 /**
  * The Settings component renders a tabbed interface for managing user profile settings.
  * It uses the `@photo-fiesta/ui-lib` Tabs component to switch between different settings pages.
  *
  */
-
 export const Settings = () => {
   return (
     <div className={styles.settingsContainer}>
-      <Tabs defaultValue={'generalInformation'}>
+      <Tabs defaultValue={TABS_CONFIG[0].value}>
         <TabsList className={styles.tabsList}>
-          <TabsTrigger className={styles.tabsTrigger} value={'generalInformation'}>
-            {' '}
-            General Information{' '}
-          </TabsTrigger>
-          <TabsTrigger className={styles.tabsTrigger} value={'devices'}>
-            {' '}
-            Devices{' '}
-          </TabsTrigger>
-          <TabsTrigger className={styles.tabsTrigger} value={'accountManagement'}>
-            {' '}
-            Account Management{' '}
-          </TabsTrigger>
-          <TabsTrigger className={styles.tabsTrigger} value={'myPayments'}>
-            {' '}
-            My payments{' '}
-          </TabsTrigger>
+          {TABS_CONFIG.map(tab => (
+            <TabsTrigger className={styles.tabsTrigger} key={tab.value} value={tab.value}>
+              {tab.label}
+            </TabsTrigger>
+          ))}
         </TabsList>
-        <TabsContent className={styles.tabsContent} value={'generalInformation'}>
-          <GeneralInfoPage />
-        </TabsContent>
-        <TabsContent className={styles.tabsContent} value={'devices'}>
-          <DevicesPage />
-        </TabsContent>
-        <TabsContent className={styles.tabsContent} value={'accountManagement'}>
-          <AccountManagementsPage />
-        </TabsContent>
-        <TabsContent className={styles.tabsContent} value={'myPayments'}>
-          <MyPaymentsPage />
-        </TabsContent>
+        {TABS_CONFIG.map(tab => (
+          <TabsContent className={styles.tabsContent} key={tab.value} value={tab.value}>
+            {tab.content}
+          </TabsContent>
+        ))}
       </Tabs>
     </div>
   )

@@ -24,7 +24,7 @@ export type ProfileProps = ComponentPropsWithoutRef<'div'>
  *   <Profile />
  * )
  */
-
+//TODO: add translations
 export const Profile = ({ className }: ProfileProps) => {
   const { authData, handleProfileSettings, isError, isOwnProfile } = useProfile()
 

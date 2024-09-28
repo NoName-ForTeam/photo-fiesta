@@ -122,10 +122,15 @@ export const useGeneralInfo = () => {
     setIsOpen(true)
   }
 
+  const handleDeletePhoto = () => {
+    setImage(null)
+  }
+
   return {
     control,
     errors,
     handleCloseModal,
+    handleDeletePhoto,
     handleOpenModal,
     image,
     isLoading,
