@@ -1,7 +1,8 @@
 import { useState } from 'react'
 
-import { useAuthMeQuery, useLogout } from '@/features'
+import { useAuthMeQuery } from '@/features'
 import { ROUTES } from '@/shared/config'
+import { useLogout } from '@/shared/utils'
 import { useRouter } from 'next/router'
 
 export const useSidebar = () => {
