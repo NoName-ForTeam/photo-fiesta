@@ -1,16 +1,15 @@
 import { ComponentPropsWithoutRef } from 'react'
 
-import { useAuthMeQuery } from '@/features'
-import { PostList } from '@/features/post/ui/postList/PostList'
-import Ava from '@/shared/assets/img/avaTest.png'
-import { ROUTES } from '@/shared/config'
-import { ProfileStat } from '@/shared/ui/profileStat/profileStat'
+import { PostList } from '@/features'
+import { avaTest } from '@/shared/assets'
+import { ProfileStat } from '@/shared/ui'
 import { Button, Typography } from '@photo-fiesta/ui-lib'
 import clsx from 'clsx'
 import Image from 'next/image'
-import { useRouter } from 'next/router'
 
 import styles from './profile.module.scss'
+
+import { useProfile } from './useProfile'
 
 export type ProfileProps = ComponentPropsWithoutRef<'div'>
 
@@ -27,8 +26,7 @@ export type ProfileProps = ComponentPropsWithoutRef<'div'>
  */
 
 export const Profile = ({ className }: ProfileProps) => {
-  const router = useRouter()
-  const { data: authData, isError } = useAuthMeQuery()
+  const { authData, handleProfileSettings, isError, isOwnProfile } = useProfile()
 
   const classNames = {
     bio: styles.bio,
@@ -42,42 +40,32 @@ export const Profile = ({ className }: ProfileProps) => {
     wrapper: styles.wrapper,
   } as const
 
-  let button
-
   if (isError) {
-    return
+    return null
   }
-  if (authData) {
-    button =
-      String(authData.userId) === router.query.userId ? (
-        <Button
-          onClick={() => {
-            router.push(ROUTES.GENERAL_INFO)
-          }}
-          variant={'secondary'}
-        >
-          <Typography variant={'h3'}>Profile Settings</Typography>
-        </Button>
-      ) : (
-        <div className={classNames.btnContainer}>
-          <Button>
-            <Typography variant={'h3'}>Follow</Typography>
-          </Button>
-          <Button variant={'secondary'}>
-            <Typography variant={'h3'}>Send Message</Typography>
-          </Button>
-        </div>
-      )
-  }
+  const profileButton = isOwnProfile ? (
+    <Button onClick={handleProfileSettings} variant={'secondary'}>
+      <Typography variant={'h3'}>Profile Settings</Typography>
+    </Button>
+  ) : (
+    <div className={styles.btnContainer}>
+      <Button>
+        <Typography variant={'h3'}>Follow</Typography>
+      </Button>
+      <Button variant={'secondary'}>
+        <Typography variant={'h3'}>Send Message</Typography>
+      </Button>
+    </div>
+  )
 
   return (
     <div className={classNames.wrapper}>
       <div className={clsx(classNames.root, className)}>
-        <Image alt={'ava'} src={Ava} />
+        <Image alt={'ava'} src={avaTest} />
         <div className={classNames.info}>
           <div className={classNames.title}>
             <Typography variant={'h1'}>{authData?.userId}</Typography>
-            {button}
+            {profileButton}
           </div>
           <div className={classNames.counts}>
             <ProfileStat className={classNames.firstStat} counts={2218} title={'Following'} />

@@ -20,9 +20,9 @@
 .main {
   display: flex;
   flex: 1;
+  align-items: center;
   justify-content: center;
 
-  max-width: 1060px;
   height: calc(100vh - var(--header-height));
 }
 

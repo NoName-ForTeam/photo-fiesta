@@ -19,8 +19,18 @@ export type GeneralInfoProps = ComponentPropsWithoutRef<'div'>
  * <GeneralInfo className="custom-class" />
  */
 export const GeneralInfo = ({ className }: GeneralInfoProps) => {
-  const { control, errors, handleCloseModal, handleOpenModal, image, isOpen, onSubmit, setImage } =
-    useGeneralInfo()
+  const {
+    control,
+    errors,
+    handleCloseModal,
+    handleOpenModal,
+    image,
+    isLoading,
+    isOpen,
+    isSubmitting,
+    onSubmit,
+    setImage,
+  } = useGeneralInfo()
 
   const classNames = {
     container: styles.container,
@@ -49,6 +59,10 @@ export const GeneralInfo = ({ className }: GeneralInfoProps) => {
         {city.cityEn}
       </SelectItem>
     ))
+  }
+
+  if (isLoading) {
+    return <div>Loading...</div>
   }
 
   return (
@@ -121,7 +135,9 @@ export const GeneralInfo = ({ className }: GeneralInfoProps) => {
           name={'aboutMe'}
         />
         <div className={classNames.line}></div>
-        <Button className={classNames.submit}>Save Changes</Button>
+        <Button className={classNames.submit} disabled={isSubmitting}>
+          Save Changes
+        </Button>
       </form>
       <ModalAddPhoto handleCloseModal={handleCloseModal} isOpen={isOpen} setImage={setImage} />
     </div>
