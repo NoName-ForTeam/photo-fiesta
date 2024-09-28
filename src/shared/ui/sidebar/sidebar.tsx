@@ -1,4 +1,4 @@
-import { LogoutModal } from '@/features'
+import { ConfirmationModal } from '@/features'
 import {
   BookmarkOutline,
   HomeOutline,
@@ -35,6 +35,7 @@ type SidebarItem = {
 /**
  * Sidebar component that displays navigation items and logout option
  */
+//TODO: add translations
 export const Sidebar = () => {
   const { confirmLogout, getProfileLink, isActive, isModalOpen, setIsModalOpen } = useSidebar()
 
@@ -84,10 +85,12 @@ export const Sidebar = () => {
         </div>
       </Sidebars>
       {isModalOpen && (
-        <LogoutModal
+        <ConfirmationModal
           closeModal={() => setIsModalOpen(false)}
-          confirmLogout={confirmLogout}
-          open={isModalOpen}
+          confirmation={confirmLogout}
+          content={'Are you really want to logout of your account?'}
+          isOpen={isModalOpen}
+          title={'Log Out'}
         />
       )}
     </div>

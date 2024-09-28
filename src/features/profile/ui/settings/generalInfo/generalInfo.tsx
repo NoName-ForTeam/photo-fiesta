@@ -18,6 +18,8 @@ export type GeneralInfoProps = ComponentPropsWithoutRef<'div'>
  * @example
  * <GeneralInfo className="custom-class" />
  */
+
+//TODO: add translations
 export const GeneralInfo = ({ className }: GeneralInfoProps) => {
   const {
     control,
