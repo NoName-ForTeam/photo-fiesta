@@ -11,6 +11,7 @@ import {
 } from '@photo-fiesta/ui-lib'
 
 import styles from './confirmationModal.module.scss'
+
 type ModalProps = {
   closeModal: () => void
   confirmation: () => void
