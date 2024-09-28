@@ -201,7 +201,11 @@ export const PhotoPreview = ({ image, onDeletePhoto, preview, size }: PhotoPrevi
           />
         )}
       </div>
-      {image && <CloseOutline className={classNames.close} onClick={handleOpenModal} />}
+      {image && (
+        <Button asChild onClick={handleOpenModal} variant={'icon-link'}>
+          <CloseOutline className={classNames.close} />
+        </Button>
+      )}
     </div>
   )
 }
