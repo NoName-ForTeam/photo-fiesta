@@ -15,8 +15,7 @@ export const API_URLS = {
   PROFILE: {
     DELETE_AVATAR: 'v1/users/profile/avatar',
     DELETE_PROFILE: 'v1/users/profile',
-    //TODO: add  id v1/users/profile/{id}
-    DELETE_PROFILE_BY_ID: 'v1/users/profile/{id}',
+    DELETE_PROFILE_BY_ID: (id: number) => `v1/users/profile/${id}`,
     GET_PROFILE: 'v1/users/profile',
     POST_AVATAR: 'v1/users/profile/avatar',
     UPDATE_PROFILE: 'v1/users/profile',

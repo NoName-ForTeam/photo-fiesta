@@ -35,3 +35,14 @@ export type AuthMeResponse = {
   userId: number
   userName: string
 }
+
+export type CheckRecoveryCodeRequest = {
+  code: string
+}
+export type CheckRecoveryCodeResponse = {
+  email: string
+}
+
+export type UpdateTokens = {
+  accessToken: string
+}

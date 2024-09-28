@@ -5,6 +5,15 @@ import { ProfileResponse, ProfileSettings, SuccessAvatarResponse } from './profi
 
 const { DELETE, POST, PUT } = METHOD
 
+const {
+  DELETE_AVATAR,
+  DELETE_PROFILE,
+  DELETE_PROFILE_BY_ID,
+  GET_PROFILE,
+  POST_AVATAR,
+  UPDATE_PROFILE,
+} = API_URLS.PROFILE
+
 export const profileApi = baseApi.injectEndpoints({
   endpoints: builder => ({
     /**
@@ -14,7 +23,7 @@ export const profileApi = baseApi.injectEndpoints({
       invalidatesTags: ['Profile'],
       query: () => ({
         method: DELETE,
-        url: API_URLS.PROFILE.DELETE_AVATAR,
+        url: DELETE_AVATAR,
       }),
     }),
     /**
@@ -24,7 +33,7 @@ export const profileApi = baseApi.injectEndpoints({
       invalidatesTags: ['Profile'],
       query: () => ({
         method: DELETE,
-        url: API_URLS.PROFILE.DELETE_PROFILE,
+        url: DELETE_PROFILE,
       }),
     }),
     /**
@@ -36,7 +45,7 @@ export const profileApi = baseApi.injectEndpoints({
 
       query: (userId: number) => ({
         method: DELETE,
-        url: `${API_URLS.PROFILE.DELETE_PROFILE_BY_ID}/${userId}`,
+        url: DELETE_PROFILE_BY_ID(userId),
       }),
     }),
     /**
@@ -45,7 +54,7 @@ export const profileApi = baseApi.injectEndpoints({
      */
     getProfile: builder.query<ProfileResponse, void>({
       providesTags: ['Profile'],
-      query: () => API_URLS.PROFILE.GET_PROFILE,
+      query: () => GET_PROFILE,
     }),
     /**
      * Update the user's profile information.
@@ -57,7 +66,7 @@ export const profileApi = baseApi.injectEndpoints({
       query: params => ({
         body: params,
         method: PUT,
-        url: API_URLS.PROFILE.UPDATE_PROFILE,
+        url: UPDATE_PROFILE,
       }),
     }),
     /**
@@ -70,7 +79,7 @@ export const profileApi = baseApi.injectEndpoints({
       query: (formData: FormData) => ({
         body: formData,
         method: POST,
-        url: API_URLS.PROFILE.POST_AVATAR,
+        url: POST_AVATAR,
       }),
     }),
   }),
