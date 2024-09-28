@@ -1,7 +1,7 @@
 import { ReactNode } from 'react'
 
 import { useAuthMeQuery } from '@/features'
-import { Header, Sidebar } from '@/shared/ui'
+import { Header, Sidebar } from '@/widgets'
 
 import style from './layout.module.scss'
 

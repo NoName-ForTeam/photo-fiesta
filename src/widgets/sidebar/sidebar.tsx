@@ -1,4 +1,3 @@
-import { ConfirmationModal } from '@/features'
 import {
   BookmarkOutline,
   HomeOutline,
@@ -10,6 +9,7 @@ import {
   TrendingUp,
 } from '@/shared/assets'
 import { ROUTES } from '@/shared/config'
+import { ConfirmationModal } from '@/widgets'
 import { Sidebars, SidebarsElement } from '@photo-fiesta/ui-lib'
 import clsx from 'clsx'
 import Link from 'next/link'

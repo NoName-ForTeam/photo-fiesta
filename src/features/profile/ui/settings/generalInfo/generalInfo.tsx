@@ -1,9 +1,9 @@
 import { ComponentPropsWithoutRef } from 'react'
 
-import { ConfirmationModal, ModalAddPhoto } from '@/features'
 import { CloseOutline, ImageOutline } from '@/shared/assets'
 import { City, Country, cities, countries } from '@/shared/config'
 import { FormDatePicker } from '@/shared/ui'
+import { ConfirmationModal, ModalAddPhoto } from '@/widgets'
 import { Button, FormInput, FormSelect, FormTextArea, SelectItem } from '@photo-fiesta/ui-lib'
 import clsx from 'clsx'
 import Image from 'next/image'
