@@ -10,7 +10,7 @@ import {
 } from '@/shared/assets'
 import { ROUTES } from '@/shared/config'
 import { ConfirmationModal } from '@/widgets'
-import { Sidebars, SidebarsElement } from '@photo-fiesta/ui-lib'
+import { Button, Sidebars, SidebarsElement } from '@photo-fiesta/ui-lib'
 import clsx from 'clsx'
 import Link from 'next/link'
 
@@ -76,7 +76,6 @@ export const Sidebar = () => {
         <div className={classNames.icons}>{renderedSidebarItems}</div>
         <div className={classNames.icons}>
           <SidebarElement
-            href={''}
             icon={LogOut}
             isActive={() => ''}
             onClick={() => setIsModalOpen(true)}
@@ -100,8 +99,14 @@ export const Sidebar = () => {
 //sidebar element
 
 type SidebarElementProps = {
-  href: string
+  href?: string
+  /**
+   * @property {Icon} icon - The icon to display in the sidebar element.
+   */
   icon: Icon
+  /**
+   * @property {(path: string) => string} isActive - Function to determine if the current path is active.
+   */
   isActive: (path: string) => string
   onClick?: () => void
   text: string
@@ -109,6 +114,9 @@ type SidebarElementProps = {
 
 /**
  * SidebarElement component that renders a single navigation item
+ *  This component can render either a Link or a Button based on whether the href prop is provided.
+ * It's used for both navigation items and the logout button in the sidebar.
+ *
  */
 const SidebarElement = ({
   href,
@@ -116,15 +124,30 @@ const SidebarElement = ({
   isActive,
   onClick,
   text,
-}: SidebarElementProps): JSX.Element => (
-  <Link
-    className={clsx(styles[isActive(href)], text == 'Search' && styles.search)}
-    href={href}
-    onClick={onClick}
-  >
+}: SidebarElementProps): JSX.Element => {
+  const commonProps = {
+    className: clsx(
+      styles.sidebarElement,
+      href ? styles[isActive(href)] : styles.logoutButton,
+      text === 'Search' && styles.search
+    ),
+    onClick,
+  }
+
+  const content = (
     <SidebarsElement>
       <Icon />
       {text}
     </SidebarsElement>
-  </Link>
-)
+  )
+
+  return href ? (
+    <Link href={href} {...commonProps}>
+      {content}
+    </Link>
+  ) : (
+    <Button variant={'icon-link'} {...commonProps}>
+      {content}
+    </Button>
+  )
+}
