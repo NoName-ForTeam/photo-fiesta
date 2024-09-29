@@ -3,6 +3,8 @@
 
 Photo-Fiesta is an Instagram clone that offers a comprehensive social media experience. Built with a microservices architecture using the Feature-Sliced Design (FSD) approach, this project showcases modern web development practices and technologies. Visit the live version at [https://photo-fiesta.online/](https://photo-fiesta.online/).
 
+![photo-fiesta.online](src/shared/assets/img/screen_photo-fiesta.png)
+
 ## Features
 
 - **Authentication**: Secure login with Google and GitHub OAuth2, JWT and Refresh Tokens
@@ -26,7 +28,7 @@ Photo-Fiesta is an Instagram clone that offers a comprehensive social media expe
 
 To run Photo-Fiesta locally:
 
-1. Clone the repository
+1. Clone the repository `git clone https://github.com/it-incubator/photo-fiesta.git`
 2. Install dependencies: `pnpm install`
 3. Set up environment variables
 4. Run the development server: `pnpm run dev`
@@ -77,8 +79,8 @@ The application is deployed at [https://photo-fiesta.online/](https://photo-fies
 
 ## Contributing
 
-We welcome contributions! Please read our contributing guidelines before submitting pull requests.
+We welcome contributions! Please read our [contributing guidelines](./contributing.md) before submitting pull requests.
 
 ## License
 
-This project is licensed under the MIT License.
+This project is currently not licensed. All rights are reserved by the project owners. No permission is granted to use, modify, or share this software for any purpose.😉
