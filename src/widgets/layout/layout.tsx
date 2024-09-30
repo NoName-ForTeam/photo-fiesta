@@ -27,7 +27,7 @@ import style from './layout.module.scss'
 export const Layout = ({ children }: { children: ReactNode }) => {
   const { data: authData } = useAuthMeQuery()
 
-  const isSuccess = !!authData && Storage.getToken()
+  const isSuccess = !!authData && !!Storage.getToken()
 
   const classNames = {
     main: style.main,
