@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import { GetPostResponse } from '@/features/createPosts/api/posts.types'
+import { GetPostResponse } from '@/features/posts/api/posts.types'
 import { ImageOutline } from '@/shared/assets'
 import { Modal, Typography } from '@photo-fiesta/ui-lib'
 

@@ -1,5 +1,5 @@
-import { useGetUserPostsQuery } from '@/features'
-import { ImagePostModal } from '@/features/createPosts/ui/imagePostModal/imagePostModal'
+import { useGetUserPostsQuery } from '@/features/posts'
+import { ImagePostModal } from '@/features/posts/ui/imagePostModal/imagePostModal'
 import { ImageOutline } from '@/shared/assets'
 
 import styles from './postList.module.scss'
