@@ -59,7 +59,7 @@ export const authApi = baseApi.injectEndpoints({
        * Query to confirm user registration.
        * @param {ConfirmRegistration} params - The confirmation parameters.
        */
-      confirmRegistration: builder.mutation<void, ConfirmRegistration>({
+      confirmRegistration: builder.query<void, ConfirmRegistration>({
         query: params => ({
           body: params,
           method: POST,
@@ -168,7 +168,7 @@ export const authApi = baseApi.injectEndpoints({
 
 export const {
   useAuthMeQuery,
-  useConfirmRegistrationMutation,
+  useConfirmRegistrationQuery,
   useCreateNewPasswordMutation,
   useLazyAuthMeQuery,
   useLogoutMutation,
