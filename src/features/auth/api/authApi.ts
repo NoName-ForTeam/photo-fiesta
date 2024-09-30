@@ -86,11 +86,6 @@ export const authApi = baseApi.injectEndpoints({
         query: params => ({
           body: params,
           credentials: 'include',
-          //! DUCT TAPE SOLUTION:  hardcoded attempt to fix refresh token issue,token get from browser  header response from server when making request to login
-          // headers: {
-          //   'X-Refresh-Token':
-          //     'refreshToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEzOTksImRldmljZUlkIjo1NzIwLCJpYXQiOjE3Mjc2NDQxNTYsImV4cCI6MTcyODk0MDE1Nn0.MVNtZkcbxj3OJUux7vXlffTleTjJELNl0lIpaqZhp2U; Path=/; HttpOnly; Secure; SameSite=None',
-          // } as Record<string, string>,
           method: POST,
           url: LOGOUT,
         }),
