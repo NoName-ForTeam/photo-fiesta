@@ -1,19 +1,44 @@
 import { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { toast } from 'react-toastify'
 
-import { useAuthMeQuery } from '@/features'
+import { baseApi } from '@/app/api'
+import { useAuthMeQuery, useLogoutMutation } from '@/features'
 import { ROUTES } from '@/shared/config'
-import { useLogout } from '@/shared/utils'
+import { Storage, isValidErrorResponse } from '@/shared/utils'
 import { useRouter } from 'next/router'
 
 export const useSidebar = () => {
+  const dispatch = useDispatch()
+  const [logoutMutation] = useLogoutMutation()
   const router = useRouter()
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const logout = useLogout()
+
   const { data: userData } = useAuthMeQuery()
 
-  const confirmLogout = () => {
-    logout()
-    setIsModalOpen(false)
+  const confirmLogout = async () => {
+    //TODO: extract logic to useLogout hook in utils
+    try {
+      await logoutMutation().unwrap()
+      setIsModalOpen(false)
+      Storage.deleteToken()
+      dispatch(baseApi.util.invalidateTags(['Auth']))
+      dispatch(baseApi.util.resetApiState())
+      await router.push(ROUTES.SIGN_IN)
+    } catch (error: unknown) {
+      //! DUCT TAPE SOLUTION: throw error 401 always that why use forced  exit
+      if (isValidErrorResponse(error)) {
+        if (error.data.statusCode === 401) {
+          toast.error('Session expired. Please login again.')
+          Storage.deleteToken()
+          dispatch(baseApi.util.invalidateTags(['Auth']))
+          dispatch(baseApi.util.resetApiState())
+          await router.push(ROUTES.SIGN_IN)
+        } else {
+          toast.error('Error while logging out')
+        }
+      }
+    }
   }
 
   /**
