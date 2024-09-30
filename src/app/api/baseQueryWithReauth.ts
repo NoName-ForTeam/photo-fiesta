@@ -7,6 +7,7 @@ const { POST } = METHOD
 const mutex = new Mutex()
 const baseQuery = fetchBaseQuery({
   baseUrl: API_URLS.BASE_URL,
+  credentials: 'include',
   prepareHeaders: headers => {
     const token = Storage.getToken()
 
@@ -18,7 +19,7 @@ const baseQuery = fetchBaseQuery({
   },
 })
 
-export const baseQueryWithReauth: BaseQueryFn<
+export const baseQueryWithReAuth: BaseQueryFn<
   FetchArgs | string,
   unknown,
   FetchBaseQueryError
@@ -35,6 +36,8 @@ export const baseQueryWithReauth: BaseQueryFn<
       try {
         const refreshResult = await baseQuery(
           {
+            //! DUCT TAPE SOLUTION: attempt to solve refresh token issue
+            //body: { refreshToken: Storage.getToken() },
             credentials: 'include',
             method: POST,
             url: API_URLS.AUTH.UPDATE_TOKENS,
@@ -50,6 +53,8 @@ export const baseQueryWithReauth: BaseQueryFn<
           refreshResult.data?.accessToken &&
           typeof refreshResult.data?.accessToken === 'string'
         ) {
+          // eslint-disable-next-line no-console
+          console.info('Refreshed token:', refreshResult.data.accessToken)
           Storage.setToken(refreshResult.data.accessToken)
           // retry the initial query
           result = await baseQuery(args, api, extraOptions)

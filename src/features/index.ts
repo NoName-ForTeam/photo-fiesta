@@ -1,3 +1,3 @@
 export * from './auth'
-export * from './createPosts'
+export * from './posts'
 export * from './profile'
