@@ -1,6 +1,6 @@
 import { ComponentPropsWithoutRef } from 'react'
 
-import { PostList } from '@/features'
+import { PostList } from '@/features/createPosts'
 import { avaTest } from '@/shared/assets'
 import { ProfileStat } from '@/shared/ui'
 import { Button, Typography } from '@photo-fiesta/ui-lib'

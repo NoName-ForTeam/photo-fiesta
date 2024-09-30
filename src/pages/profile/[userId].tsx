@@ -1,11 +1,11 @@
 import { Profile, useAuthMeQuery } from '@/features'
 
 const ProfilePage = () => {
-  const { isError, refetch } = useAuthMeQuery()
+  const {} = useAuthMeQuery()
 
-  if (isError) {
-    refetch()
-  }
+  // if (isError) {
+  //   refetch()
+  // }
 
   return (
     <>
