@@ -1,8 +1,36 @@
+import { useEffect } from 'react'
+
 import { ROUTES } from '@/shared/config'
+import { Storage } from '@/shared/utils'
 import { Button } from '@photo-fiesta/ui-lib'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 
 export default function Home() {
+  const router = useRouter()
+  //const [triggerAuthMe] = useLazyAuthMeQuery()
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      const token = Storage.getToken()
+
+      if (!token) {
+        //TODO: route to public page
+        router.push(ROUTES.SIGN_IN)
+
+        return
+      }
+      //! may be it is not needed
+      try {
+        // await triggerAuthMe().unwrap()
+      } catch (err) {
+        router.push(ROUTES.SIGN_IN)
+      }
+    }
+
+    checkAuth()
+  }, [])
+
   //TODO: This is a mock data, need to fix
   return (
     <>

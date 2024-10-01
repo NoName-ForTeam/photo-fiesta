@@ -41,7 +41,7 @@ export const SignIn = () => {
             control={control}
             name={'email'}
             render={({ field }) => (
-              <Input label={t.auth.email} placeholder={t.getPlaceholder(t.auth.email)} {...field} />
+              <Input label={t.auth.email} placeholder={t.input.email} {...field} />
             )}
           />
           <Controller
@@ -50,7 +50,7 @@ export const SignIn = () => {
             render={({ field }) => (
               <Input
                 label={t.auth.password}
-                placeholder={t.getPlaceholder(t.auth.password)}
+                placeholder={t.input.password}
                 variant={'password'}
                 {...field}
               />

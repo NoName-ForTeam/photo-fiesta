@@ -1,6 +1,6 @@
 import { useForm } from 'react-hook-form'
 
-import { useLazyAuthMeQuery, useSignInMutation } from '@/features'
+import { useSignInMutation } from '@/features'
 import { ROUTES } from '@/shared/config'
 import {
   Storage,
@@ -37,7 +37,7 @@ export const useSignIn = () => {
     resolver: zodResolver(signInSchema),
   })
   const [signIn] = useSignInMutation()
-  const [getMe] = useLazyAuthMeQuery()
+  //const [getMe] = useLazyAuthMeQuery()
   /**
    * This function is used to submit login credentials, store the received access token,
    * extract the `userId` from the token, and redirect the user to their profile page.
@@ -70,9 +70,8 @@ export const useSignIn = () => {
           userId = parsed.userId
         } else {
           // If not, fetch the user data from the `auth/me` endpoint
-          const meRes = await getMe()
-
-          userId = meRes?.data?.userId
+          // const meRes = await getMe()
+          // userId = meRes?.data?.userId
         }
         // If no userId is found, do nothing
         if (!userId) {

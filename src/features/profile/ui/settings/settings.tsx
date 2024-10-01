@@ -4,6 +4,7 @@ import AccountManagementsPage from '@/pages/profile/settings/accountManagementsP
 import DevicesPage from '@/pages/profile/settings/devicesPage'
 import GeneralInfoPage from '@/pages/profile/settings/generalInfoPage'
 import MyPaymentsPage from '@/pages/profile/settings/myPaymentsPage'
+import { useTranslation } from '@/shared/utils'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@photo-fiesta/ui-lib'
 
 import styles from './settings.module.scss'
@@ -14,19 +15,25 @@ type TabConfig = {
   value: string
 }
 
-const TABS_CONFIG: TabConfig[] = [
-  { content: <GeneralInfoPage />, label: 'General Information', value: 'generalInformation' },
-  { content: <DevicesPage />, label: 'Devices', value: 'devices' },
-  { content: <AccountManagementsPage />, label: 'Account Management', value: 'accountManagement' },
-  { content: <MyPaymentsPage />, label: 'My Payments', value: 'myPayments' },
-]
-
 /**
  * The Settings component renders a tabbed interface for managing user profile settings.
  * It uses the `@photo-fiesta/ui-lib` Tabs component to switch between different settings pages.
  *
  */
 export const Settings = () => {
+  const { t } = useTranslation()
+
+  const TABS_CONFIG: TabConfig[] = [
+    { content: <GeneralInfoPage />, label: t.settings.general, value: 'generalInformation' },
+    { content: <DevicesPage />, label: t.settings.devices, value: 'devices' },
+    {
+      content: <AccountManagementsPage />,
+      label: t.settings.management,
+      value: 'accountManagement',
+    },
+    { content: <MyPaymentsPage />, label: t.settings.payments, value: 'myPayments' },
+  ]
+
   return (
     <div className={styles.settingsContainer}>
       <Tabs defaultValue={TABS_CONFIG[0].value}>
