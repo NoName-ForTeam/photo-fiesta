@@ -11,7 +11,6 @@ export const ImagePostModal = ({
   description,
   images,
   likesCount,
-  location,
   userName,
 }: GetPostResponse) => {
   const [isOpenModal, setIsOpenModal] = useState<boolean>()
@@ -34,7 +33,7 @@ export const ImagePostModal = ({
           <img alt={'Post image'} height={400} src={images[0].url} width={400} />
           <div className={styles.modalInfo}>
             <Typography variant={'h3'}>{userName}</Typography>
-            <Typography>{location}</Typography>
+            {/*<Typography>{location}</Typography>*/}
             <Typography>{description}</Typography>
             <Typography>{`Likes: ${likesCount}`}</Typography>
             <Typography>{createdAt}</Typography>
