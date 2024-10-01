@@ -84,7 +84,7 @@ export const SignUp = () => {
               errorMessage={errors.confirmPassword?.message}
               label={t.auth.confirmPassword}
               name={'confirmPassword'}
-              placeholder={'Confirm Password'}
+              placeholder={t.auth.confirm}
               variant={'password'}
             />
           </div>
