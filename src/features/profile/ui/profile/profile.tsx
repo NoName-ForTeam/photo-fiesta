@@ -2,9 +2,7 @@ import { ComponentPropsWithoutRef } from 'react'
 
 import { PostList } from '@/features'
 import { ProfileAvatar, ProfileStat } from '@/shared/ui'
-import { avaTest } from '@/shared/assets'
 import { useTranslation } from '@/shared/utils'
-
 import { Button, Typography } from '@photo-fiesta/ui-lib'
 import clsx from 'clsx'
 
@@ -27,7 +25,6 @@ export type ProfileProps = ComponentPropsWithoutRef<'div'>
  */
 //TODO: add translations
 export const Profile = ({ className }: ProfileProps) => {
-
   const { authData, handleProfileSettings, isError, isOwnProfile, profileInfo } = useProfile()
   const { t } = useTranslation()
 
