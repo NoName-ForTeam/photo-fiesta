@@ -1,8 +1,7 @@
 import { ComponentPropsWithoutRef } from 'react'
 
 import { PostList } from '@/features'
-import { ProfileStat } from '@/shared/ui'
-import { ProfileAvatar } from '@/shared/ui/profileAvatar'
+import { ProfileAvatar, ProfileStat } from '@/shared/ui'
 import { Button, Typography } from '@photo-fiesta/ui-lib'
 import clsx from 'clsx'
 
