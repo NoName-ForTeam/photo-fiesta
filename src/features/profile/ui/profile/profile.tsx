@@ -1,12 +1,10 @@
 import { ComponentPropsWithoutRef } from 'react'
 
 import { PostList } from '@/features'
-import { avaTest } from '@/shared/assets'
-import { ProfileStat } from '@/shared/ui'
+import { ProfileAvatar, ProfileStat } from '@/shared/ui'
 import { useTranslation } from '@/shared/utils'
 import { Button, Typography } from '@photo-fiesta/ui-lib'
 import clsx from 'clsx'
-import Image from 'next/image'
 
 import styles from './profile.module.scss'
 
@@ -27,8 +25,8 @@ export type ProfileProps = ComponentPropsWithoutRef<'div'>
  */
 //TODO: add translations
 export const Profile = ({ className }: ProfileProps) => {
+  const { authData, handleProfileSettings, isError, isOwnProfile, profileInfo } = useProfile()
   const { t } = useTranslation()
-  const { authData, handleProfileSettings, isError, isOwnProfile } = useProfile()
 
   const classNames = {
     bio: styles.bio,
@@ -63,7 +61,7 @@ export const Profile = ({ className }: ProfileProps) => {
   return (
     <div className={classNames.wrapper}>
       <div className={clsx(classNames.root, className)}>
-        <Image alt={'ava'} src={avaTest} />
+        <ProfileAvatar avatarOwner={profileInfo?.avatars[0]?.url} height={204} width={204} />
         <div className={classNames.info}>
           <div className={classNames.title}>
             <Typography variant={'h1'}>{authData?.userId}</Typography>
@@ -83,9 +81,7 @@ export const Profile = ({ className }: ProfileProps) => {
             <ProfileStat counts={2764} title={t.myProfile.publications} />
           </div>
           <Typography className={classNames.bio} variant={'text16'}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-            incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-            exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+            {profileInfo?.aboutMe}
           </Typography>
         </div>
       </div>
