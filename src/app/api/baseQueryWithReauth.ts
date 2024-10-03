@@ -34,30 +34,27 @@ export const baseQueryWithReAuth: BaseQueryFn<
       const release = await mutex.acquire()
 
       try {
-        const refreshResult = await baseQuery(
-          {
-            //! DUCT TAPE SOLUTION: attempt to solve refresh token issue
-            //body: { refreshToken: Storage.getToken() },
-            credentials: 'include',
-            method: POST,
-            url: API_URLS.AUTH.UPDATE_TOKENS,
-          },
-          api,
-          extraOptions
-        )
+        if (Storage.getToken()) {
+          const refreshResult = await baseQuery(
+            {
+              method: POST,
+              url: API_URLS.AUTH.UPDATE_TOKENS,
+            },
+            api,
+            extraOptions
+          )
 
-        if (
-          typeof refreshResult.data === 'object' &&
-          refreshResult.data !== null &&
-          'accessToken' in refreshResult.data &&
-          refreshResult.data?.accessToken &&
-          typeof refreshResult.data?.accessToken === 'string'
-        ) {
-          // eslint-disable-next-line no-console
-          console.info('Refreshed token:', refreshResult.data.accessToken)
-          Storage.setToken(refreshResult.data.accessToken)
-          // retry the initial query
-          result = await baseQuery(args, api, extraOptions)
+          if (
+            typeof refreshResult.data === 'object' &&
+            refreshResult.data !== null &&
+            'accessToken' in refreshResult.data &&
+            refreshResult.data?.accessToken &&
+            typeof refreshResult.data?.accessToken === 'string'
+          ) {
+            Storage.setToken(refreshResult.data.accessToken)
+            // retry the initial query
+            result = await baseQuery(args, api, extraOptions)
+          }
         }
       } finally {
         // release must be called once the mutex should be released again.

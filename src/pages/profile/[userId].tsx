@@ -8,7 +8,6 @@ import { Profile, useAuthMeQuery } from '@/features'
 const ProfilePage = () => {
   const { isError, isLoading, refetch } = useAuthMeQuery()
 
-  //! DUCT TAPE SOLUTION:needs discussion
   useEffect(() => {
     if (isError) {
       toast.error('Failed to load profile. Retrying...')

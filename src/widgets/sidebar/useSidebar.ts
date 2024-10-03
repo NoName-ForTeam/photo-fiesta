@@ -21,12 +21,11 @@ export const useSidebar = () => {
     try {
       await logoutMutation().unwrap()
       setIsModalOpen(false)
-      Storage.deleteToken()
       dispatch(baseApi.util.invalidateTags(['Auth']))
       dispatch(baseApi.util.resetApiState())
       await router.push(ROUTES.SIGN_IN)
+      Storage.deleteToken()
     } catch (error: unknown) {
-      //! DUCT TAPE SOLUTION: throw error 401 always that why use forced  exit
       if (isValidErrorResponse(error)) {
         if (error.data.statusCode === 401) {
           toast.error('Session expired. Please login again.')

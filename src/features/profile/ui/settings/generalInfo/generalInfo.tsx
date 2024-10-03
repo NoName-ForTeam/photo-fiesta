@@ -3,6 +3,7 @@ import { ComponentPropsWithoutRef } from 'react'
 import { CloseOutline, ImageOutline } from '@/shared/assets'
 import { City, Country, cities, countries } from '@/shared/config'
 import { FormDatePicker } from '@/shared/ui'
+import { useTranslation } from '@/shared/utils'
 import { ConfirmationModal, ModalAddPhoto } from '@/widgets'
 import { Button, FormInput, FormSelect, FormTextArea, SelectItem } from '@photo-fiesta/ui-lib'
 import clsx from 'clsx'
@@ -21,6 +22,7 @@ export type GeneralInfoProps = ComponentPropsWithoutRef<'div'>
 
 //TODO: add translations
 export const GeneralInfo = ({ className }: GeneralInfoProps) => {
+  const { t } = useTranslation()
   const {
     control,
     errors,
@@ -79,32 +81,32 @@ export const GeneralInfo = ({ className }: GeneralInfoProps) => {
           size={192}
         />
         <Button className={classNames.uploadButton} onClick={handleOpenModal} variant={'outlined'}>
-          Add a Profile Photo
+          {t.settings.addProfilePhoto}
         </Button>
       </div>
       <form className={classNames.form} onSubmit={onSubmit}>
         <FormInput
           control={control}
           errorMessage={errors.userName?.message}
-          label={'Username*'}
+          label={`${t.settings.username}*`}
           name={'userName'}
-          placeholder={'Enter your username'}
+          placeholder={t.input.username}
           type={'text'}
         />
         <FormInput
           control={control}
           errorMessage={errors.firstName?.message}
-          label={'First name*'}
+          label={`${t.settings.firstName}*`}
           name={'firstName'}
-          placeholder={'Enter your first name'}
+          placeholder={t.input.name}
           type={'text'}
         />
         <FormInput
           control={control}
           errorMessage={errors.lastName?.message}
-          label={'Last name*'}
+          label={`${t.settings.lastName}*`}
           name={'lastName'}
-          placeholder={'Enter your last name'}
+          placeholder={t.input.lastName}
           type={'text'}
         />
 
@@ -112,17 +114,17 @@ export const GeneralInfo = ({ className }: GeneralInfoProps) => {
           className={classNames.datePicker}
           control={control}
           errorMessage={errors.dateOfBirth?.message}
-          label={'Date of birth*'}
+          label={`${t.settings.dateOfBirth}*`}
           name={'dateOfBirth'}
           placeholder={'00.00.0000'}
-          rules={{ required: 'Date is required' }}
+          rules={{ required: t.settings.dateRequired }}
         />
         <div className={classNames.selectBlock}>
           <FormSelect
             className={classNames.select}
             control={control}
             defaultValue={String(countries[0].id)}
-            label={'Select your country'}
+            label={t.settings.country}
             name={'country'}
           >
             {renderCountryOptions(countries)}
@@ -131,7 +133,7 @@ export const GeneralInfo = ({ className }: GeneralInfoProps) => {
             className={classNames.select}
             control={control}
             defaultValue={String(cities[0].id)}
-            label={'Select your city'}
+            label={t.settings.city}
             name={'city'}
           >
             {renderCityOptions(cities)}
@@ -140,12 +142,12 @@ export const GeneralInfo = ({ className }: GeneralInfoProps) => {
         <FormTextArea
           className={classNames.textarea}
           control={control}
-          label={'About me'}
+          label={t.settings.me}
           name={'aboutMe'}
         />
         <div className={classNames.line}></div>
         <Button className={classNames.submit} disabled={isSubmitting}>
-          Save Changes
+          {t.settings.save}
         </Button>
       </form>
       <ModalAddPhoto handleCloseModal={handleCloseModal} isOpen={isOpen} setImage={setImage} />

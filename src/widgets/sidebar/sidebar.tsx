@@ -9,6 +9,7 @@ import {
   TrendingUp,
 } from '@/shared/assets'
 import { ROUTES } from '@/shared/config'
+import { useTranslation } from '@/shared/utils'
 import { ConfirmationModal } from '@/widgets'
 import { Button, Sidebars, SidebarsElement } from '@photo-fiesta/ui-lib'
 import clsx from 'clsx'
@@ -37,6 +38,7 @@ type SidebarItem = {
  */
 //TODO: add translations
 export const Sidebar = () => {
+  const { t } = useTranslation()
   const { confirmLogout, getProfileLink, isActive, isModalOpen, setIsModalOpen } = useSidebar()
 
   const classNames = {
@@ -46,18 +48,18 @@ export const Sidebar = () => {
 
   /** Array of sidebar items to be rendered */
   const sidebarItems: SidebarItem[] = [
-    { href: ROUTES.HOME, icon: HomeOutline, text: 'Home' },
-    { href: ROUTES.CREATE, icon: PlusSquareOutline, text: 'Create' },
+    { href: ROUTES.HOME, icon: HomeOutline, text: t.sidebar.home },
+    { href: ROUTES.CREATE, icon: PlusSquareOutline, text: t.sidebar.create },
     {
       href: getProfileLink(),
       icon: Person,
       isActiveOverride: `${ROUTES.PROFILE}/[userId]`,
-      text: 'My Profile',
+      text: t.sidebar.myProfile,
     },
-    { href: ROUTES.MESSENGER, icon: MessageCircle, text: 'Messenger' },
-    { href: ROUTES.SEARCH, icon: Search, text: 'Search' },
-    { href: ROUTES.STATICS, icon: TrendingUp, text: 'Statics' },
-    { href: ROUTES.FAVORITES, icon: BookmarkOutline, text: 'Favorites' },
+    { href: ROUTES.MESSENGER, icon: MessageCircle, text: t.sidebar.messenger },
+    { href: ROUTES.SEARCH, icon: Search, text: t.sidebar.search },
+    { href: ROUTES.STATICS, icon: TrendingUp, text: t.sidebar.statics },
+    { href: ROUTES.FAVORITES, icon: BookmarkOutline, text: t.sidebar.favorites },
   ]
 
   const renderedSidebarItems = sidebarItems.map(item => (
@@ -79,7 +81,7 @@ export const Sidebar = () => {
             icon={LogOut}
             isActive={() => ''}
             onClick={() => setIsModalOpen(true)}
-            text={'Log Out'}
+            text={t.sidebar.logout}
           />
         </div>
       </Sidebars>
@@ -89,7 +91,7 @@ export const Sidebar = () => {
           confirmation={confirmLogout}
           content={'Are you really want to logout of your account?'}
           isOpen={isModalOpen}
-          title={'Log Out'}
+          title={t.sidebar.logout}
         />
       )}
     </div>

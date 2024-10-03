@@ -2,6 +2,9 @@ import { ComponentPropsWithoutRef } from 'react'
 
 import { PostList } from '@/features'
 import { ProfileAvatar, ProfileStat } from '@/shared/ui'
+import { avaTest } from '@/shared/assets'
+import { useTranslation } from '@/shared/utils'
+
 import { Button, Typography } from '@photo-fiesta/ui-lib'
 import clsx from 'clsx'
 
@@ -24,7 +27,9 @@ export type ProfileProps = ComponentPropsWithoutRef<'div'>
  */
 //TODO: add translations
 export const Profile = ({ className }: ProfileProps) => {
+
   const { authData, handleProfileSettings, isError, isOwnProfile, profileInfo } = useProfile()
+  const { t } = useTranslation()
 
   const classNames = {
     bio: styles.bio,
@@ -43,15 +48,15 @@ export const Profile = ({ className }: ProfileProps) => {
   }
   const profileButton = isOwnProfile ? (
     <Button onClick={handleProfileSettings} variant={'secondary'}>
-      <Typography variant={'h3'}>Profile Settings</Typography>
+      <Typography variant={'h3'}>{t.myProfile.settings}</Typography>
     </Button>
   ) : (
     <div className={styles.btnContainer}>
       <Button>
-        <Typography variant={'h3'}>Follow</Typography>
+        <Typography variant={'h3'}>{t.myProfile.follow}</Typography>
       </Button>
       <Button variant={'secondary'}>
-        <Typography variant={'h3'}>Send Message</Typography>
+        <Typography variant={'h3'}>{t.myProfile.sendMessage}</Typography>
       </Button>
     </div>
   )
@@ -66,9 +71,17 @@ export const Profile = ({ className }: ProfileProps) => {
             {profileButton}
           </div>
           <div className={classNames.counts}>
-            <ProfileStat className={classNames.firstStat} counts={2218} title={'Following'} />
-            <ProfileStat className={classNames.secondStat} counts={2358} title={'Followers'} />
-            <ProfileStat counts={2764} title={'Publications'} />
+            <ProfileStat
+              className={classNames.firstStat}
+              counts={2218}
+              title={t.myProfile.following}
+            />
+            <ProfileStat
+              className={classNames.secondStat}
+              counts={2358}
+              title={t.myProfile.followers}
+            />
+            <ProfileStat counts={2764} title={t.myProfile.publications} />
           </div>
           <Typography className={classNames.bio} variant={'text16'}>
             {profileInfo?.aboutMe}

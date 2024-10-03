@@ -1,6 +1,7 @@
 import { ReactNode } from 'react'
 
 import { useAuthMeQuery } from '@/features'
+import { Storage } from '@/shared/utils'
 import { Header, Sidebar } from '@/widgets'
 
 import style from './layout.module.scss'
@@ -22,10 +23,12 @@ import style from './layout.module.scss'
  * )
  */
 
+//! Problem with 401 error here
 export const Layout = ({ children }: { children: ReactNode }) => {
   const { data: authData } = useAuthMeQuery()
 
-  const isSuccess = !!authData
+  const isSuccess = !!authData && !!Storage.getToken()
+
   const classNames = {
     main: style.main,
     wrapper: style.wrapper,
