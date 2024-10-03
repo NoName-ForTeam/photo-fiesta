@@ -14,7 +14,7 @@ import { useRouter } from 'next/router'
  * - Refetching profile data
  */
 export const useProfile = () => {
-  const { refetch: getProfile } = useGetProfileQuery()
+  const { data: profileInfo, refetch: getProfile } = useGetProfileQuery()
   const router = useRouter()
   const { data: authData, isError } = useAuthMeQuery()
 
@@ -40,5 +40,6 @@ export const useProfile = () => {
     handleProfileSettings,
     isError,
     isOwnProfile,
+    profileInfo,
   }
 }

@@ -1,5 +1,37 @@
-.postGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 16px;
+@use '@/app/styles/mixins' as *;
+
+.content {
+  width: 100%;
+  max-width: 972px;
+}
+
+.header {
+  @include modal-header;
+}
+
+.main {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  max-height: 503px;
+}
+
+.imageWrapper {
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 50%;
+  max-width: 490px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 60px;
+  align-items: center;
+
+  width: 100%;
+  max-width: 433px;
 }
