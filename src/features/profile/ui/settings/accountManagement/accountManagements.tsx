@@ -109,7 +109,7 @@ export const AccountManagements = () => {
           confirmation={handleConfirmation}
           content={'Payment was successful'}
           isOpen={isModalOpen}
-          title={modalTitle}
+          title={modalTitle && modalTitle}
           two={false}
         />
       )}

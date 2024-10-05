@@ -17,9 +17,9 @@ type ModalProps = {
   confirmation: () => void
   content: string
   isOpen: boolean
-  title: string
+  title: null | string
   //*  show only one button if false
-  two: boolean
+  two?: boolean
 }
 //TODO: add translations
 export const ConfirmationModal = ({

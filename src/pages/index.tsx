@@ -29,6 +29,7 @@ export default function Home() {
     }
 
     checkAuth()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   //TODO: This is a mock data, need to fix
