@@ -1,106 +1,92 @@
 import { useState } from 'react'
 
-import { Avatar, useCreatePostMutation, useUploadPostImageMutation } from '@/features'
+import { Avatar, Post } from '@/features'
 import { ArrowIosBackOutline } from '@/shared/assets'
-// import { ImageOutline } from '@/shared/assets'
-import {
-  Button,
-  Modal,
-  // ModalClose,
-  ModalContent,
-  ModalHeader,
-  Typography,
-} from '@photo-fiesta/ui-lib'
-// import Image from 'next/image'
+import { Button, Typography } from '@photo-fiesta/ui-lib'
+import clsx from 'clsx'
 
 import styles from './imagePostModal.module.scss'
-type Props = {
+
+type ImagePostModalProps = {
   avatar: Avatar[] | undefined
   handleClose: () => void
   selectedImage: null | string
   userId: number | undefined
 }
 
-export const ImagePostModal = ({ avatar, handleClose, selectedImage, userId }: Props) => {
-  const [isOpenModal, setIsOpenModal] = useState<boolean>(true)
-  const [createPost, { isLoading: isCreatingPost }] = useCreatePostMutation()
-  const [uploadImage, { isLoading: isUploading }] = useUploadPostImageMutation()
-  const [description, setDescription] = useState('')
-
-  const handleSavePost = async () => {
-    if (selectedImage && description) {
-      const formData = new FormData()
-
-      const blob = await (await fetch(selectedImage)).blob()
-
-      formData.append('file', blob, 'image.jpg')
-
-      const imageUploadData = await uploadImage(formData).unwrap()
-
-      // Создаем пост
-      if (Array.isArray(imageUploadData)) {
-        await createPost({
-          childrenMetadata: imageUploadData.map((img: { uploadId: string }) => ({
-            uploadId: img.uploadId,
-          })),
-          description,
-        })
-      } else {
-        // Обработка случая, когда imageUploadData не является массивом
-        await createPost({
-          childrenMetadata: [{ uploadId: imageUploadData.images[0]?.uploadId }],
-          description,
-        })
-      }
-
-      handleClose()
-      setDescription('')
-      setIsOpenModal(isOpenModal)
+export const ImagePostModal = ({
+  avatar,
+  handleClose,
+  selectedImage,
+  userId,
+}: ImagePostModalProps) => {
+  const [step, setStep] = useState<'cropping' | 'filters' | 'publication'>('cropping')
+  const getStepTitle = () => {
+    switch (step) {
+      case 'cropping':
+        return 'Cropping'
+      case 'filters':
+        return 'Filters'
+      case 'publication':
+        return 'Publication'
+      default:
+        return ''
     }
-    console.log(description)
-    console.log(selectedImage)
+  }
+
+  const goToNextStep = () => {
+    if (step === 'cropping') {
+      setStep('filters')
+    } else if (step === 'filters') {
+      setStep('publication')
+    }
+  }
+
+  const goToPrevStep = () => {
+    if (step === 'publication') {
+      setStep('filters')
+    } else if (step === 'filters') {
+      setStep('cropping')
+    }
   }
 
   return (
-    <div className={styles.wrapper}>
-      <Modal onOpenChange={handleClose} open={isOpenModal}>
-        <ModalContent className={styles.content}>
-          <ModalHeader className={styles.header}>
-            <Button variant={'icon-link'}>
-              <ArrowIosBackOutline />
+    <div className={styles.overlay}>
+      <div className={clsx(styles.modalContent, step === 'cropping' ? styles.autoSize : '')}>
+        <div className={styles.header}>
+          <Button onClick={goToPrevStep} variant={'icon-link'}>
+            <ArrowIosBackOutline />
+          </Button>
+          <Typography variant={'h1'}>{getStepTitle()}</Typography>
+          {step !== 'publication' && (
+            <Button onClick={goToNextStep} variant={'ghost'}>
+              Next
             </Button>
-            <Typography variant={'h1'}>Publication</Typography>
-            <Button
-              disabled={isCreatingPost || isUploading || !selectedImage || !description}
-              onClick={handleSavePost}
-              variant={'ghost'}
-            >
-              {/*{isCreatingPost || isUploading ? 'Saving...' : 'Save Post'}*/}
+          )}
+          {step === 'publication' && (
+            <Button form={'postDescription'} variant={'ghost'}>
               Publish
             </Button>
-          </ModalHeader>
+          )}
+        </div>
 
-          <div className={styles.main}>
-            <div className={styles.imageWrapper}>
-              {/*<Image alt={'Post image'} height={400} src={images[0].url} width={400} />*/}
-              <img alt={'Post image'} height={400} src={selectedImage!} width={400} />
-            </div>
-            <div className={styles.form}>
-              {/*<Image alt={'avatar'} src={avatar} />*/}
-              <img alt={'avatar'} src={avatar?.[0].url} />
-              <Typography variant={'h3'}>{userId}</Typography>
-              <Typography>
-                <textarea
-                  onChange={e => setDescription(e.target.value)}
-                  placeholder={'Write a description...'}
-                  value={description}
-                />
-              </Typography>
-              {/*<Typography>{location}</Typography>*/}
-            </div>
-          </div>
-        </ModalContent>
-      </Modal>
+        <div className={styles.body}>
+          <section className={styles.imageSection}>
+            {selectedImage ? (
+              <img alt={'Selected'} className={styles.selectedImage} src={selectedImage} />
+            ) : (
+              <Typography variant={'h2'}>No image selected</Typography>
+            )}
+          </section>
+          <Post
+            avatar={avatar}
+            handleClose={handleClose}
+            selectedImage={selectedImage}
+            step={step}
+            userId={userId}
+          />
+        </div>
+      </div>
     </div>
   )
 }

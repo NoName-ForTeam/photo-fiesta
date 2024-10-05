@@ -1,3 +1,10 @@
+export type GetPostsResponse = {
+  items: GetPostResponse[]
+  pageSize?: number
+  totalCount?: number
+  totalUsers?: number
+}
+
 export type GetPostResponse = {
   avatarOwner: string
   createdAt: string
@@ -21,12 +28,6 @@ export type PostResponseImages = {
   width: number
 }
 
-export type GetPostsResponse = {
-  items: GetPostResponse[]
-  pageSize?: number
-  totalCount?: number
-  totalUsers?: number
-}
 export type PostsType = {
   avatarOwner: string
   createdAt: string
@@ -58,4 +59,17 @@ export type PostArgsType = {
 }
 export type PostsImages = {
   images: PostsImagesType[]
+}
+export type GetPublicPostsResponse = {
+  items: PostsType[]
+  pageSize: number
+  totalCount: number
+  totalUsers: number
+}
+export type GetUserPublicPostsArgs = {
+  endCursorPostId?: number
+  pageSize?: number
+  sortBy?: string
+  sortDirection?: 'asc' | 'desc'
+  userId: number
 }

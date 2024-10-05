@@ -1,6 +1,6 @@
 import { ComponentPropsWithoutRef, useState } from 'react'
 
-import { PostList, useGetUserPostsQuery } from '@/features/posts'
+import { PostList } from '@/features/posts'
 import { ImagePostModal } from '@/features/posts/ui/imagePostModal/imagePostModal'
 import { avaTest } from '@/shared/assets'
 import { ProfileStat } from '@/shared/ui'
@@ -20,8 +20,6 @@ export const Profile = ({ className }: ProfileProps) => {
   const { t } = useTranslation()
   const { authData, handleProfileSettings, isError, isOwnProfile, profileInfo } = useProfile()
 
-  const userId = authData?.userId
-  const { data: userPosts } = useGetUserPostsQuery({ userId })
   const handleCloseModal = () => setOpenModal(false)
   const handleOpenModal = () => setOpenModal(true)
 
@@ -65,8 +63,6 @@ export const Profile = ({ className }: ProfileProps) => {
       </Button>
     </div>
   )
-
-  console.log(userPosts)
 
   return (
     <div className={clsx(styles.wrapper)}>

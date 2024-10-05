@@ -1,5 +1,11 @@
 import { baseApi } from '@/app/api'
-import { PostArgsType, PostsImages, PostsType } from '@/features/posts/api/posts.types'
+import {
+  GetPublicPostsResponse,
+  GetUserPublicPostsArgs,
+  PostArgsType,
+  PostsImages,
+  PostsType,
+} from '@/features/posts/api/posts.types'
 
 export const postsApi = baseApi.injectEndpoints({
   endpoints: builder => {
@@ -11,7 +17,7 @@ export const postsApi = baseApi.injectEndpoints({
           url: `v1/posts`,
         }),
       }),
-      getUserPosts: builder.query({
+      getUserPosts: builder.query<GetPublicPostsResponse, GetUserPublicPostsArgs>({
         providesTags: ['Posts'],
         query: ({ endCursorPostId, userId }) => ({
           // body: params,
