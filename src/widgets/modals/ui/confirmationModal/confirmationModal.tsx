@@ -18,6 +18,8 @@ type ModalProps = {
   content: string
   isOpen: boolean
   title: string
+  //*  show only one button if false
+  two: boolean
 }
 //TODO: add translations
 export const ConfirmationModal = ({
@@ -26,6 +28,7 @@ export const ConfirmationModal = ({
   content,
   isOpen,
   title,
+  two = true,
 }: ModalProps) => {
   const classNames = {
     container: styles.container,
@@ -34,6 +37,7 @@ export const ConfirmationModal = ({
     footer: styles.footer,
     header: styles.header,
     icon: styles.icon,
+    one: styles.one,
   } as const
 
   return (
@@ -52,12 +56,26 @@ export const ConfirmationModal = ({
             {content}
           </Typography>
           <ModalFooter className={classNames.footer}>
-            <Button onClick={closeModal} variant={'secondary'}>
-              No
-            </Button>
-            <Button onClick={confirmation} variant={'primary'}>
-              Yes
-            </Button>
+            {two && (
+              <>
+                <Button onClick={closeModal} variant={'secondary'}>
+                  No
+                </Button>
+                <Button onClick={confirmation} variant={'primary'}>
+                  Yes
+                </Button>
+              </>
+            )}
+            {!two && (
+              <Button
+                className={classNames.one}
+                fullWidth
+                onClick={confirmation}
+                variant={'primary'}
+              >
+                Ok
+              </Button>
+            )}
           </ModalFooter>
         </div>
       </ModalContent>
