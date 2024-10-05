@@ -1,14 +1,12 @@
 import { ComponentPropsWithoutRef, useState } from 'react'
 
-import { PostList } from '@/features/posts'
+import { PostList } from '@/features'
 import { ImagePostModal } from '@/features/posts/ui/imagePostModal/imagePostModal'
-import { avaTest } from '@/shared/assets'
-import { ProfileStat } from '@/shared/ui'
+import { ProfileAvatar, ProfileStat } from '@/shared/ui'
 import { useTranslation } from '@/shared/utils'
 import { ModalAddPhoto } from '@/widgets'
 import { Button, Typography } from '@photo-fiesta/ui-lib'
 import clsx from 'clsx'
-import Image from 'next/image'
 
 import styles from './profile.module.scss'
 
@@ -16,6 +14,18 @@ import { useProfile } from './useProfile'
 
 export type ProfileProps = ComponentPropsWithoutRef<'div'>
 
+/**
+ * `Profile` is a component that displays a user's profile information, including their avatar,
+ * follower statistics, and options to follow or send a message.
+ * If the authenticated user is viewing their own profile, they have the option to access profile settings.
+ * It also displays a list of posts below the profile information.
+ *
+ * @example
+ * return (
+ *   <Profile />
+ * )
+ */
+//TODO: add translations
 export const Profile = ({ className }: ProfileProps) => {
   const { t } = useTranslation()
   const { authData, handleProfileSettings, isError, isOwnProfile, profileInfo } = useProfile()
@@ -65,10 +75,10 @@ export const Profile = ({ className }: ProfileProps) => {
   )
 
   return (
-    <div className={clsx(styles.wrapper)}>
-      <div className={clsx(styles.root, className)}>
-        <Image alt={'ava'} src={avaTest} />
-        <div className={styles.info}>
+    <div className={classNames.wrapper}>
+      <div className={clsx(classNames.root, className)}>
+        <ProfileAvatar avatarOwner={profileInfo?.avatars[0]?.url} height={204} width={204} />
+        <div className={classNames.info}>
           <div className={classNames.title}>
             <Typography variant={'h1'}>{authData?.userId}</Typography>
             {profileButton}
@@ -87,9 +97,7 @@ export const Profile = ({ className }: ProfileProps) => {
             <ProfileStat counts={2764} title={t.myProfile.publications} />
           </div>
           <Typography className={classNames.bio} variant={'text16'}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-            incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-            exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+            {profileInfo?.aboutMe}
           </Typography>
         </div>
       </div>
