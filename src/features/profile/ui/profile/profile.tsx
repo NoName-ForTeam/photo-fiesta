@@ -1,16 +1,12 @@
-import { ComponentPropsWithoutRef, useState } from 'react'
+import { ComponentPropsWithoutRef } from 'react'
 
-import { PostList } from '@/features'
-import { ImagePostModal } from '@/features/posts/ui/imagePostModal/imagePostModal'
+import { PostList, useProfile } from '@/features'
 import { ProfileAvatar, ProfileStat } from '@/shared/ui'
 import { useTranslation } from '@/shared/utils'
-import { ModalAddPhoto } from '@/widgets'
 import { Button, Typography } from '@photo-fiesta/ui-lib'
 import clsx from 'clsx'
 
 import styles from './profile.module.scss'
-
-import { useProfile } from './useProfile'
 
 export type ProfileProps = ComponentPropsWithoutRef<'div'>
 
@@ -29,20 +25,6 @@ export type ProfileProps = ComponentPropsWithoutRef<'div'>
 export const Profile = ({ className }: ProfileProps) => {
   const { t } = useTranslation()
   const { authData, handleProfileSettings, isError, isOwnProfile, profileInfo } = useProfile()
-
-  const handleCloseModal = () => setOpenModal(false)
-  const handleOpenModal = () => setOpenModal(true)
-
-  const [selectedImage, setSelectedImage] = useState<null | string>(null)
-  const [openPostModal, setOpenPostModal] = useState(false)
-  const [openModal, setOpenModal] = useState(false)
-
-  const handleClosePostModal = () => {
-    setOpenPostModal(false)
-    setSelectedImage(null) // Сбрасываем выбранное изображение после закрытия
-  }
-
-  const handleOpenPostModal = () => setOpenPostModal(true)
 
   const classNames = {
     bio: styles.bio,
@@ -101,31 +83,8 @@ export const Profile = ({ className }: ProfileProps) => {
           </Typography>
         </div>
       </div>
-
-      {/* Кнопка добавления поста */}
-      {isOwnProfile && <Button onClick={handleOpenModal}>Добавить пост</Button>}
-
-      {/* Модалка для создания поста */}
-      {openModal && (
-        <ModalAddPhoto
-          handleCloseModal={() => {
-            handleCloseModal()
-            handleOpenPostModal() // Открываем модалку для поста после закрытия ModalAddPhoto
-          }}
-          isOpen={openModal}
-          setImage={setSelectedImage}
-        />
-      )}
-      {openPostModal && selectedImage && (
-        <ImagePostModal
-          avatar={profileInfo?.avatars}
-          handleClose={handleClosePostModal}
-          selectedImage={selectedImage}
-          userId={profileInfo?.id}
-        />
-      )}
-      {/* Список постов */}
-      <PostList userId={authData?.userId} />
+      {/*TODO: fix type of userId*/}
+      <PostList avatar={profileInfo?.avatars[0]?.url} userId={authData?.userId} />
     </div>
   )
 }

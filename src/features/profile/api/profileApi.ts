@@ -1,7 +1,6 @@
 import { baseApi } from '@/app/api'
+import { ProfileResponse, ProfileSettings, SuccessAvatarResponse } from '@/features'
 import { API_URLS, METHOD } from '@/shared/config'
-
-import { ProfileResponse, ProfileSettings, SuccessAvatarResponse } from './profile.types'
 
 const { DELETE, POST, PUT } = METHOD
 

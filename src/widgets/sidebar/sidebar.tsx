@@ -1,3 +1,6 @@
+import { useState } from 'react'
+
+import { ImagePostModal, useImagePostModal, useProfile } from '@/features'
 import {
   BookmarkOutline,
   HomeOutline,
@@ -10,7 +13,7 @@ import {
 } from '@/shared/assets'
 import { ROUTES } from '@/shared/config'
 import { useTranslation } from '@/shared/utils'
-import { ConfirmationModal } from '@/widgets'
+import { ConfirmationModal, ModalAddPhoto } from '@/widgets'
 import { Button, Sidebars, SidebarsElement } from '@photo-fiesta/ui-lib'
 import clsx from 'clsx'
 import Link from 'next/link'
@@ -30,6 +33,7 @@ type SidebarItem = {
    * For example, it's used for dynamic routes like user profiles.
    */
   isActiveOverride?: string
+  onClick?: () => void
   text: string
 }
 
@@ -40,6 +44,22 @@ type SidebarItem = {
 export const Sidebar = () => {
   const { t } = useTranslation()
   const { confirmLogout, getProfileLink, isActive, isModalOpen, setIsModalOpen } = useSidebar()
+  const { profileInfo } = useProfile()
+  const { postId } = useImagePostModal({})
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
+  const [selectedImage, setSelectedImage] = useState<null | string>(null)
+  const [openPostModal, setOpenPostModal] = useState(false)
+
+  //TODO: refactor callback for createModal when it opened after ModalAddPhoto
+  const openCreateModal = () => setIsCreateModalOpen(true)
+  const closeCreateModal = () => setIsCreateModalOpen(false)
+
+  const handleClosePostModal = () => {
+    setOpenPostModal(false)
+    setSelectedImage(null)
+  }
+
+  const handleOpenPostModal = () => setOpenPostModal(true)
 
   const classNames = {
     icons: styles.icons,
@@ -49,7 +69,7 @@ export const Sidebar = () => {
   /** Array of sidebar items to be rendered */
   const sidebarItems: SidebarItem[] = [
     { href: ROUTES.HOME, icon: HomeOutline, text: t.sidebar.home },
-    { href: ROUTES.CREATE, icon: PlusSquareOutline, text: t.sidebar.create },
+    { href: '#', icon: PlusSquareOutline, onClick: openCreateModal, text: t.sidebar.create },
     {
       href: getProfileLink(),
       icon: Person,
@@ -68,6 +88,7 @@ export const Sidebar = () => {
       icon={item.icon}
       isActive={path => isActive(item.isActiveOverride || path)}
       key={item.href}
+      onClick={item.onClick}
       text={item.text}
     />
   ))
@@ -92,6 +113,25 @@ export const Sidebar = () => {
           content={'Are you really want to logout of your account?'}
           isOpen={isModalOpen}
           title={t.sidebar.logout}
+        />
+      )}
+      {isCreateModalOpen && (
+        <ModalAddPhoto
+          handleCloseModal={() => {
+            closeCreateModal()
+            handleOpenPostModal()
+          }}
+          isOpen={isCreateModalOpen}
+          setImage={setSelectedImage}
+        />
+      )}
+      {openPostModal && selectedImage && (
+        <ImagePostModal
+          avatar={profileInfo?.avatars}
+          handleClose={handleClosePostModal}
+          postId={postId}
+          selectedImage={selectedImage}
+          userId={profileInfo?.id}
         />
       )}
     </div>

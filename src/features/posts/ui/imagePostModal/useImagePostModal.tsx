@@ -11,18 +11,22 @@ const postDescriptionSchema = z.object({
     .string()
     .min(1, 'Minimum number of characters 1')
     .max(500, 'Maximum number of characters 500'),
+  // location: z.string(),
+  //TODO: check type of this field(location)
 })
 const badRequestSchema = createBadRequestSchema(['description'])
 
 export type FormValues = z.infer<typeof postDescriptionSchema>
-type Props = {
+
+type UseImagePostModalProps = {
   handleClose: () => void
-  selectedImage: null | string
+  selectedImage?: null | string
 }
-export const useImagePostModal = ({ handleClose, selectedImage }: Props) => {
+export const useImagePostModal = ({ handleClose, selectedImage }: UseImagePostModalProps) => {
   const [createPost, { isLoading: isCreatingPost }] = useCreatePostMutation()
   const [uploadImage, { isLoading: isUploading }] = useUploadPostImageMutation()
   const [isOpenModal, setIsOpenModal] = useState<boolean>(true)
+  const [postId, setPostId] = useState<number>()
 
   const {
     control,
@@ -67,6 +71,9 @@ export const useImagePostModal = ({ handleClose, selectedImage }: Props) => {
           description: data.description,
         })
       }
+      if (postId) {
+        setPostId(postId)
+      }
       handleClose()
       setIsOpenModal(false)
     } catch (error) {
@@ -84,6 +91,7 @@ export const useImagePostModal = ({ handleClose, selectedImage }: Props) => {
     isOpenModal,
     isUploading,
     onSubmit,
+    postId,
     setIsOpenModal,
   }
 }

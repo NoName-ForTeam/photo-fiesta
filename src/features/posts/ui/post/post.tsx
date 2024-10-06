@@ -1,7 +1,7 @@
 import { forwardRef } from 'react'
 
-import { Avatar } from '@/features'
-import { useImagePostModal } from '@/features/posts/ui/imagePostModal/useImagePostModal'
+import { Avatar, useImagePostModal } from '@/features'
+import { ProfileAvatar } from '@/shared/ui'
 import { FormTextArea, Typography } from '@photo-fiesta/ui-lib'
 
 import styles from './post.module.scss'
@@ -22,7 +22,7 @@ export const Post = forwardRef<HTMLFormElement, PostProps>(
       return (
         <section className={styles.formSection}>
           <div className={styles.profileInfo}>
-            <img alt={'avatar'} src={avatar?.[0].url} />
+            <ProfileAvatar avatarOwner={avatar?.[0].url} />
             <Typography variant={'h3'}>{userId}</Typography>
           </div>
           <form id={'postDescription'} onSubmit={onSubmit} ref={ref}>
@@ -35,7 +35,8 @@ export const Post = forwardRef<HTMLFormElement, PostProps>(
                 placeholder={'Text-area'}
               />
               <Typography>
-                <input className={styles.location} placeholder={'Location'} />
+                <label>Add location</label>
+                <textarea className={styles.location} name={'location'} placeholder={'NewYork'} />
               </Typography>
             </div>
           </form>
