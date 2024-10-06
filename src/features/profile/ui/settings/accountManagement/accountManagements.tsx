@@ -71,7 +71,6 @@ export const AccountManagements = () => {
           <div className={clsx(classNames.container, classNames.data)}>
             <div>
               <Typography variant={'text14'}>Expire at</Typography>
-              {/*TODO: add data get request instead 12.12.2022*/}
               <Typography variant={'textBold14'}>
                 {' '}
                 {new Date(currentPayment.endDateOfSubscription).toLocaleDateString()}
@@ -79,7 +78,6 @@ export const AccountManagements = () => {
             </div>
             <div>
               <Typography variant={'text14'}>Next payment</Typography>
-              {/*TODO: add data get request instead 13.02.2023*/}
               <Typography variant={'textBold14'}>
                 {' '}
                 {new Date(currentPayment.dateOfPayment).toLocaleDateString()}
@@ -150,7 +148,6 @@ export const AccountManagements = () => {
           </div>
         </>
       )}
-      {/*TODO: add logic for modal window*/}
       {isModalOpen && (
         <ConfirmationModal
           closeModal={handleModalClose}

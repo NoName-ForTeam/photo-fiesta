@@ -1,4 +1,3 @@
-// useAccountManagement.ts
 import { useCallback, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
