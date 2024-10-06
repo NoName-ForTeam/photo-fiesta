@@ -10,11 +10,17 @@ import styles from './accountManagement.module.scss'
 
 type AccountType = 'business' | 'personal'
 type ModalType = 'Error' | 'Success' | null
+
+/**
+ * AccountManagements component for managing user account settings
+ */
+
 export const AccountManagements = () => {
+  //TODO: add custom hook for logic
   const { control } = useForm()
   const [accountType, setAccountType] = useState<AccountType>('personal')
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [modalTitle, setModalTitle] = useState<ModalType>(null)
+  const [isModalOpen, setIsModalOpen] = useState(true)
+  const [modalTitle, setModalTitle] = useState<ModalType>('Success')
 
   const classNames = {
     account: styles.account,
@@ -109,8 +115,8 @@ export const AccountManagements = () => {
           confirmation={handleConfirmation}
           content={'Payment was successful'}
           isOpen={isModalOpen}
+          isTwoButtons={false}
           title={modalTitle && modalTitle}
-          two={false}
         />
       )}
     </form>
@@ -122,6 +128,10 @@ type RadioBlockProps = {
   title: string
   value: string
 } & ComponentPropsWithoutRef<'div'>
+
+/**
+ * RadioBlock component for rendering a radio button with a label
+ */
 
 const RadioBlock = ({ title, value }: RadioBlockProps) => {
   const classNames = {
