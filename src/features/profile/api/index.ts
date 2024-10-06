@@ -1,2 +1,2 @@
-export * from './profile.types'
-export * from './profileApi'
+export * from './profile'
+export * from './subscriptions'
