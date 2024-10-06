@@ -25,7 +25,7 @@ export type ProfileProps = ComponentPropsWithoutRef<'div'>
 export const Profile = ({ className }: ProfileProps) => {
   const { t } = useTranslation()
   const { authData, handleProfileSettings, isError, isOwnProfile, profileInfo } = useProfile()
-
+  const userAvatar = profileInfo?.avatars.length ? [profileInfo.avatars[0]] : []
   const classNames = {
     bio: styles.bio,
     btnContainer: styles.btnContainer,
@@ -84,7 +84,7 @@ export const Profile = ({ className }: ProfileProps) => {
         </div>
       </div>
       {/*TODO: fix type of userId*/}
-      <PostList avatar={profileInfo?.avatars[0]?.url} userId={authData?.userId} />
+      <PostList avatar={userAvatar} userId={authData?.userId ?? 0} />
     </div>
   )
 }

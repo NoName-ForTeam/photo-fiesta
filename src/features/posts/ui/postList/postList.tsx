@@ -17,7 +17,6 @@ export const PostList = ({ avatar, userId }: Props) => {
   const [selectedPostId, setSelectedPostId] = useState<null | number>(null)
   const [selectedImage, setSelectedImage] = useState<null | string>(null)
   const { data: userPosts } = useGetUserPostsQuery({ userId })
-  // const { data: postById } = useGetPostByIdQuery({ postId })
 
   if (!userPosts?.items.length) {
     return (
@@ -26,7 +25,6 @@ export const PostList = ({ avatar, userId }: Props) => {
       </div>
     )
   }
-  console.log(userPosts)
 
   const handleOpenImageModal = (postId: number, imageUrl: string) => {
     setSelectedPostId(postId)
