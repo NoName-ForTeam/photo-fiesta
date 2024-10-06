@@ -1,5 +1,5 @@
-import { ComponentPropsWithoutRef, useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { ComponentPropsWithoutRef } from 'react'
+import { Controller } from 'react-hook-form'
 
 import { PaypalSvgrepoCom4, StripeSvgrepoCom4 } from '@/shared/assets'
 import { ConfirmationModal } from '@/widgets'
@@ -8,19 +8,32 @@ import clsx from 'clsx'
 
 import styles from './accountManagement.module.scss'
 
-type AccountType = 'business' | 'personal'
-type ModalType = 'Error' | 'Success' | null
+import { useAccountManagement } from './useAccountManagement'
 
 /**
  * AccountManagements component for managing user account settings
  */
 
 export const AccountManagements = () => {
-  //TODO: add custom hook for logic
-  const { control } = useForm()
-  const [accountType, setAccountType] = useState<AccountType>('personal')
-  const [isModalOpen, setIsModalOpen] = useState(true)
-  const [modalTitle, setModalTitle] = useState<ModalType>('Success')
+  const {
+    accountType,
+    accountTypes,
+    control,
+    currentPayment,
+    handleAccountTypeChange,
+    handleConfirmation,
+    handleModalClose,
+    handlePaymentSubmit,
+    handleSubmit,
+    handleSubscriptionChange,
+    isModalOpen,
+    isSubmitting,
+    isSubscriptionActive,
+    modalTitle,
+    onSubmit,
+    showLoading,
+    subscriptionCosts,
+  } = useAccountManagement()
 
   const classNames = {
     account: styles.account,
@@ -30,27 +43,27 @@ export const AccountManagements = () => {
     data: styles.data,
     form: styles.form,
     icon: styles.icon,
-    remewal: styles.remewal,
+    renewal: styles.renewal,
     subscription: styles.subscription,
     title: styles.title,
   } as const
-  const handleAccountTypeChange = (value: AccountType) => {
-    setAccountType(value)
-  }
-  //TODO: use this handleModalOpen
-  // const handleModalOpen = () => {
-  //   setIsModalOpen(true)
-  // }
-  const handleModalClose = () => {
-    setIsModalOpen(false)
-  }
-  const handleConfirmation = () => {
-    setModalTitle('Success')
+
+  const AccountTypeBlocks = accountTypes.map(type => (
+    <RadioBlock key={type.value} title={type.title} value={type.value} />
+  ))
+
+  const SubscriptionCostBlocks = subscriptionCosts.map(cost => (
+    <RadioBlock key={cost.value} title={cost.title} value={cost.value} />
+  ))
+
+  // TODO: add loading component
+  if (showLoading) {
+    return <div>Loading...</div>
   }
 
   return (
-    <form className={classNames.form}>
-      {accountType === 'business' && modalTitle === 'Success' && (
+    <form className={classNames.form} onSubmit={handleSubmit(onSubmit)}>
+      {accountType === 'business' && isSubscriptionActive && currentPayment && (
         <div className={classNames.subscription}>
           <Typography className={classNames.title} variant={'h3'}>
             Current Subscription:
@@ -59,16 +72,26 @@ export const AccountManagements = () => {
             <div>
               <Typography variant={'text14'}>Expire at</Typography>
               {/*TODO: add data get request instead 12.12.2022*/}
-              <Typography variant={'textBold14'}>12.12.2022</Typography>
+              <Typography variant={'textBold14'}>
+                {' '}
+                {new Date(currentPayment.endDateOfSubscription).toLocaleDateString()}
+              </Typography>
             </div>
             <div>
               <Typography variant={'text14'}>Next payment</Typography>
               {/*TODO: add data get request instead 13.02.2023*/}
-              <Typography variant={'textBold14'}>13.02.2023</Typography>
+              <Typography variant={'textBold14'}>
+                {' '}
+                {new Date(currentPayment.dateOfPayment).toLocaleDateString()}
+              </Typography>
             </div>
           </div>
-          <label className={classNames.remewal}>
-            <FormCheckbox control={control} name={'auto'} />
+          <label className={classNames.renewal}>
+            <FormCheckbox
+              control={control}
+              defaultChecked={currentPayment?.autoRenewal}
+              name={'autoRenewal'}
+            />
             <Typography variant={'text14'}>Auto-renewal</Typography>
           </label>
         </div>
@@ -83,26 +106,45 @@ export const AccountManagements = () => {
           onValueChange={handleAccountTypeChange}
           value={accountType}
         >
-          <RadioBlock title={'Personal'} value={'personal'} />
-          <RadioBlock title={'Business'} value={'business'} />
+          {AccountTypeBlocks}
         </RadioGroup>
       </div>
       {accountType == 'business' && (
         <>
           <div className={classNames.costs}>
             <Typography variant={'h3'}>Your subscription costs:</Typography>
-            <RadioGroup className={classNames.container} defaultValue={'10'}>
-              <RadioBlock title={'$10 per 1 Day'} value={'10'} />
-              <RadioBlock title={'$50 per 7 Day'} value={'50'} />
-              <RadioBlock title={'$100 per month'} value={'100'} />
-            </RadioGroup>
+            <Controller
+              control={control}
+              name={'typeSubscription'}
+              render={({ field }) => (
+                <RadioGroup
+                  className={classNames.container}
+                  defaultValue={'MONTHLY'}
+                  onValueChange={value => {
+                    field.onChange(value)
+                    handleSubscriptionChange(value)
+                  }}
+                  value={field.value}
+                >
+                  {SubscriptionCostBlocks}
+                </RadioGroup>
+              )}
+            />
           </div>
           <div className={classNames.buttons}>
-            <Button variant={'icon-link'}>
+            <Button
+              disabled={isSubmitting}
+              onClick={() => handlePaymentSubmit('PAYPAL')}
+              variant={'icon-link'}
+            >
               <PaypalSvgrepoCom4 className={classNames.icon} />
             </Button>
             <Typography variant={'text14'}>Or</Typography>
-            <Button variant={'icon-link'}>
+            <Button
+              disabled={isSubmitting}
+              onClick={() => handlePaymentSubmit('STRIPE')}
+              variant={'icon-link'}
+            >
               <StripeSvgrepoCom4 className={classNames.icon} />
             </Button>
           </div>
@@ -113,10 +155,14 @@ export const AccountManagements = () => {
         <ConfirmationModal
           closeModal={handleModalClose}
           confirmation={handleConfirmation}
-          content={'Payment was successful'}
+          content={
+            modalTitle === 'Success'
+              ? 'Payment was successful'
+              : 'Transaction failed.Please,write to support'
+          }
           isOpen={isModalOpen}
           isTwoButtons={false}
-          title={modalTitle && modalTitle}
+          title={modalTitle ?? ''}
         />
       )}
     </form>
