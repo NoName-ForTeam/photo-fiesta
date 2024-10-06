@@ -45,7 +45,7 @@ export const Sidebar = () => {
   const { t } = useTranslation()
   const { confirmLogout, getProfileLink, isActive, isModalOpen, setIsModalOpen } = useSidebar()
   const { profileInfo } = useProfile()
-  const { postId } = useImagePostModal({})
+
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
   const [selectedImage, setSelectedImage] = useState<null | string>(null)
   const [openPostModal, setOpenPostModal] = useState(false)
@@ -58,8 +58,8 @@ export const Sidebar = () => {
     setOpenPostModal(false)
     setSelectedImage(null)
   }
-
   const handleOpenPostModal = () => setOpenPostModal(true)
+  const { postId } = useImagePostModal({ handleClose: handleOpenPostModal })
 
   const classNames = {
     icons: styles.icons,
@@ -129,7 +129,7 @@ export const Sidebar = () => {
         <ImagePostModal
           avatar={profileInfo?.avatars}
           handleClose={handleClosePostModal}
-          postId={postId}
+          postId={postId ?? 0}
           selectedImage={selectedImage}
           userId={profileInfo?.id}
         />
