@@ -1,7 +1,82 @@
 // TODO: styles by default,maybe changed later
-.root {
+.form {
   display: flex;
+  flex-direction: column;
+  gap: 20px;
+
   width: 100%;
   height: 100%;
-  min-height: 630px;
+  margin-top: 20px;
+
+  & .radio {
+    width: 15px;
+    height: 15px;
+  }
+}
+
+.remewal {
+  cursor: pointer;
+
+  display: flex;
+  gap: 4px;
+  align-items: center;
+
+  margin-top: 5px;
+}
+
+// TODO: hard code width 121.09% - problem in settings.module.scss
+.account,
+.costs,
+.subscription {
+  width: 121.09%;
+}
+
+.account {
+  order: 1;
+}
+
+.costs {
+  order: 2;
+}
+
+.buttons {
+  display: flex;
+  flex-direction: row;
+  gap: 54px;
+  align-items: center;
+  justify-content: flex-end;
+  order: 3;
+
+  width: 121.09%;
+}
+
+.container {
+  padding: 14px 20px;
+  background-color: var(--dark-500);
+  outline: 1px solid var(--dark-300);
+
+  &.data {
+    display: flex;
+    gap: 48px;
+
+    & > div {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+  }
+}
+
+.block {
+  display: flex;
+  gap: 8px;
+}
+
+.title {
+  margin-bottom: 5px;
+}
+
+.icon {
+  width: 96px;
+  height: 64px;
 }
