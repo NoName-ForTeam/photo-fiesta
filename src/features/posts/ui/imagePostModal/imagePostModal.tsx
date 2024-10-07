@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useState } from 'react'
 
 import {
   Avatar,
@@ -6,8 +6,10 @@ import {
   useDeletePostMutation,
   useDeleteUploadImageMutation,
   useGetPostByIdQuery,
+  useImagePostModal,
+  useUpdatePostMutation,
 } from '@/features'
-import { ArrowIosBackOutline, CloseOutline } from '@/shared/assets'
+import { ArrowIosBackOutline, Close, CloseOutline, Edit2 } from '@/shared/assets'
 import { ProfileAvatar } from '@/shared/ui'
 import {
   Button,
@@ -15,6 +17,7 @@ import {
   ModalDescription,
   ModalFooter,
   ModalHeader,
+  ModalTitle,
   Typography,
 } from '@photo-fiesta/ui-lib'
 import clsx from 'clsx'
@@ -38,27 +41,19 @@ export const ImagePostModal = ({
   userId,
   viewMode = false,
 }: ImagePostModalProps) => {
+  const { modalRef, setShowConfirmModal, showConfirmModal } = useImagePostModal({
+    handleClose,
+    selectedImage,
+  })
   const [step, setStep] = useState<'cropping' | 'filters' | 'publication'>('cropping')
-  const [showConfirmModal, setShowConfirmModal] = useState(false)
+  const [showConfirmDeleteModal, setShowConfirmDeleteModal] = useState(false)
+  const [showConfirmCloseModal, setShowConfirmCloseModal] = useState(false)
   const { data: postById } = useGetPostByIdQuery({ postId })
   const [deleteImage] = useDeleteUploadImageMutation()
   const [deletePost] = useDeletePostMutation()
-
-  const modalRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
-        setShowConfirmModal(true) // Открываем модалку подтверждения
-      }
-    }
-
-    document.addEventListener('mousedown', handleClickOutside)
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside)
-    }
-  }, [])
+  const [updateDescription] = useUpdatePostMutation()
+  const [isEditing, setIsEditing] = useState(false)
+  const [description, setDescription] = useState(postById?.description || '')
 
   // Логика удаления поста и картинки при подтверждении
   const confirmDelete = async () => {
@@ -68,10 +63,14 @@ export const ImagePostModal = ({
     await deletePost({ postId }) // Удаляем пост
     handleClose() // Закрываем модалку
   }
+  const saveDescriptionChanges = async () => {
+    await updateDescription({ description, postId }) // Сохраняем новое описание
+    setIsEditing(false) // Отключаем режим редактирования
+  }
 
   const getStepTitle = () => {
-    if (viewMode) {
-      return 'View Post' // Название для режима просмотра
+    if (isEditing) {
+      return 'Edit Post' // Название для режима просмотра
     }
     switch (step) {
       case 'cropping':
@@ -129,6 +128,12 @@ export const ImagePostModal = ({
             )}
           </div>
         )}
+        {isEditing && (
+          <div className={styles.header}>
+            <Typography variant={'h1'}>{getStepTitle()}</Typography>
+            <Close onClick={() => setShowConfirmCloseModal(true)} />
+          </div>
+        )}
 
         <div className={styles.body}>
           <section className={styles.imageSection}>
@@ -141,12 +146,49 @@ export const ImagePostModal = ({
           {viewMode && postById && (
             <section className={styles.viewMode}>
               <div className={styles.profileInfo}>
-                <CloseOutline onClick={confirmDelete} />
+                <CloseOutline onClick={() => setShowConfirmDeleteModal(true)} />
+                <Edit2 onClick={() => setIsEditing(true)} />
                 <ProfileAvatar avatarOwner={avatar?.[0]?.url} />
                 <Typography variant={'h3'}>{userId}</Typography>
               </div>
               <div className={styles.postDetails}>
-                <Typography variant={'h3'}>{postById?.description}</Typography>
+                {isEditing ? (
+                  <div>
+                    <textarea
+                      className={styles.textarea}
+                      onChange={e => setDescription(e.target.value)}
+                      value={description}
+                    />
+                    <Button onClick={saveDescriptionChanges} variant={'primary'}>
+                      Save Changes
+                    </Button>
+                    {showConfirmCloseModal && (
+                      <Modal>
+                        <ModalTitle>Close Post</ModalTitle>
+                        <ModalDescription>
+                          Do you really want to close the edition of the publication? If you close
+                          If you close changes won`t be saved
+                        </ModalDescription>
+                        <ModalFooter>
+                          <Button onClick={() => handleClose()}>Yes</Button>
+                          <Button onClick={() => setShowConfirmCloseModal(false)}>No</Button>
+                        </ModalFooter>
+                      </Modal>
+                    )}
+                  </div>
+                ) : (
+                  <Typography variant={'h3'}>{postById?.description}</Typography> // Иначе показываем описание
+                )}
+                {showConfirmDeleteModal && (
+                  <Modal>
+                    <ModalTitle>Delete Post</ModalTitle>
+                    <ModalDescription>Are you sure you want to delete this post?</ModalDescription>
+                    <ModalFooter>
+                      <Button onClick={confirmDelete}>Yes</Button>
+                      <Button onClick={() => setShowConfirmDeleteModal(false)}>No</Button>
+                    </ModalFooter>
+                  </Modal>
+                )}
               </div>
             </section>
           )}

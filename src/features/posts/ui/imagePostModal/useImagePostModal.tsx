@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 import { useCreatePostMutation, useUploadPostImageMutation } from '@/features'
@@ -21,12 +21,18 @@ export type FormValues = z.infer<typeof postDescriptionSchema>
 type UseImagePostModalProps = {
   handleClose: () => void
   selectedImage?: null | string
+  viewMode?: boolean
 }
-export const useImagePostModal = ({ handleClose, selectedImage }: UseImagePostModalProps) => {
+export const useImagePostModal = ({
+  handleClose,
+  selectedImage,
+  viewMode,
+}: UseImagePostModalProps) => {
   const [createPost, { isLoading: isCreatingPost }] = useCreatePostMutation()
   const [uploadImage, { isLoading: isUploading }] = useUploadPostImageMutation()
   const [isOpenModal, setIsOpenModal] = useState<boolean>(true)
   const [postId, setPostId] = useState<number>()
+  const [showConfirmModal, setShowConfirmModal] = useState(false)
 
   const {
     control,
@@ -38,16 +44,29 @@ export const useImagePostModal = ({ handleClose, selectedImage }: UseImagePostMo
     resolver: zodResolver(postDescriptionSchema),
   })
 
+  const modalRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (!viewMode && modalRef.current && !modalRef.current.contains(event.target as Node)) {
+        setShowConfirmModal(true) // Открываем модалку подтверждения
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [viewMode])
+
   const onSubmit = handleSubmit(async (data: FormValues) => {
-    console.log('Submitting form with data:', data)
-    console.log('Selected image:', selectedImage)
     try {
       if (!selectedImage) {
         console.error('No image selected')
 
         return
       }
-      console.log('Form Data:', data)
       const formData = new FormData()
 
       const blob = await (await fetch(selectedImage)).blob()
@@ -80,8 +99,6 @@ export const useImagePostModal = ({ handleClose, selectedImage }: UseImagePostMo
       console.error('Error during post creation', error)
       handleErrorResponse<FormValues>({ badRequestSchema, error, setError })
     }
-    console.log(data.description)
-    console.log(selectedImage)
   })
 
   return {
@@ -90,8 +107,11 @@ export const useImagePostModal = ({ handleClose, selectedImage }: UseImagePostMo
     isCreatingPost,
     isOpenModal,
     isUploading,
+    modalRef,
     onSubmit,
     postId,
     setIsOpenModal,
+    setShowConfirmModal,
+    showConfirmModal,
   }
 }
