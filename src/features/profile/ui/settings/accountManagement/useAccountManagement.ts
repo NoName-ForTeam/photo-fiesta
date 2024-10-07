@@ -2,6 +2,9 @@ import { useCallback, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 import { useGetCurrentPaymentQuery, usePostSubscriptionMutation } from '@/features/profile/api'
+import { ErrorResponse } from '@/shared/api'
+import { PAYMENT_DELAY } from '@/shared/config'
+import { checkErrorMessages, useDelayedLoading } from '@/shared/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/router'
 import { z } from 'zod'
@@ -43,24 +46,11 @@ export const useAccountManagement = () => {
   const [accountType, setAccountType] = useState<AccountType>('personal')
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [modalTitle, setModalTitle] = useState<ModalType>(null)
-  const [showLoading, setShowLoading] = useState(false)
 
   const [postSubscription, { isLoading }] = usePostSubscriptionMutation()
-
-  // Effect for managing loading state - delay for 5s after loading for show loading component
-  useEffect(() => {
-    if (!isLoading) {
-      const timer = setTimeout(() => {
-        setShowLoading(false)
-      }, 5000)
-
-      return () => clearTimeout(timer)
-    } else {
-      setShowLoading(true)
-    }
-  }, [isLoading])
-
-  const { control, handleSubmit, setValue } = useForm<FormData>({
+  //when true we see loading component
+  const showLoading = useDelayedLoading(isLoading, PAYMENT_DELAY)
+  const { control, handleSubmit, setError, setValue } = useForm<FormData>({
     defaultValues: {
       amount: 10,
       autoRenewal: false,
@@ -73,7 +63,9 @@ export const useAccountManagement = () => {
 
   const { data: currentPaymentData, refetch: refetchCurrentPayment } = useGetCurrentPaymentQuery()
 
+  //{userId,subscriptionId,dateOfPayment,endDateOfSubscription,autoRenewal}
   const currentPayment = currentPaymentData?.data[0]
+
   const isSubscriptionActive =
     !!currentPayment && new Date(currentPayment.endDateOfSubscription) > new Date()
 
@@ -108,6 +100,7 @@ export const useAccountManagement = () => {
     } catch (error) {
       setModalTitle('Error')
       setIsModalOpen(true)
+      checkErrorMessages(error as ErrorResponse, setError)
     } finally {
       setIsSubmitting(false)
     }
