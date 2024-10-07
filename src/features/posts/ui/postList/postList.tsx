@@ -16,7 +16,7 @@ export const PostList = ({ avatar, userId }: Props) => {
   const [openModal, setOpenModal] = useState(false)
   const [selectedPostId, setSelectedPostId] = useState<null | number>(null)
   const [selectedImage, setSelectedImage] = useState<null | string>(null)
-  const { data: userPosts } = useGetUserPostsQuery({ userId })
+  const { data: userPosts } = useGetUserPostsQuery({ userId }, { skip: !userId })
 
   if (!userPosts?.items.length) {
     return (

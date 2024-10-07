@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 import { useCreatePostMutation, useUploadPostImageMutation } from '@/features'
@@ -21,15 +21,11 @@ export type FormValues = z.infer<typeof postDescriptionSchema>
 type UseImagePostModalProps = {
   handleClose: () => void
   selectedImage?: null | string
-  viewMode?: boolean
 }
-export const useImagePostModal = ({
-  handleClose,
-  selectedImage,
-  viewMode,
-}: UseImagePostModalProps) => {
-  const [createPost, { isLoading: isCreatingPost }] = useCreatePostMutation()
-  const [uploadImage, { isLoading: isUploading }] = useUploadPostImageMutation()
+export const useImagePostModal = ({ handleClose, selectedImage }: UseImagePostModalProps) => {
+  const [createPost] = useCreatePostMutation()
+  const [uploadImage] = useUploadPostImageMutation()
+
   const [isOpenModal, setIsOpenModal] = useState<boolean>(true)
   const [postId, setPostId] = useState<number>()
   const [showConfirmModal, setShowConfirmModal] = useState(false)
@@ -44,28 +40,10 @@ export const useImagePostModal = ({
     resolver: zodResolver(postDescriptionSchema),
   })
 
-  const modalRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (!viewMode && modalRef.current && !modalRef.current.contains(event.target as Node)) {
-        setShowConfirmModal(true) // Открываем модалку подтверждения
-      }
-    }
-
-    document.addEventListener('mousedown', handleClickOutside)
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside)
-    }
-  }, [viewMode])
-
   const onSubmit = handleSubmit(async (data: FormValues) => {
     try {
       if (!selectedImage) {
-        console.error('No image selected')
-
-        return
+        throw new Error('No image selected')
       }
       const formData = new FormData()
 
@@ -76,20 +54,13 @@ export const useImagePostModal = ({
       const imageUploadData = await uploadImage(formData).unwrap()
 
       // Создаем пост
-      if (Array.isArray(imageUploadData)) {
-        await createPost({
-          childrenMetadata: imageUploadData.map((img: { uploadId: string }) => ({
-            uploadId: img.uploadId,
-          })),
-          description: data.description,
-        })
-      } else {
-        // Обработка случая, когда imageUploadData не является массивом
-        await createPost({
-          childrenMetadata: [{ uploadId: imageUploadData.images[0]?.uploadId }],
-          description: data.description,
-        })
-      }
+      await createPost({
+        childrenMetadata: Array.isArray(imageUploadData)
+          ? imageUploadData.map(img => ({ uploadId: img.uploadId }))
+          : [{ uploadId: imageUploadData.images[0]?.uploadId }],
+        description: data.description,
+      })
+
       if (postId) {
         setPostId(postId)
       }
@@ -104,13 +75,11 @@ export const useImagePostModal = ({
   return {
     control,
     errors,
-    isCreatingPost,
     isOpenModal,
-    isUploading,
-    modalRef,
     onSubmit,
     postId,
     setIsOpenModal,
+    setPostId,
     setShowConfirmModal,
     showConfirmModal,
   }

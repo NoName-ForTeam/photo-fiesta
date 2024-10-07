@@ -100,6 +100,7 @@ export const postsApi = baseApi.injectEndpoints({
      * Uploads an image for a post.
      * @param {FormData} formData - The image file to upload.
      */
+
     uploadPostImage: builder.mutation<PostsImages, FormData>({
       invalidatesTags: ['Posts'],
       query: (formData: FormData) => ({

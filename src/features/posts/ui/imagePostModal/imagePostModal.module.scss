@@ -1,3 +1,5 @@
+@use '@/app/styles/mixins' as *;
+
 .overlay {
   position: fixed;
   z-index: 1000;
@@ -53,4 +55,55 @@
     height: 100%;
     object-fit: contain;
   }
+}
+
+.closeModalContainer {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  max-width: 486px;
+  margin: 0 auto;
+  padding: 24px;
+
+  background-color: var(--dark-300);
+}
+
+.closeModalHeader {
+  @include modal-header;
+
+  margin-bottom: 30px;
+  padding: 0 24px;
+}
+
+.content {
+  width: 100%;
+  max-width: 380px;
+}
+
+.closeModalDescription {
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.closeModalFooter {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+
+  button {
+    margin-top: 30px;
+    font-size: 16px;
+  }
+}
+
+.icon {
+  @include modal-close;
 }

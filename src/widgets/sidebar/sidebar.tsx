@@ -53,12 +53,13 @@ export const Sidebar = () => {
   //TODO: refactor callback for createModal when it opened after ModalAddPhoto
   const openCreateModal = () => setIsCreateModalOpen(true)
   const closeCreateModal = () => setIsCreateModalOpen(false)
+  const handleOpenPostModal = () => setOpenPostModal(true)
 
   const handleClosePostModal = () => {
     setOpenPostModal(false)
     setSelectedImage(null)
   }
-  const handleOpenPostModal = () => setOpenPostModal(true)
+
   const { postId } = useImagePostModal({ handleClose: handleOpenPostModal })
 
   const classNames = {

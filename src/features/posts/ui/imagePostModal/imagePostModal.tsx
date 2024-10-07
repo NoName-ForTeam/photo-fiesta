@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import {
   Avatar,
@@ -14,7 +14,6 @@ import { ProfileAvatar } from '@/shared/ui'
 import {
   Button,
   Modal,
-  ModalDescription,
   ModalFooter,
   ModalHeader,
   ModalTitle,
@@ -41,65 +40,63 @@ export const ImagePostModal = ({
   userId,
   viewMode = false,
 }: ImagePostModalProps) => {
-  const { modalRef, setShowConfirmModal, showConfirmModal } = useImagePostModal({
+  const { setShowConfirmModal, showConfirmModal } = useImagePostModal({
     handleClose,
     selectedImage,
   })
-  const [step, setStep] = useState<'cropping' | 'filters' | 'publication'>('cropping')
-  const [showConfirmDeleteModal, setShowConfirmDeleteModal] = useState(false)
-  const [showConfirmCloseModal, setShowConfirmCloseModal] = useState(false)
+
   const { data: postById } = useGetPostByIdQuery({ postId })
   const [deleteImage] = useDeleteUploadImageMutation()
   const [deletePost] = useDeletePostMutation()
   const [updateDescription] = useUpdatePostMutation()
+
+  const [step, setStep] = useState<'cropping' | 'filters' | 'publication'>('cropping')
+  const [showConfirmDeleteModal, setShowConfirmDeleteModal] = useState(false)
+  const [showConfirmCloseModal, setShowConfirmCloseModal] = useState(false)
   const [isEditing, setIsEditing] = useState(false)
   const [description, setDescription] = useState(postById?.description || '')
 
+  const modalRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+        if (!viewMode && (step === 'cropping' || step === 'filters' || step === 'publication')) {
+          setShowConfirmModal(true)
+        }
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [viewMode, step])
+
+  const isEditingOrDeleting = postId > -1
   // Логика удаления поста и картинки при подтверждении
   const confirmDelete = async () => {
-    if (selectedImage) {
+    if (selectedImage && isEditingOrDeleting) {
       await deleteImage({ uploadId: selectedImage }) // Удаляем картинку
     }
     await deletePost({ postId }) // Удаляем пост
     handleClose() // Закрываем модалку
   }
   const saveDescriptionChanges = async () => {
-    await updateDescription({ description, postId }) // Сохраняем новое описание
-    setIsEditing(false) // Отключаем режим редактирования
-  }
-
-  const getStepTitle = () => {
-    if (isEditing) {
-      return 'Edit Post' // Название для режима просмотра
-    }
-    switch (step) {
-      case 'cropping':
-        return 'Cropping'
-      case 'filters':
-        return 'Filters'
-      case 'publication':
-        return 'Publication'
-      default:
-        return ''
+    if (isEditingOrDeleting) {
+      await updateDescription({ description, postId }) // Сохраняем новое описание
+      setIsEditing(false) // Отключаем режим редактирования
     }
   }
 
-  const goToNextStep = () => {
+  const getStepTitle = () =>
+    isEditing ? 'Edit Post' : step.charAt(0).toUpperCase() + step.slice(1)
+
+  const changeStep = (direction: 'next' | 'prev') => {
     if (!viewMode) {
-      if (step === 'cropping') {
-        setStep('filters')
-      } else if (step === 'filters') {
-        setStep('publication')
-      }
-    }
-  }
-
-  const goToPrevStep = () => {
-    if (!viewMode) {
-      if (step === 'publication') {
-        setStep('filters')
-      } else if (step === 'filters') {
-        setStep('cropping')
+      if (direction === 'next') {
+        setStep(prev => (prev === 'cropping' ? 'filters' : 'publication'))
+      } else {
+        setStep(prev => (prev === 'publication' ? 'filters' : 'cropping'))
       }
     }
   }
@@ -112,12 +109,12 @@ export const ImagePostModal = ({
       >
         {!viewMode && (
           <div className={styles.header}>
-            <Button onClick={goToPrevStep} variant={'icon-link'}>
+            <Button onClick={() => changeStep('prev')} variant={'icon-link'}>
               <ArrowIosBackOutline />
             </Button>
             <Typography variant={'h1'}>{getStepTitle()}</Typography>
             {step !== 'publication' && (
-              <Button onClick={goToNextStep} variant={'ghost'}>
+              <Button onClick={() => changeStep('next')} variant={'ghost'}>
                 Next
               </Button>
             )}
@@ -164,15 +161,24 @@ export const ImagePostModal = ({
                     </Button>
                     {showConfirmCloseModal && (
                       <Modal>
-                        <ModalTitle>Close Post</ModalTitle>
-                        <ModalDescription>
-                          Do you really want to close the edition of the publication? If you close
-                          If you close changes won`t be saved
-                        </ModalDescription>
-                        <ModalFooter>
-                          <Button onClick={() => handleClose()}>Yes</Button>
-                          <Button onClick={() => setShowConfirmCloseModal(false)}>No</Button>
-                        </ModalFooter>
+                        <div className={styles.closeModalContainer}>
+                          <ModalHeader className={styles.closeModalHeader}>
+                            <ModalTitle>Close Post</ModalTitle>
+                            <CloseOutline className={styles.icon} />
+                          </ModalHeader>
+                          <div className={styles.closeModalDescription}>
+                            <Typography className={styles.description} variant={'text16'}>
+                              Do you really want to close the edition of the publication? If you If
+                              If you close changes won`t be saved
+                            </Typography>
+                            <ModalFooter className={styles.closeModalFooter}>
+                              <Button onClick={() => handleClose()} variant={'outlined'}>
+                                Yes
+                              </Button>
+                              <Button onClick={() => setShowConfirmCloseModal(false)}>No</Button>
+                            </ModalFooter>
+                          </div>
+                        </div>
                       </Modal>
                     )}
                   </div>
@@ -181,12 +187,23 @@ export const ImagePostModal = ({
                 )}
                 {showConfirmDeleteModal && (
                   <Modal>
-                    <ModalTitle>Delete Post</ModalTitle>
-                    <ModalDescription>Are you sure you want to delete this post?</ModalDescription>
-                    <ModalFooter>
-                      <Button onClick={confirmDelete}>Yes</Button>
-                      <Button onClick={() => setShowConfirmDeleteModal(false)}>No</Button>
-                    </ModalFooter>
+                    <div className={styles.closeModalContainer}>
+                      <ModalHeader className={styles.closeModalHeader}>
+                        <ModalTitle>
+                          <Typography variant={'h1'}>Delete Post</Typography>
+                        </ModalTitle>
+                        <CloseOutline className={styles.icon} />
+                      </ModalHeader>
+                      <div className={styles.closeModalDescription}>
+                        <Typography className={styles.description} variant={'text16'}>
+                          Are you sure you want to delete this post?
+                        </Typography>
+                      </div>
+                      <ModalFooter className={styles.closeModalFooter}>
+                        <Button onClick={confirmDelete}>Yes</Button>
+                        <Button onClick={() => setShowConfirmDeleteModal(false)}>No</Button>
+                      </ModalFooter>
+                    </div>
                   </Modal>
                 )}
               </div>
@@ -203,26 +220,35 @@ export const ImagePostModal = ({
           )}
           {showConfirmModal && (
             <Modal onOpenChange={() => setShowConfirmModal(false)} open={showConfirmModal}>
-              <ModalHeader>
-                Close
-                <CloseOutline onClick={() => setShowConfirmModal(false)} />
-              </ModalHeader>
-              <ModalDescription>
-                Do you really want to close the creation of a publication? If you close everything
-                will be deleted.
-              </ModalDescription>
-              <ModalFooter>
-                <Button
-                  onClick={() => {
-                    setShowConfirmModal(false)
-                    handleClose()
-                  }}
-                  variant={'outlined'}
-                >
-                  Discard
-                </Button>
-                <Button>SafeDraft</Button>
-              </ModalFooter>
+              <div className={styles.closeModalContainer}>
+                <ModalHeader className={styles.closeModalHeader}>
+                  <ModalTitle>
+                    <Typography variant={'h1'}>Close</Typography>
+                  </ModalTitle>
+                  <CloseOutline
+                    className={styles.icon}
+                    onClick={() => setShowConfirmModal(false)}
+                  />
+                </ModalHeader>
+                <div className={styles.closeModalDescription}>
+                  <Typography className={styles.description} variant={'text16'}>
+                    Do you really want to close the creation of a publication? If you close
+                    everything will be deleted.
+                  </Typography>
+                </div>
+                <ModalFooter className={styles.closeModalFooter}>
+                  <Button
+                    onClick={() => {
+                      setShowConfirmModal(false)
+                      handleClose()
+                    }}
+                    variant={'outlined'}
+                  >
+                    Discard
+                  </Button>
+                  <Button>SafeDraft</Button>
+                </ModalFooter>
+              </div>
             </Modal>
           )}
         </div>
