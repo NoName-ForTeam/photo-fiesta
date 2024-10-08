@@ -17,6 +17,16 @@ export const API_URLS = {
     DELETE_SESSION_TEMPLATE_ALL: 'v1/sessions/terminate-all',
     GET_SESSIONS: 'v1/sessions',
   },
+  POSTS: {
+    CREATE_POST: 'v1/posts',
+    DELETE_POST: (postId: number) => `v1/posts/${postId}`,
+    DELETE_UPLOAD_IMAGE: (uploadId: string) => `v1/posts/image/${uploadId}`,
+    GET_POST_BY_ID: (postId: number) => `v1/public-posts/${postId}`,
+    GET_USER_PUBLIC_POSTS: (endCursorPostId: number | undefined, userId: number) =>
+      `v1/public-posts/user/${userId}/${endCursorPostId}`,
+    UPDATE_POST: (postId: number) => `v1/posts/${postId}`,
+    UPLOAD_POST_IMAGE: 'v1/posts/image',
+  },
   PROFILE: {
     DELETE_AVATAR: 'v1/users/profile/avatar',
     DELETE_PROFILE: 'v1/users/profile',

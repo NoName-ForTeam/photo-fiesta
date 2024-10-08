@@ -1,0 +1,41 @@
+.formSection {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  margin-top: 20px;
+}
+
+.profileInfo {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: center;
+
+  margin-bottom: 20px;
+
+  img {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+  }
+}
+
+.form,
+.filter {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.form input,
+.form textarea {
+  width: 100%;
+  max-width: 433px;
+  margin-top: 10px;
+  padding: 10px;
+}
+
+.location {
+  margin-top: 10px;
+  padding: 10px;
+}
