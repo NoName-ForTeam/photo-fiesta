@@ -20,6 +20,9 @@ export const API_URLS = {
     POST_AVATAR: 'v1/users/profile/avatar',
     UPDATE_PROFILE: 'v1/users/profile',
   },
+  PUBLIC_USERS: {
+    TOTAL_COUNT_USERS: 'v1/public-user',
+  },
 }
 
 export const METHOD = {

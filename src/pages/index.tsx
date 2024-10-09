@@ -16,7 +16,7 @@ export default function Home() {
 
       if (!token) {
         //TODO: route to public page
-        router.push(ROUTES.SIGN_IN)
+        router.push(ROUTES.PUBLIC)
 
         return
       }
@@ -29,7 +29,7 @@ export default function Home() {
     }
 
     checkAuth()
-  }, [])
+  }, [router])
 
   //TODO: This is a mock data, need to fix
   return (
