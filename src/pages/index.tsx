@@ -15,7 +15,6 @@ export default function Home() {
       const token = Storage.getToken()
 
       if (!token) {
-        //TODO: route to public page
         router.push(ROUTES.PUBLIC)
 
         return

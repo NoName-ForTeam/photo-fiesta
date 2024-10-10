@@ -21,7 +21,7 @@ export const API_URLS = {
     UPDATE_PROFILE: 'v1/users/profile',
   },
   PUBLIC_USERS: {
-    TOTAL_COUNT_USERS: 'v1/public-user',
+    GET_TOTAL_COUNT_USERS: 'v1/public-user',
   },
 }
 
