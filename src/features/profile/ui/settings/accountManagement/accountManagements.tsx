@@ -58,7 +58,6 @@ export const AccountManagements = () => {
     <RadioBlock key={cost.value} title={cost.title} value={cost.value} />
   ))
 
-  // TODO: add loading component
   if (showLoading || isFetchingProfile) {
     return <Loader />
   }

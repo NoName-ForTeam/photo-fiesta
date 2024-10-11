@@ -8,7 +8,7 @@ import {
   usePostSubscriptionMutation,
 } from '@/features/profile/api'
 import { ErrorResponse } from '@/shared/api'
-import { PAYMENT_DELAY } from '@/shared/config'
+import { LOADING_DELAY } from '@/shared/config'
 import { checkErrorMessages, useDelayedLoading, useModal } from '@/shared/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/router'
@@ -77,8 +77,10 @@ export const useAccountManagement = () => {
   }, [])
 
   const [postSubscription, { isLoading }] = usePostSubscriptionMutation()
+
   //when true we see loading component
-  const showLoading = useDelayedLoading(isLoading, PAYMENT_DELAY)
+  const showLoading = useDelayedLoading(isLoading, LOADING_DELAY)
+
   const { control, handleSubmit, setError, setValue } = useForm<FormData>({
     defaultValues: {
       amount: 10,

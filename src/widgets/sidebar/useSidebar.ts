@@ -3,24 +3,82 @@ import { useDispatch } from 'react-redux'
 import { toast } from 'react-toastify'
 
 import { baseApi } from '@/app/api'
-import { useAuthMeQuery, useLogoutMutation } from '@/features'
+import { useAuthMeQuery, useImagePostModal, useLogoutMutation, useProfile } from '@/features'
+import {
+  BookmarkOutline,
+  HomeOutline,
+  MessageCircle,
+  Person,
+  PlusSquareOutline,
+  Search,
+  TrendingUp,
+} from '@/shared/assets'
 import { ROUTES } from '@/shared/config'
-import { Storage, isValidErrorResponse } from '@/shared/utils'
+import { Storage, isValidErrorResponse, useTranslation } from '@/shared/utils'
 import { useRouter } from 'next/router'
 
+/** Type representing the icon components used in the sidebar */
+export type Icon = typeof HomeOutline
+
+type SidebarItem = {
+  href: string
+  icon: Icon
+  /**
+   * Optional override for the active state check.
+   * Used when the active state logic differs from the standard path comparison.
+   * For example, it's used for dynamic routes like user profiles.
+   */
+  isActiveOverride?: string
+  onClick?: () => void
+  text: string
+}
+
+type ModalState = {
+  isCreateModalOpen: boolean
+  isModalOpen: boolean
+  openPostModal: boolean
+}
 export const useSidebar = () => {
   const dispatch = useDispatch()
   const [logoutMutation] = useLogoutMutation()
   const router = useRouter()
-  const [isModalOpen, setIsModalOpen] = useState(false)
 
+  const { t } = useTranslation()
+  const { profileInfo } = useProfile()
   const { data: userData } = useAuthMeQuery()
 
+  // State for modals
+  const [modalState, setModalState] = useState<ModalState>({
+    isCreateModalOpen: false,
+    isModalOpen: false,
+    openPostModal: false,
+  })
+
+  const [selectedImage, setSelectedImage] = useState<null | string>(null)
+
+  /** Modal control functions */
+  const openCreateModal = () => setModalState(prev => ({ ...prev, isCreateModalOpen: true }))
+
+  const closeCreateModal = () => setModalState(prev => ({ ...prev, isCreateModalOpen: false }))
+
+  const handleClosePostModal = () => {
+    setModalState(prev => ({ ...prev, openPostModal: false, selectedImage: null }))
+  }
+
+  const handleOpenPostModal = () => setModalState(prev => ({ ...prev, openPostModal: true }))
+
+  const { postId } = useImagePostModal({ handleClose: handleOpenPostModal })
+
+  const handleCloseAddPhotoModal = () => {
+    closeCreateModal()
+    handleOpenPostModal()
+  }
+
+  /** Logout functions */
   const confirmLogout = async () => {
-    //TODO: extract logic to useLogout hook in utils
     try {
       await logoutMutation().unwrap()
-      setIsModalOpen(false)
+      setModalState(prev => ({ ...prev, isModalOpen: false }))
       dispatch(baseApi.util.invalidateTags(['Auth']))
       dispatch(baseApi.util.resetApiState())
       await router.push(ROUTES.SIGN_IN)
@@ -39,7 +97,15 @@ export const useSidebar = () => {
       }
     }
   }
+  const handleLogoutClick = () => {
+    setModalState(prev => ({ ...prev, isModalOpen: true }))
+  }
 
+  const handleCloseLogoutModal = () => {
+    setModalState(prev => ({ ...prev, isModalOpen: false }))
+  }
+
+  /** Active route functions */
   /**
    * Determines if the given path is the active route.
    *
@@ -51,6 +117,7 @@ export const useSidebar = () => {
    * It handles both static routes and dynamic routes with [userId].
    * For routes with [userId], it replaces the placeholder with the actual user ID if available.
    */
+
   const isActive = (path: string) => {
     if (path.includes('[userId]') && userData?.userId) {
       return router.asPath === path.replace('[userId]', userData.userId.toString()) ? 'active' : ''
@@ -59,19 +126,44 @@ export const useSidebar = () => {
     return router.pathname === path ? 'active' : ''
   }
 
+  /** Profile link function */
   /**
    * Generates the profile link for the current user
    * @returns {string} The profile link, or the default profile route if user data is not available
    */
+
   const getProfileLink = () =>
     userData?.userId ? `${ROUTES.PROFILE}/${userData.userId.toString()}` : ROUTES.PROFILE
 
+  /** Array of sidebar items to be rendered */
+  const sidebarItems: SidebarItem[] = [
+    { href: ROUTES.HOME, icon: HomeOutline, text: t.sidebar.home },
+    { href: '#', icon: PlusSquareOutline, onClick: openCreateModal, text: t.sidebar.create },
+    {
+      href: getProfileLink(),
+      icon: Person,
+      isActiveOverride: `${ROUTES.PROFILE}/[userId]`,
+      text: t.sidebar.myProfile,
+    },
+    { href: ROUTES.MESSENGER, icon: MessageCircle, text: t.sidebar.messenger },
+    { href: ROUTES.SEARCH, icon: Search, text: t.sidebar.search },
+    { href: ROUTES.STATICS, icon: TrendingUp, text: t.sidebar.statics },
+    { href: ROUTES.FAVORITES, icon: BookmarkOutline, text: t.sidebar.favorites },
+  ]
+
   return {
     confirmLogout,
-    getProfileLink,
+    handleCloseAddPhotoModal,
+    handleCloseLogoutModal,
+    handleClosePostModal,
+    handleLogoutClick,
+    handleOpenPostModal,
     isActive,
-    isModalOpen,
-    setIsModalOpen,
-    userData,
+    modalState,
+    postId,
+    profileInfo,
+    selectedImage,
+    setSelectedImage,
+    sidebarItems,
   }
 }

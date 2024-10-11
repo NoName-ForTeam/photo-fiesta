@@ -1,17 +1,5 @@
-import { useState } from 'react'
-
-import { ImagePostModal, useImagePostModal, useProfile } from '@/features'
-import {
-  BookmarkOutline,
-  HomeOutline,
-  LogOut,
-  MessageCircle,
-  Person,
-  PlusSquareOutline,
-  Search,
-  TrendingUp,
-} from '@/shared/assets'
-import { ROUTES } from '@/shared/config'
+import { ImagePostModal } from '@/features'
+import { LogOut } from '@/shared/assets'
 import { useTranslation } from '@/shared/utils'
 import { ConfirmationModal, ModalAddPhoto } from '@/widgets'
 import { Button, Sidebars, SidebarsElement } from '@photo-fiesta/ui-lib'
@@ -20,68 +8,35 @@ import Link from 'next/link'
 
 import styles from './sidebar.module.scss'
 
-import { useSidebar } from './useSidebar'
-
-/** Type representing the icon components used in the sidebar */
-type Icon = typeof HomeOutline
-type SidebarItem = {
-  href: string
-  icon: Icon
-  /**
-   * Optional override for the active state check.
-   * Used when the active state logic differs from the standard path comparison.
-   * For example, it's used for dynamic routes like user profiles.
-   */
-  isActiveOverride?: string
-  onClick?: () => void
-  text: string
-}
+import { Icon, useSidebar } from './useSidebar'
 
 /**
  * Sidebar component that displays navigation items and logout option
  */
-//TODO: add translations
+
 export const Sidebar = () => {
   const { t } = useTranslation()
-  const { confirmLogout, getProfileLink, isActive, isModalOpen, setIsModalOpen } = useSidebar()
-  const { profileInfo } = useProfile()
+  const {
+    confirmLogout,
+    handleCloseAddPhotoModal,
+    handleCloseLogoutModal,
+    handleClosePostModal,
+    handleLogoutClick,
+    isActive,
+    modalState,
+    postId,
+    profileInfo,
+    selectedImage,
+    setSelectedImage,
+    sidebarItems,
+  } = useSidebar()
 
-  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
-  const [selectedImage, setSelectedImage] = useState<null | string>(null)
-  const [openPostModal, setOpenPostModal] = useState(false)
-
-  //TODO: refactor callback for createModal when it opened after ModalAddPhoto
-  const openCreateModal = () => setIsCreateModalOpen(true)
-  const closeCreateModal = () => setIsCreateModalOpen(false)
-  const handleOpenPostModal = () => setOpenPostModal(true)
-
-  const handleClosePostModal = () => {
-    setOpenPostModal(false)
-    setSelectedImage(null)
-  }
-
-  const { postId } = useImagePostModal({ handleClose: handleOpenPostModal })
+  const { isCreateModalOpen, isModalOpen, openPostModal } = modalState
 
   const classNames = {
     icons: styles.icons,
     root: styles.root,
   }
-
-  /** Array of sidebar items to be rendered */
-  const sidebarItems: SidebarItem[] = [
-    { href: ROUTES.HOME, icon: HomeOutline, text: t.sidebar.home },
-    { href: '#', icon: PlusSquareOutline, onClick: openCreateModal, text: t.sidebar.create },
-    {
-      href: getProfileLink(),
-      icon: Person,
-      isActiveOverride: `${ROUTES.PROFILE}/[userId]`,
-      text: t.sidebar.myProfile,
-    },
-    { href: ROUTES.MESSENGER, icon: MessageCircle, text: t.sidebar.messenger },
-    { href: ROUTES.SEARCH, icon: Search, text: t.sidebar.search },
-    { href: ROUTES.STATICS, icon: TrendingUp, text: t.sidebar.statics },
-    { href: ROUTES.FAVORITES, icon: BookmarkOutline, text: t.sidebar.favorites },
-  ]
 
   const renderedSidebarItems = sidebarItems.map(item => (
     <SidebarElement
@@ -102,14 +57,14 @@ export const Sidebar = () => {
           <SidebarElement
             icon={LogOut}
             isActive={() => ''}
-            onClick={() => setIsModalOpen(true)}
+            onClick={handleLogoutClick}
             text={t.sidebar.logout}
           />
         </div>
       </Sidebars>
       {isModalOpen && (
         <ConfirmationModal
-          closeModal={() => setIsModalOpen(false)}
+          closeModal={handleCloseLogoutModal}
           confirmation={confirmLogout}
           content={'Are you really want to logout of your account?'}
           isOpen={isModalOpen}
@@ -118,10 +73,7 @@ export const Sidebar = () => {
       )}
       {isCreateModalOpen && (
         <ModalAddPhoto
-          handleCloseModal={() => {
-            closeCreateModal()
-            handleOpenPostModal()
-          }}
+          handleCloseModal={handleCloseAddPhotoModal}
           isOpen={isCreateModalOpen}
           setImage={setSelectedImage}
         />
