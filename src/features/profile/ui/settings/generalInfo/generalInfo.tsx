@@ -2,7 +2,7 @@ import { ComponentPropsWithoutRef } from 'react'
 
 import { CloseOutline, ImageOutline } from '@/shared/assets'
 import { City, Country, cities, countries } from '@/shared/config'
-import { FormDatePicker } from '@/shared/ui'
+import { FormDatePicker, Loader } from '@/shared/ui'
 import { useTranslation } from '@/shared/utils'
 import { ConfirmationModal, ModalAddPhoto } from '@/widgets'
 import { Button, FormInput, FormSelect, FormTextArea, SelectItem } from '@photo-fiesta/ui-lib'
@@ -66,9 +66,8 @@ export const GeneralInfo = ({ className }: GeneralInfoProps) => {
     ))
   }
 
-  //TODO: add custom loading component
   if (isLoading) {
-    return <div>Loading...</div>
+    return <Loader />
   }
 
   return (

@@ -14,6 +14,12 @@ type TabConfig = {
   value: string
 }
 
+/**
+ * This hook initializes the tab configuration, manages the current
+ * active tab state, and checks for the presence of a success parameter
+ * in the URL to set the appropriate tab.
+ */
+
 export const useSettingsTabs = () => {
   const { t } = useTranslation()
   const router = useRouter()

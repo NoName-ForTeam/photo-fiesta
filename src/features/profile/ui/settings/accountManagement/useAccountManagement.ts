@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useCallback, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
@@ -8,13 +9,12 @@ import {
 } from '@/features/profile/api'
 import { ErrorResponse } from '@/shared/api'
 import { PAYMENT_DELAY } from '@/shared/config'
-import { checkErrorMessages, useDelayedLoading } from '@/shared/utils'
+import { checkErrorMessages, useDelayedLoading, useModal } from '@/shared/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/router'
 import { z } from 'zod'
 
 type AccountType = 'business' | 'personal'
-type ModalType = 'Error' | 'Success' | null
 
 /** Array of available account types */
 const accountTypes = [
@@ -41,14 +41,28 @@ type FormData = z.infer<typeof formSchema>
 
 /**
  * Custom hook for managing account and subscription logic
+ * This hook provides functionality for handling user account types,
+ * subscription management, and payment processing. It also manages
+ * modal states for success and error messages.
  */
 export const useAccountManagement = () => {
   const router = useRouter()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [accountType, setAccountType] = useState<AccountType>('personal')
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [modalTitle, setModalTitle] = useState<ModalType>(null)
+  const { isModalOpen, modalTitle, setIsModalOpen, setModalTitle } = useModal()
+
   const { isLoading: isFetchingProfile } = useGetProfileQuery()
+
+  /**
+   * This function constructs the base URL using the current protocol,
+   * host, and pathname. It checks if the code is running in a browser
+   * environment (i.e., `window` is defined) before accessing the
+   * location properties.
+   *
+   * @returns {string} The base URL as a string in the format
+   *                  'protocol://host/pathname', or an empty string
+   *                  if not running in a browser environment.
+   */
 
   const getBaseUrl = useCallback(() => {
     if (typeof window !== 'undefined') {

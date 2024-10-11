@@ -1,7 +1,7 @@
 import { ComponentPropsWithoutRef } from 'react'
 
 import { PostList, useProfile } from '@/features'
-import { ProfileAvatar, ProfileStat } from '@/shared/ui'
+import { Loader, ProfileAvatar, ProfileStat } from '@/shared/ui'
 import { useTranslation } from '@/shared/utils'
 import { Button, Typography } from '@photo-fiesta/ui-lib'
 import clsx from 'clsx'
@@ -43,7 +43,7 @@ export const Profile = ({ className }: ProfileProps) => {
     return null
   }
   if (isLoading) {
-    return <div>Loading...</div>
+    return <Loader />
   }
   const profileButton = isOwnProfile ? (
     <Button onClick={handleProfileSettings} variant={'secondary'}>

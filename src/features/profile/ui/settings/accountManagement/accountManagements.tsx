@@ -2,6 +2,7 @@ import { ComponentPropsWithoutRef } from 'react'
 import { Controller } from 'react-hook-form'
 
 import { PaypalSvgrepoCom4, StripeSvgrepoCom4 } from '@/shared/assets'
+import { Loader } from '@/shared/ui'
 import { ConfirmationModal } from '@/widgets'
 import { Button, FormCheckbox, RadioGroup, RadioGroupItem, Typography } from '@photo-fiesta/ui-lib'
 import clsx from 'clsx'
@@ -59,7 +60,7 @@ export const AccountManagements = () => {
 
   // TODO: add loading component
   if (showLoading || isFetchingProfile) {
-    return <div>Loading...</div>
+    return <Loader />
   }
 
   return (

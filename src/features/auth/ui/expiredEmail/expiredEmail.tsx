@@ -4,6 +4,7 @@ import { toast } from 'react-toastify'
 import { SentEmail, useResendLinkMutation } from '@/features'
 import { ErrorResponse } from '@/shared/api'
 import { rafiki } from '@/shared/assets'
+import { Loader } from '@/shared/ui'
 import { useTranslation } from '@/shared/utils'
 import { Button, Card, Typography } from '@photo-fiesta/ui-lib'
 import Image from 'next/image'
@@ -69,7 +70,7 @@ export const ExpiredEmail = ({ email }: Props) => {
   }
 
   if (isLoading) {
-    return <div>Loading...</div>
+    return <Loader />
   }
 
   const onCloseModalHandler = () => {
