@@ -26,6 +26,7 @@ export const AccountManagements = () => {
     handlePaymentSubmit,
     handleSubmit,
     handleSubscriptionChange,
+    isFetchingProfile,
     isModalOpen,
     isSubmitting,
     isSubscriptionActive,
@@ -57,7 +58,7 @@ export const AccountManagements = () => {
   ))
 
   // TODO: add loading component
-  if (showLoading) {
+  if (showLoading || isFetchingProfile) {
     return <div>Loading...</div>
   }
 

@@ -1,15 +1,17 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
-import { useGetCurrentPaymentQuery, usePostSubscriptionMutation } from '@/features/profile/api'
+import {
+  useGetCurrentPaymentQuery,
+  useGetProfileQuery,
+  usePostSubscriptionMutation,
+} from '@/features/profile/api'
 import { ErrorResponse } from '@/shared/api'
 import { PAYMENT_DELAY } from '@/shared/config'
 import { checkErrorMessages, useDelayedLoading } from '@/shared/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/router'
 import { z } from 'zod'
-
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || process.env.NEXT_PUBLIC_BASE_URL_VERCEL || ''
 
 type AccountType = 'business' | 'personal'
 type ModalType = 'Error' | 'Success' | null
@@ -46,6 +48,19 @@ export const useAccountManagement = () => {
   const [accountType, setAccountType] = useState<AccountType>('personal')
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [modalTitle, setModalTitle] = useState<ModalType>(null)
+  const { isLoading: isFetchingProfile } = useGetProfileQuery()
+
+  const getBaseUrl = useCallback(() => {
+    if (typeof window !== 'undefined') {
+      const protocol = window.location.protocol
+      const host = window.location.host
+      const pathname = window.location.pathname
+
+      return `${protocol}//${host}/${pathname}`
+    }
+
+    return ''
+  }, [])
 
   const [postSubscription, { isLoading }] = usePostSubscriptionMutation()
   //when true we see loading component
@@ -54,7 +69,7 @@ export const useAccountManagement = () => {
     defaultValues: {
       amount: 10,
       autoRenewal: false,
-      baseUrl: BASE_URL,
+      baseUrl: getBaseUrl(),
       paymentType: 'STRIPE',
       typeSubscription: 'DAY',
     },
@@ -147,9 +162,15 @@ export const useAccountManagement = () => {
 
     if (success === 'true') {
       handleSuccessfulPayment()
+      //change current url removing query params success
       router.replace(router.pathname, undefined, { shallow: true })
     }
-  }, [router, handleSuccessfulPayment])
+    if (success === 'false') {
+      setModalTitle('Error')
+      setIsModalOpen(true)
+      router.replace(router.pathname, undefined, { shallow: true })
+    }
+  }, [router.query.success, handleSuccessfulPayment])
 
   return {
     accountType,
@@ -162,6 +183,7 @@ export const useAccountManagement = () => {
     handlePaymentSubmit,
     handleSubmit,
     handleSubscriptionChange,
+    isFetchingProfile,
     isLoading,
     isModalOpen,
     isSubmitting,
