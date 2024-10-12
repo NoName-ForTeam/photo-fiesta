@@ -1,17 +1,10 @@
 import { useEffect, useRef, useState } from 'react'
 
-import { Avatar, Post, useImagePostModal } from '@/features'
-import { usePost } from '@/features/posts/ui/post/usePost'
+import { Avatar, Post, useImagePostModal, usePost } from '@/features'
 import { ArrowIosBackOutline, Close, CloseOutline, Edit2 } from '@/shared/assets'
 import { ProfileAvatar } from '@/shared/ui'
-import {
-  Button,
-  Modal,
-  ModalFooter,
-  ModalHeader,
-  ModalTitle,
-  Typography,
-} from '@photo-fiesta/ui-lib'
+import { ConfirmationModal } from '@/widgets'
+import { Button, Typography } from '@photo-fiesta/ui-lib'
 import clsx from 'clsx'
 
 import styles from './imagePostModal.module.scss'
@@ -33,7 +26,7 @@ export const ImagePostModal = ({
   userId,
   viewMode = false,
 }: ImagePostModalProps) => {
-  const { setShowConfirmModal, showConfirmModal } = useImagePostModal({
+  const { interruptionCreatePost, setShowConfirmModal, showConfirmModal } = useImagePostModal({
     handleClose,
     selectedImage,
   })
@@ -57,17 +50,15 @@ export const ImagePostModal = ({
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
-        if (!viewMode && (step === 'cropping' || step === 'filters' || step === 'publication')) {
-          setShowConfirmModal(true)
-        }
+      if (!viewMode && modalRef.current && !modalRef.current.contains(event.target as Node)) {
+        setShowConfirmModal(true)
       }
     }
 
     document.addEventListener('mousedown', handleClickOutside)
 
     return () => document.removeEventListener('mousedown', handleClickOutside)
-  }, [viewMode, step])
+  }, [viewMode])
 
   const getStepTitle = () =>
     isEditing ? 'Edit Post' : step.charAt(0).toUpperCase() + step.slice(1)
@@ -141,51 +132,30 @@ export const ImagePostModal = ({
                       Save Changes
                     </Button>
                     {showConfirmCloseModal && (
-                      <Modal>
-                        <div className={styles.closeModalContainer}>
-                          <ModalHeader className={styles.closeModalHeader}>
-                            <ModalTitle>Close Post</ModalTitle>
-                            <CloseOutline className={styles.icon} />
-                          </ModalHeader>
-                          <div className={styles.closeModalDescription}>
-                            <Typography className={styles.description} variant={'text16'}>
-                              Do you really want to close the edition of the publication? If you If
-                              If you close changes won`t be saved
-                            </Typography>
-                            <ModalFooter className={styles.closeModalFooter}>
-                              <Button onClick={() => handleClose()} variant={'outlined'}>
-                                Yes
-                              </Button>
-                              <Button onClick={() => setShowConfirmCloseModal(false)}>No</Button>
-                            </ModalFooter>
-                          </div>
-                        </div>
-                      </Modal>
+                      <ConfirmationModal
+                        closeModal={() => setShowConfirmCloseModal(false)}
+                        confirmation={() => handleClose()}
+                        content={
+                          'Do you really want to close the edition of the publication? If you close changes won`t be saved'
+                        }
+                        isOpen={showConfirmCloseModal}
+                        isTwoButtons
+                        title={'Close Post'}
+                      />
                     )}
                   </div>
                 ) : (
                   <Typography variant={'h3'}>{postById?.description}</Typography> // Иначе показываем описание
                 )}
                 {showConfirmDeleteModal && (
-                  <Modal>
-                    <div className={styles.closeModalContainer}>
-                      <ModalHeader className={styles.closeModalHeader}>
-                        <ModalTitle>
-                          <Typography variant={'h1'}>Delete Post</Typography>
-                        </ModalTitle>
-                        <CloseOutline className={styles.icon} />
-                      </ModalHeader>
-                      <div className={styles.closeModalDescription}>
-                        <Typography className={styles.description} variant={'text16'}>
-                          Are you sure you want to delete this post?
-                        </Typography>
-                      </div>
-                      <ModalFooter className={styles.closeModalFooter}>
-                        <Button onClick={confirmDelete}>Yes</Button>
-                        <Button onClick={() => setShowConfirmDeleteModal(false)}>No</Button>
-                      </ModalFooter>
-                    </div>
-                  </Modal>
+                  <ConfirmationModal
+                    closeModal={() => setShowConfirmDeleteModal(false)}
+                    confirmation={confirmDelete}
+                    content={'Are you sure you want to delete this post?'}
+                    isOpen={showConfirmDeleteModal}
+                    isTwoButtons
+                    title={'Delete Post'}
+                  />
                 )}
               </div>
             </section>
@@ -200,37 +170,15 @@ export const ImagePostModal = ({
             />
           )}
           {showConfirmModal && (
-            <Modal onOpenChange={() => setShowConfirmModal(false)} open={showConfirmModal}>
-              <div className={styles.closeModalContainer}>
-                <ModalHeader className={styles.closeModalHeader}>
-                  <ModalTitle>
-                    <Typography variant={'h1'}>Close</Typography>
-                  </ModalTitle>
-                  <CloseOutline
-                    className={styles.icon}
-                    onClick={() => setShowConfirmModal(false)}
-                  />
-                </ModalHeader>
-                <div className={styles.closeModalDescription}>
-                  <Typography className={styles.description} variant={'text16'}>
-                    Do you really want to close the creation of a publication? If you close
-                    everything will be deleted.
-                  </Typography>
-                </div>
-                <ModalFooter className={styles.closeModalFooter}>
-                  <Button
-                    onClick={() => {
-                      setShowConfirmModal(false)
-                      handleClose()
-                    }}
-                    variant={'outlined'}
-                  >
-                    Discard
-                  </Button>
-                  <Button>SafeDraft</Button>
-                </ModalFooter>
-              </div>
-            </Modal>
+            <ConfirmationModal
+              closeModal={() => setShowConfirmModal(false)}
+              confirmation={interruptionCreatePost}
+              content={
+                'Do you really want to close the creation of a publication? If you close everything will be deleted.'
+              }
+              isOpen={showConfirmModal}
+              title={'Close'}
+            />
           )}
         </div>
       </div>

@@ -17,6 +17,7 @@ export const usePost = ({ handleClose, postId, selectedImage }: PostProps) => {
   const [deleteImage] = useDeleteUploadImageMutation()
   const [deletePost] = useDeletePostMutation()
   const [updateDescription] = useUpdatePostMutation()
+
   const [isEditing, setIsEditing] = useState(false)
   const [description, setDescription] = useState(postById?.description || '')
   const [showConfirmDeleteModal, setShowConfirmDeleteModal] = useState(false)

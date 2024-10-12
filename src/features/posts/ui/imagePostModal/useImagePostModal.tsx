@@ -40,6 +40,10 @@ export const useImagePostModal = ({ handleClose, selectedImage }: UseImagePostMo
     resolver: zodResolver(postDescriptionSchema),
   })
 
+  const interruptionCreatePost = () => {
+    setShowConfirmModal(false)
+    handleClose()
+  }
   const onSubmit = handleSubmit(async (data: FormValues) => {
     try {
       if (!selectedImage) {
@@ -75,6 +79,7 @@ export const useImagePostModal = ({ handleClose, selectedImage }: UseImagePostMo
   return {
     control,
     errors,
+    interruptionCreatePost,
     isOpenModal,
     onSubmit,
     postId,
