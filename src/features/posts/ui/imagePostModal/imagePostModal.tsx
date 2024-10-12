@@ -1,14 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 
-import {
-  Avatar,
-  Post,
-  useDeletePostMutation,
-  useDeleteUploadImageMutation,
-  useGetPostByIdQuery,
-  useImagePostModal,
-  useUpdatePostMutation,
-} from '@/features'
+import { Avatar, Post, useImagePostModal } from '@/features'
+import { usePost } from '@/features/posts/ui/post/usePost'
 import { ArrowIosBackOutline, Close, CloseOutline, Edit2 } from '@/shared/assets'
 import { ProfileAvatar } from '@/shared/ui'
 import {
@@ -44,17 +37,21 @@ export const ImagePostModal = ({
     handleClose,
     selectedImage,
   })
-
-  const { data: postById } = useGetPostByIdQuery({ postId })
-  const [deleteImage] = useDeleteUploadImageMutation()
-  const [deletePost] = useDeletePostMutation()
-  const [updateDescription] = useUpdatePostMutation()
+  const {
+    confirmDelete,
+    description,
+    isEditing,
+    postById,
+    saveDescriptionChanges,
+    setDescription,
+    setIsEditing,
+    setShowConfirmCloseModal,
+    setShowConfirmDeleteModal,
+    showConfirmCloseModal,
+    showConfirmDeleteModal,
+  } = usePost({ handleClose, postId })
 
   const [step, setStep] = useState<'cropping' | 'filters' | 'publication'>('cropping')
-  const [showConfirmDeleteModal, setShowConfirmDeleteModal] = useState(false)
-  const [showConfirmCloseModal, setShowConfirmCloseModal] = useState(false)
-  const [isEditing, setIsEditing] = useState(false)
-  const [description, setDescription] = useState(postById?.description || '')
 
   const modalRef = useRef<HTMLDivElement>(null)
 
@@ -71,22 +68,6 @@ export const ImagePostModal = ({
 
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [viewMode, step])
-
-  const isEditingOrDeleting = postId > -1
-  // Логика удаления поста и картинки при подтверждении
-  const confirmDelete = async () => {
-    if (selectedImage && isEditingOrDeleting) {
-      await deleteImage({ uploadId: selectedImage }) // Удаляем картинку
-    }
-    await deletePost({ postId }) // Удаляем пост
-    handleClose() // Закрываем модалку
-  }
-  const saveDescriptionChanges = async () => {
-    if (isEditingOrDeleting) {
-      await updateDescription({ description, postId }) // Сохраняем новое описание
-      setIsEditing(false) // Отключаем режим редактирования
-    }
-  }
 
   const getStepTitle = () =>
     isEditing ? 'Edit Post' : step.charAt(0).toUpperCase() + step.slice(1)
