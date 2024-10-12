@@ -38,6 +38,11 @@ type ModalState = {
   isModalOpen: boolean
   openPostModal: boolean
 }
+
+/**
+ * Custom hook for managing sidebar state and functionality.
+ */
+
 export const useSidebar = () => {
   const dispatch = useDispatch()
   const [logoutMutation] = useLogoutMutation()
@@ -56,7 +61,7 @@ export const useSidebar = () => {
 
   const [selectedImage, setSelectedImage] = useState<null | string>(null)
 
-  /** Modal control functions */
+  //* Modal control functions
   const openCreateModal = () => setModalState(prev => ({ ...prev, isCreateModalOpen: true }))
 
   const closeCreateModal = () => setModalState(prev => ({ ...prev, isCreateModalOpen: false }))
@@ -74,7 +79,12 @@ export const useSidebar = () => {
     handleOpenPostModal()
   }
 
-  /** Logout functions */
+  //* Logout functions
+
+  /**
+   * Handles user logout and updates application state accordingly.
+   */
+
   const confirmLogout = async () => {
     try {
       await logoutMutation().unwrap()
@@ -105,7 +115,7 @@ export const useSidebar = () => {
     setModalState(prev => ({ ...prev, isModalOpen: false }))
   }
 
-  /** Active route functions */
+  //* Active route functions
   /**
    * Determines if the given path is the active route.
    *
@@ -165,5 +175,6 @@ export const useSidebar = () => {
     selectedImage,
     setSelectedImage,
     sidebarItems,
+    t,
   }
 }

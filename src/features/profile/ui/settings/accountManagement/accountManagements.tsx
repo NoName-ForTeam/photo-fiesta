@@ -20,7 +20,7 @@ export const AccountManagements = () => {
     accountType,
     accountTypes,
     control,
-    currentPayment,
+    endDateOfSubscription,
     handleAccountTypeChange,
     handleConfirmation,
     handleModalClose,
@@ -32,6 +32,7 @@ export const AccountManagements = () => {
     isSubmitting,
     isSubscriptionActive,
     modalTitle,
+    nextPaymentDate,
     onSubmit,
     showLoading,
     subscriptionCosts,
@@ -61,10 +62,15 @@ export const AccountManagements = () => {
   if (showLoading || isFetchingProfile) {
     return <Loader />
   }
+  const buttonTitleModal = modalTitle === 'Success' ? 'Ok' : 'Back to payment'
+  const contentModal =
+    modalTitle === 'Success'
+      ? 'Payment was successful'
+      : 'Transaction failed.Please,write to support'
 
   return (
     <form className={classNames.form} onSubmit={handleSubmit(onSubmit)}>
-      {accountType === 'business' && isSubscriptionActive && currentPayment && (
+      {accountType === 'business' && isSubscriptionActive && (
         <div className={classNames.subscription}>
           <Typography className={classNames.title} variant={'h3'}>
             Current Subscription:
@@ -72,25 +78,15 @@ export const AccountManagements = () => {
           <div className={clsx(classNames.container, classNames.data)}>
             <div>
               <Typography variant={'text14'}>Expire at</Typography>
-              <Typography variant={'textBold14'}>
-                {' '}
-                {new Date(currentPayment.endDateOfSubscription).toLocaleDateString()}
-              </Typography>
+              <Typography variant={'textBold14'}> {endDateOfSubscription}</Typography>
             </div>
             <div>
               <Typography variant={'text14'}>Next payment</Typography>
-              <Typography variant={'textBold14'}>
-                {' '}
-                {new Date(currentPayment.dateOfPayment).toLocaleDateString()}
-              </Typography>
+              <Typography variant={'textBold14'}> {nextPaymentDate}</Typography>
             </div>
           </div>
           <label className={classNames.renewal}>
-            <FormCheckbox
-              control={control}
-              defaultChecked={currentPayment?.autoRenewal}
-              name={'autoRenewal'}
-            />
+            <FormCheckbox control={control} defaultChecked={false} name={'autoRenewal'} />
             <Typography variant={'text14'}>Auto-renewal</Typography>
           </label>
         </div>
@@ -151,13 +147,10 @@ export const AccountManagements = () => {
       )}
       {isModalOpen && (
         <ConfirmationModal
+          buttonTitle={buttonTitleModal}
           closeModal={handleModalClose}
           confirmation={handleConfirmation}
-          content={
-            modalTitle === 'Success'
-              ? 'Payment was successful'
-              : 'Transaction failed.Please,write to support'
-          }
+          content={contentModal}
           isOpen={isModalOpen}
           isTwoButtons={false}
           title={modalTitle ?? ''}

@@ -9,7 +9,13 @@ import {
 } from '@/features/profile/api'
 import { ErrorResponse } from '@/shared/api'
 import { LOADING_DELAY } from '@/shared/config'
-import { checkErrorMessages, useDelayedLoading, useModal } from '@/shared/utils'
+import {
+  checkErrorMessages,
+  computeSubscriptionDates,
+  getBaseUrl,
+  useDelayedLoading,
+  useModal,
+} from '@/shared/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/router'
 import { z } from 'zod'
@@ -45,6 +51,7 @@ type FormData = z.infer<typeof formSchema>
  * subscription management, and payment processing. It also manages
  * modal states for success and error messages.
  */
+
 export const useAccountManagement = () => {
   const router = useRouter()
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -52,30 +59,6 @@ export const useAccountManagement = () => {
   const { isModalOpen, modalTitle, setIsModalOpen, setModalTitle } = useModal()
 
   const { isLoading: isFetchingProfile } = useGetProfileQuery()
-
-  /**
-   * This function constructs the base URL using the current protocol,
-   * host, and pathname. It checks if the code is running in a browser
-   * environment (i.e., `window` is defined) before accessing the
-   * location properties.
-   *
-   * @returns {string} The base URL as a string in the format
-   *                  'protocol://host/pathname', or an empty string
-   *                  if not running in a browser environment.
-   */
-
-  const getBaseUrl = useCallback(() => {
-    if (typeof window !== 'undefined') {
-      const protocol = window.location.protocol
-      const host = window.location.host
-      const pathname = window.location.pathname
-
-      return `${protocol}//${host}/${pathname}`
-    }
-
-    return ''
-  }, [])
-
   const [postSubscription, { isLoading }] = usePostSubscriptionMutation()
 
   //when true we see loading component
@@ -94,11 +77,20 @@ export const useAccountManagement = () => {
 
   const { data: currentPaymentData, refetch: refetchCurrentPayment } = useGetCurrentPaymentQuery()
 
-  //{userId,subscriptionId,dateOfPayment,endDateOfSubscription,autoRenewal}
-  const currentPayment = currentPaymentData?.data[0]
+  const renewal = currentPaymentData?.hasAutoRenewal
 
-  const isSubscriptionActive =
-    !!currentPayment && new Date(currentPayment.endDateOfSubscription) > new Date()
+  // {userId,subscriptionId,dateOfPayment,endDateOfSubscription,autoRenewal}
+  // get current payments
+  const currentPayments = currentPaymentData?.data || []
+
+  //get end date of subscription and next payment date
+  const {
+    endDate: endDateOfSubscription,
+    isSubscriptionActive,
+    nextPaymentDate,
+  } = computeSubscriptionDates(currentPayments)
+
+  //* Account type handling
 
   // Effect for refetching current payment when account type changes to business
   useEffect(() => {
@@ -115,14 +107,12 @@ export const useAccountManagement = () => {
     setAccountType(value)
   }
 
-  const handleModalClose = () => {
-    setIsModalOpen(false)
-  }
-
+  //* Payment handling
   const onSubmit = async (data: FormData) => {
     if (isSubmitting) {
       return
     }
+    alert(JSON.stringify(data))
     setIsSubmitting(true)
     try {
       const response = await postSubscription(data).unwrap()
@@ -138,33 +128,23 @@ export const useAccountManagement = () => {
   }
 
   /**
-   * Handles confirmation in the modal
-   */
-  const handleConfirmation = () => {
-    setModalTitle(null)
-    setIsModalOpen(false)
-  }
-
-  /**
-   * Handles change in subscription type
-   * @param {string} value - The new subscription type
-   */
-  const handleSubscriptionChange = (value: string) => {
-    const subscription = subscriptionCosts.find(cost => cost.value === value)
-
-    if (subscription) {
-      setValue('typeSubscription', subscription.value)
-      setValue('amount', subscription.amount)
-    }
-  }
-
-  /**
    * Handles payment submission
    * @param {FormData['paymentType']} paymentType - The payment type
    */
   const handlePaymentSubmit = (paymentType: FormData['paymentType']) => {
     setValue('paymentType', paymentType)
     handleSubmit(onSubmit)()
+  }
+
+  //* Modal handling
+
+  const handleModalClose = () => {
+    setIsModalOpen(false)
+  }
+
+  const handleConfirmation = () => {
+    setModalTitle(null)
+    setIsModalOpen(false)
   }
 
   const handleSuccessfulPayment = useCallback(() => {
@@ -188,11 +168,25 @@ export const useAccountManagement = () => {
     }
   }, [router.query.success, handleSuccessfulPayment])
 
+  //* Subscription handling
+  /**
+   * Handles change in subscription type
+   * @param {string} value - The new subscription type
+   */
+  const handleSubscriptionChange = (value: string) => {
+    const subscription = subscriptionCosts.find(cost => cost.value === value)
+
+    if (subscription) {
+      setValue('typeSubscription', subscription.value)
+      setValue('amount', subscription.amount)
+    }
+  }
+
   return {
     accountType,
     accountTypes,
     control,
-    currentPayment,
+    endDateOfSubscription,
     handleAccountTypeChange,
     handleConfirmation,
     handleModalClose,
@@ -205,7 +199,9 @@ export const useAccountManagement = () => {
     isSubmitting,
     isSubscriptionActive,
     modalTitle,
+    nextPaymentDate,
     onSubmit,
+    renewal,
     showLoading,
     subscriptionCosts,
   }

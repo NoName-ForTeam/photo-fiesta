@@ -1,6 +1,5 @@
 import { ImagePostModal } from '@/features'
 import { LogOut } from '@/shared/assets'
-import { useTranslation } from '@/shared/utils'
 import { ConfirmationModal, ModalAddPhoto } from '@/widgets'
 import { Button, Sidebars, SidebarsElement } from '@photo-fiesta/ui-lib'
 import clsx from 'clsx'
@@ -15,7 +14,6 @@ import { Icon, useSidebar } from './useSidebar'
  */
 
 export const Sidebar = () => {
-  const { t } = useTranslation()
   const {
     confirmLogout,
     handleCloseAddPhotoModal,
@@ -29,6 +27,7 @@ export const Sidebar = () => {
     selectedImage,
     setSelectedImage,
     sidebarItems,
+    t,
   } = useSidebar()
 
   const { isCreateModalOpen, isModalOpen, openPostModal } = modalState
