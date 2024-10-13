@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form'
 import {
   useGetCurrentPaymentQuery,
   useGetProfileQuery,
+  usePostCancelAutoRenewalMutation,
   usePostSubscriptionMutation,
 } from '@/features/profile/api'
 import { ErrorResponse } from '@/shared/api'
@@ -54,15 +55,36 @@ type FormData = z.infer<typeof formSchema>
 
 export const useAccountManagement = () => {
   const router = useRouter()
+
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [accountType, setAccountType] = useState<AccountType>('personal')
+
   const { isModalOpen, modalTitle, setIsModalOpen, setModalTitle } = useModal()
 
   const { isLoading: isFetchingProfile } = useGetProfileQuery()
   const [postSubscription, { isLoading }] = usePostSubscriptionMutation()
+  const [postCancelAutoRenewal] = usePostCancelAutoRenewalMutation()
 
   //when true we see loading component
   const showLoading = useDelayedLoading(isLoading, LOADING_DELAY)
+
+  const { data: currentPaymentData, refetch: refetchCurrentPayment } = useGetCurrentPaymentQuery()
+
+  const renewal = currentPaymentData?.hasAutoRenewal
+
+  // {userId,subscriptionId,dateOfPayment,endDateOfSubscription,autoRenewal}
+  // get current payments
+  const currentPayments = currentPaymentData?.data || []
+
+  const initialCheckedState = currentPaymentData?.hasAutoRenewal || false
+  const [checked, setChecked] = useState(initialCheckedState)
+
+  // logic for autoRenewal
+  const handleAutoRenewalChange = (value: boolean) => {
+    if (!value) {
+      postCancelAutoRenewal()
+    }
+    setChecked(value)
+  }
 
   const { control, handleSubmit, setError, setValue } = useForm<FormData>({
     defaultValues: {
@@ -75,20 +97,21 @@ export const useAccountManagement = () => {
     resolver: zodResolver(formSchema),
   })
 
-  const { data: currentPaymentData, refetch: refetchCurrentPayment } = useGetCurrentPaymentQuery()
-
-  const renewal = currentPaymentData?.hasAutoRenewal
-
-  // {userId,subscriptionId,dateOfPayment,endDateOfSubscription,autoRenewal}
-  // get current payments
-  const currentPayments = currentPaymentData?.data || []
-
   //get end date of subscription and next payment date
   const {
     endDate: endDateOfSubscription,
     isSubscriptionActive,
     nextPaymentDate,
   } = computeSubscriptionDates(currentPayments)
+
+  const [accountType, setAccountType] = useState<AccountType>(
+    isSubscriptionActive ? 'business' : 'personal'
+  )
+
+  //check is subscription active and set account type
+  useEffect(() => {
+    setAccountType(isSubscriptionActive ? 'business' : 'personal')
+  }, [isSubscriptionActive])
 
   //* Account type handling
 
@@ -97,6 +120,7 @@ export const useAccountManagement = () => {
     if (accountType === 'business') {
       refetchCurrentPayment()
     }
+    setChecked(currentPaymentData?.hasAutoRenewal || false)
   }, [accountType, refetchCurrentPayment])
 
   /**
@@ -112,10 +136,15 @@ export const useAccountManagement = () => {
     if (isSubmitting) {
       return
     }
-    alert(JSON.stringify(data))
+    //put in autoRenewal actual state of checkbox
+    const updatedData = {
+      ...data,
+      autoRenewal: checked, // use current state of checkbox
+    }
+
     setIsSubmitting(true)
     try {
-      const response = await postSubscription(data).unwrap()
+      const response = await postSubscription(updatedData).unwrap()
 
       router.push(response.url)
     } catch (error) {
@@ -185,9 +214,11 @@ export const useAccountManagement = () => {
   return {
     accountType,
     accountTypes,
+    checked,
     control,
     endDateOfSubscription,
     handleAccountTypeChange,
+    handleAutoRenewalChange,
     handleConfirmation,
     handleModalClose,
     handlePaymentSubmit,

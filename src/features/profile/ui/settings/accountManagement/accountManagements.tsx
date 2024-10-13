@@ -19,9 +19,11 @@ export const AccountManagements = () => {
   const {
     accountType,
     accountTypes,
+    checked,
     control,
     endDateOfSubscription,
     handleAccountTypeChange,
+    handleAutoRenewalChange,
     handleConfirmation,
     handleModalClose,
     handlePaymentSubmit,
@@ -82,11 +84,16 @@ export const AccountManagements = () => {
             </div>
             <div>
               <Typography variant={'text14'}>Next payment</Typography>
-              <Typography variant={'textBold14'}> {nextPaymentDate}</Typography>
+              {checked && <Typography variant={'textBold14'}> {nextPaymentDate}</Typography>}
             </div>
           </div>
           <label className={classNames.renewal}>
-            <FormCheckbox control={control} defaultChecked={false} name={'autoRenewal'} />
+            <FormCheckbox
+              checked={checked}
+              control={control}
+              name={'autoRenewal'}
+              onCheckedChange={handleAutoRenewalChange}
+            />
             <Typography variant={'text14'}>Auto-renewal</Typography>
           </label>
         </div>
