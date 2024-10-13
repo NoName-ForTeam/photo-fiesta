@@ -1,3 +1,5 @@
+// TODO: add styles for mobile
+
 .settingsContainer {
   display: flex;
   align-self: flex-start;
@@ -16,6 +18,7 @@
   text-align: center;
 }
 
+/*** TODO: add hard coded width 121.09% - problem in accountManagement.module.scss ***/
 .tabsContent {
   display: flex;
   justify-content: center;

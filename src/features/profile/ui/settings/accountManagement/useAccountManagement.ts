@@ -7,7 +7,7 @@ import {
   useGetProfileQuery,
   usePostCancelAutoRenewalMutation,
   usePostSubscriptionMutation,
-} from '@/features/profile/api'
+} from '@/features'
 import { ErrorResponse } from '@/shared/api'
 import { LOADING_DELAY } from '@/shared/config'
 import {
