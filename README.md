@@ -1,7 +1,7 @@
 
 # Photo-Fiesta
 
-Photo-Fiesta is an Instagram clone that offers a comprehensive social media experience. Built with a microservices architecture using the Feature-Sliced Design (FSD) approach, this project showcases modern web development practices and technologies. Visit the live version at [https://photo-fiesta.online/](https://photo-fiesta.online/).
+Photo-Fiesta is an Instagram clone that offers a comprehensive social media experience. Built with a microservices architecture using the Feature-Sliced Design (FSD) approach, this project showcases modern web development practices and technologies. Visit the live version at [https://photo-fiesta.online/](https://photo-fiesta.online/) or our reserve deployment to [photo-fiesta-tau.vercel.app](https://photo-fiesta-tau.vercel.app/)
 
 ![photo-fiesta.online](src/shared/assets/img/screen_photo-fiesta.png)
 
@@ -75,7 +75,7 @@ pnpm run test
 
 ## Deployment
 
-The application is deployed at [https://photo-fiesta.online/](https://photo-fiesta.online/). For detailed deployment instructions, please refer to our deployment documentation.
+The application is deployed at [https://photo-fiesta.online/](https://photo-fiesta.online/) or our reserve deployment to [photo-fiesta-tau.vercel.app](https://photo-fiesta-tau.vercel.app/). For detailed deployment instructions, please refer to our deployment documentation.
 
 ## Contributing
 
