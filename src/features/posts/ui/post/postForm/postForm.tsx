@@ -15,6 +15,7 @@ import { z } from 'zod'
 
 import styles from './postForm.module.scss'
 
+/** Validation schema for the post description */
 const postDescriptionSchema = z.object({
   description: z
     .string()
@@ -33,7 +34,9 @@ type PostFormProps = {
   postId: number
   selectedImage?: null | string
 }
-
+/**
+ * The PostForm component handles creating and editing posts description with controlled textarea and zod-validation.
+ */
 export const PostForm = ({ handleClose, isEditing, postId, selectedImage }: PostFormProps) => {
   const [createPost] = useCreatePostMutation()
   const [uploadImage] = useUploadPostImageMutation()
@@ -45,7 +48,6 @@ export const PostForm = ({ handleClose, isEditing, postId, selectedImage }: Post
 
   const {
     control,
-
     formState: { errors },
     handleSubmit,
     setError,
@@ -55,6 +57,7 @@ export const PostForm = ({ handleClose, isEditing, postId, selectedImage }: Post
     resolver: zodResolver(postDescriptionSchema),
   })
 
+  /** Submit function for create description in post modal */
   const onSubmit = handleSubmit(async (data: FormValues) => {
     try {
       if (!selectedImage) {
@@ -82,6 +85,8 @@ export const PostForm = ({ handleClose, isEditing, postId, selectedImage }: Post
       handleErrorResponse<FormValues>({ badRequestSchema, error, setError })
     }
   })
+
+  /** Submit function for edit description in post modal */
   const saveDescriptionChanges = handleSubmit(async (data: FormValues) => {
     try {
       await updateDescription({ description: data.description, postId })
@@ -91,6 +96,11 @@ export const PostForm = ({ handleClose, isEditing, postId, selectedImage }: Post
       handleErrorResponse<FormValues>({ badRequestSchema, error, setError })
     }
   })
+
+  /**
+   * This constant is used to render the `FormTextArea` component with the appropriate label and placeholder
+   * based on whether the post is being created or edited.
+   */
   const formContent = (
     <>
       <Controller
@@ -102,7 +112,7 @@ export const PostForm = ({ handleClose, isEditing, postId, selectedImage }: Post
               {...field}
               control={control}
               error={errors.description?.message}
-              label={isEditing ? 'Edit post description' : 'Add publication description'}
+              label={'Add publication description'}
               onChangeValue={value => {
                 field.onChange(value)
                 setCharCount(value.length)

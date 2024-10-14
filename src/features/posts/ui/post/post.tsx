@@ -14,6 +14,10 @@ type PostProps = {
   userId: number | undefined
 }
 
+/**
+ * The Post component represents a section of modal with different steps like cropping, filters, and publication.
+ */
+
 export const Post = ({ avatar, handleClose, postId, selectedImage, step, userId }: PostProps) => {
   if (step === 'publication') {
     return (

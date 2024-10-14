@@ -19,6 +19,20 @@ type ImagePostModalProps = {
   viewMode?: boolean
 }
 
+/**
+ * A modal component for display creating and editing image posts.
+ *
+ * @example
+ * <ImagePostModal
+ *   avatar={avatarData}
+ *   handleClose={handleCloseModal}
+ *   postId={postId}
+ *   selectedImage={selectedImage}
+ *   userId={userId}
+ *   viewMode={true}
+ * />
+ */
+
 export const ImagePostModal = forwardRef<HTMLFormElement, ImagePostModalProps>(
   ({ avatar, handleClose, postId, selectedImage, userId, viewMode = false }) => {
     const {
@@ -43,10 +57,14 @@ export const ImagePostModal = forwardRef<HTMLFormElement, ImagePostModalProps>(
     })
 
     // TODO: addTranslate
-    // TODO: rebase handleClickOutside in useImagePostModal(and fix bugs)
 
     const modalRef = useRef<HTMLDivElement>(null)
 
+    /**
+     * Sets up an event listener for mouse down events on the document (ImagePostModal for creating post).
+     * When a click event occurs outside the modal reference element and the modal is not in view mode,
+     * it sets `showConfirmModal` to true.
+     */
     useEffect(() => {
       const handleClickOutside = (event: MouseEvent) => {
         if (!viewMode && modalRef.current && !modalRef.current.contains(event.target as Node)) {
@@ -58,6 +76,8 @@ export const ImagePostModal = forwardRef<HTMLFormElement, ImagePostModalProps>(
 
       return () => document.removeEventListener('mousedown', handleClickOutside)
     }, [viewMode])
+
+    // TODO: rebase handleClickOutside in useImagePostModal(and fix bugs)
 
     return (
       <div className={styles.overlay}>

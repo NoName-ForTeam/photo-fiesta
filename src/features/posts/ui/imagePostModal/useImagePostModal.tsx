@@ -10,8 +10,12 @@ type UseImagePostModalProps = {
   handleClose: () => void
   postId: number
   selectedImage?: null | string
-  viewMode?: boolean
+  viewMode?: boolean // Whether the modal is in view mode or not
 }
+
+/**
+ * A custom hook for managing the state and behavior of the ImagePostModal component.
+ */
 
 export const useImagePostModal = ({
   handleClose,
@@ -30,14 +34,20 @@ export const useImagePostModal = ({
   const [showConfirmDeleteModal, setShowConfirmDeleteModal] = useState(false)
   const [showConfirmCloseModal, setShowConfirmCloseModal] = useState(false)
 
+  /** Delete post function */
   const confirmDelete = async () => {
     if (selectedImage) {
+      /**  Delete the image, and if the operation is successful, then delete all posts with the same description */
       await deleteImage({ uploadId: selectedImage })
     }
     await deletePost({ postId })
     handleClose()
   }
 
+  /**
+   * Changes the current step to the next or previous step based on the `direction` parameter.
+   * If the modal is not in view mode, it updates the `step` state accordingly.
+   */
   const getStepTitle = () =>
     isEditing ? 'Edit Post' : step.charAt(0).toUpperCase() + step.slice(1)
 
@@ -51,6 +61,7 @@ export const useImagePostModal = ({
     }
   }
 
+  /**The function aborts the process of editing a post and does not save any changes */
   const interruptionCreatePost = () => {
     setShowConfirmModal(false)
     handleClose()
