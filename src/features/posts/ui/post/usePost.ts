@@ -13,7 +13,7 @@ type PostProps = {
   selectedImage?: null | string
 }
 export const usePost = ({ handleClose, postId, selectedImage }: PostProps) => {
-  const { data: postById } = useGetPostByIdQuery({ postId })
+  const { data: postById } = useGetPostByIdQuery({ postId }, { skip: !postId })
   const [deleteImage] = useDeleteUploadImageMutation()
   const [deletePost] = useDeletePostMutation()
   const [updateDescription] = useUpdatePostMutation()

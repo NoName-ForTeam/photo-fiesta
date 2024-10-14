@@ -2,7 +2,7 @@
   display: flex;
   flex-direction: column;
   width: 50%;
-  margin-top: 20px;
+  margin: 20px 0 24px 20px;
 }
 
 .profileInfo {
@@ -12,12 +12,6 @@
   align-items: center;
 
   margin-bottom: 20px;
-
-  img {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-  }
 }
 
 .form,
@@ -29,13 +23,64 @@
 
 .form input,
 .form textarea {
+  resize: none;
   width: 100%;
   max-width: 433px;
-  margin-top: 10px;
   padding: 10px;
 }
 
+.char {
+  display: flex;
+  justify-content: end;
+  padding-right: 45px;
+  color: var(--light-900);
+}
+
+.locationContainer {
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+}
+
+.locationContainer textarea {
+  resize: none;
+
+  position: relative;
+
+  overflow: hidden;
+
+  width: 100%;
+  max-width: 433px;
+}
+
+.locationLabel {
+  font-size: var(--font-size-s);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--line-height-m);
+  color: var(--light-900);
+}
+
+.textareaWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
 .location {
-  margin-top: 10px;
-  padding: 10px;
+  align-content: center;
+
+  width: 100%;
+  height: 36px;
+
+  color: var(--light-900);
+
+  background: transparent;
+}
+
+.icon {
+  position: absolute;
+  top: 50%;
+  right: 50px;
+  transform: translateY(-50%);
 }

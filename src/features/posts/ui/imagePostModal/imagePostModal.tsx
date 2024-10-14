@@ -6,6 +6,7 @@ import { ProfileAvatar } from '@/shared/ui'
 import { ConfirmationModal } from '@/widgets'
 import { Button, Typography } from '@photo-fiesta/ui-lib'
 import clsx from 'clsx'
+import Image from 'next/image'
 
 import styles from './imagePostModal.module.scss'
 
@@ -79,6 +80,9 @@ export const ImagePostModal = ({
         className={clsx(styles.modalContent, step === 'cropping' ? styles.autoSize : '')}
         ref={modalRef}
       >
+        {viewMode && !isEditing && (
+          <CloseOutline className={styles.closeIcon} onClick={() => handleClose()} />
+        )}
         {!viewMode && (
           <div className={styles.header}>
             <Button onClick={() => changeStep('prev')} variant={'icon-link'}>
@@ -107,7 +111,13 @@ export const ImagePostModal = ({
         <div className={styles.body}>
           <section className={styles.imageSection}>
             {selectedImage ? (
-              <img alt={'Selected'} className={styles.selectedImage} src={selectedImage} />
+              <Image
+                alt={'Selected'}
+                className={styles.selectedImage}
+                height={432}
+                src={selectedImage}
+                width={492}
+              />
             ) : (
               <Typography variant={'h2'}>No image selected</Typography>
             )}
