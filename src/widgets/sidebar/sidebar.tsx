@@ -59,8 +59,8 @@ export const Sidebar = () => {
     setOpenPostModal(false)
     setSelectedImage(null)
   }
-
-  const { postId } = useImagePostModal({ handleClose: handleOpenPostModal })
+  const postId = 0
+  const {} = useImagePostModal({ handleClose: handleOpenPostModal, postId })
 
   const classNames = {
     icons: styles.icons,

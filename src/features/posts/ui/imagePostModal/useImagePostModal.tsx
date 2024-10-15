@@ -1,86 +1,89 @@
 import { useState } from 'react'
-import { useForm } from 'react-hook-form'
 
-import { useCreatePostMutation, useUploadPostImageMutation } from '@/features'
-import { createBadRequestSchema, handleErrorResponse } from '@/shared/utils'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from 'zod'
-
-const postDescriptionSchema = z.object({
-  description: z
-    .string()
-    .min(1, 'Minimum number of characters 1')
-    .max(500, 'Maximum number of characters 500'),
-  // location: z.string(),
-  //TODO: check type of this field(location)
-})
-const badRequestSchema = createBadRequestSchema(['description'])
-
-export type FormValues = z.infer<typeof postDescriptionSchema>
+import {
+  Step,
+  useDeletePostMutation,
+  useDeleteUploadImageMutation,
+  useGetPostByIdQuery,
+} from '@/features'
 
 type UseImagePostModalProps = {
   handleClose: () => void
+  postId: number
   selectedImage?: null | string
+  viewMode?: boolean // Whether the modal is in view mode or not
 }
-export const useImagePostModal = ({ handleClose, selectedImage }: UseImagePostModalProps) => {
-  const [createPost] = useCreatePostMutation()
-  const [uploadImage] = useUploadPostImageMutation()
 
+/**
+ * A custom hook for managing the state and behavior of the ImagePostModal component.
+ */
+
+export const useImagePostModal = ({
+  handleClose,
+  postId,
+  selectedImage,
+  viewMode,
+}: UseImagePostModalProps) => {
+  const { data: postById } = useGetPostByIdQuery({ postId }, { skip: !postId })
+  const [deleteImage] = useDeleteUploadImageMutation()
+  const [deletePost] = useDeletePostMutation()
+
+  const [step, setStep] = useState<Step>('cropping')
+  const [isEditing, setIsEditing] = useState(false)
   const [isOpenModal, setIsOpenModal] = useState<boolean>(true)
-  const [postId, setPostId] = useState<number>()
   const [showConfirmModal, setShowConfirmModal] = useState(false)
+  const [showConfirmDeleteModal, setShowConfirmDeleteModal] = useState(false)
+  const [showConfirmCloseModal, setShowConfirmCloseModal] = useState(false)
 
-  const {
-    control,
-    formState: { errors },
-    handleSubmit,
-    setError,
-  } = useForm<FormValues>({
-    mode: 'onBlur',
-    resolver: zodResolver(postDescriptionSchema),
-  })
-
-  const onSubmit = handleSubmit(async (data: FormValues) => {
-    try {
-      if (!selectedImage) {
-        throw new Error('No image selected')
-      }
-      const formData = new FormData()
-
-      const blob = await (await fetch(selectedImage)).blob()
-
-      formData.append('file', blob, 'image.jpg')
-
-      const imageUploadData = await uploadImage(formData).unwrap()
-
-      // Создаем пост
-      await createPost({
-        childrenMetadata: Array.isArray(imageUploadData)
-          ? imageUploadData.map(img => ({ uploadId: img.uploadId }))
-          : [{ uploadId: imageUploadData.images[0]?.uploadId }],
-        description: data.description,
-      })
-
-      if (postId) {
-        setPostId(postId)
-      }
-      handleClose()
-      setIsOpenModal(false)
-    } catch (error) {
-      console.error('Error during post creation', error)
-      handleErrorResponse<FormValues>({ badRequestSchema, error, setError })
+  /** Delete post function */
+  const confirmDelete = async () => {
+    if (selectedImage) {
+      /**  Delete the image, and if the operation is successful, then delete all posts with the same description */
+      await deleteImage({ uploadId: selectedImage })
     }
-  })
+    await deletePost({ postId })
+    handleClose()
+  }
+
+  /**
+   * Changes the current step to the next or previous step based on the `direction` parameter.
+   * If the modal is not in view mode, it updates the `step` state accordingly.
+   */
+  const getStepTitle = () =>
+    isEditing ? 'Edit Post' : step.charAt(0).toUpperCase() + step.slice(1)
+
+  const changeStep = (direction: 'next' | 'prev') => {
+    if (!viewMode) {
+      if (direction === 'next') {
+        setStep(prev => (prev === 'cropping' ? 'filters' : 'publication'))
+      } else {
+        setStep(prev => (prev === 'publication' ? 'filters' : 'cropping'))
+      }
+    }
+  }
+
+  /**The function aborts the process of editing a post and does not save any changes */
+  const interruptionCreatePost = () => {
+    setShowConfirmModal(false)
+    handleClose()
+  }
 
   return {
-    control,
-    errors,
+    changeStep,
+    confirmDelete,
+    getStepTitle,
+    interruptionCreatePost,
+    isEditing,
     isOpenModal,
-    onSubmit,
-    postId,
+    postById,
+    setIsEditing,
     setIsOpenModal,
-    setPostId,
+    setShowConfirmCloseModal,
+    setShowConfirmDeleteModal,
     setShowConfirmModal,
+    showConfirmCloseModal,
+    showConfirmDeleteModal,
     showConfirmModal,
+    step,
   }
 }

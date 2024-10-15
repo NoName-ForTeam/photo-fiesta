@@ -57,6 +57,7 @@ export const ConfirmationModal = ({
           </Typography>
           <ModalFooter className={classNames.footer}>
             {isTwoButtons && (
+              // TODO: create names in buttons by props
               <>
                 <Button onClick={closeModal} variant={'secondary'}>
                   No

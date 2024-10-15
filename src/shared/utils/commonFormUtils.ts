@@ -75,4 +75,13 @@ export const commonDateOfBirthSchema = z
     const age = differenceInYears(new Date(), date)
 
     return age >= 13
-  }, 'A user under 13 cannot create a profile.Privacy Policy')
+  }, 'A user under 13 cannot createPage a profile.Privacy Policy')
+
+export const postDescriptionSchema = z.object({
+  description: z
+    .string()
+    .min(1, 'Minimum number of characters 1')
+    .max(500, 'Maximum number of characters 500'),
+  // location: z.string(),
+  //TODO: check type of this field(location)
+})
