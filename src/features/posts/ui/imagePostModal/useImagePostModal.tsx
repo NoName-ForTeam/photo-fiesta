@@ -1,6 +1,7 @@
 import { useState } from 'react'
 
 import {
+  Step,
   useDeletePostMutation,
   useDeleteUploadImageMutation,
   useGetPostByIdQuery,
@@ -27,7 +28,7 @@ export const useImagePostModal = ({
   const [deleteImage] = useDeleteUploadImageMutation()
   const [deletePost] = useDeletePostMutation()
 
-  const [step, setStep] = useState<'cropping' | 'filters' | 'publication'>('cropping')
+  const [step, setStep] = useState<Step>('cropping')
   const [isEditing, setIsEditing] = useState(false)
   const [isOpenModal, setIsOpenModal] = useState<boolean>(true)
   const [showConfirmModal, setShowConfirmModal] = useState(false)

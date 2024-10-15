@@ -5,12 +5,14 @@ import { Typography } from '@photo-fiesta/ui-lib'
 
 import styles from './post.module.scss'
 
+export type Step = 'cropping' | 'filters' | 'publication'
+
 type PostProps = {
   avatar: Avatar[] | undefined
   handleClose: () => void
   postId: number
   selectedImage: null | string
-  step: 'cropping' | 'filters' | 'publication'
+  step: Step
   userId: number | undefined
 }
 

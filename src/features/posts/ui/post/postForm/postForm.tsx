@@ -1,32 +1,9 @@
-import { useState } from 'react'
-import { Controller, useForm } from 'react-hook-form'
+import { Controller } from 'react-hook-form'
 
-import {
-  useCreatePostMutation,
-  useGetPostByIdQuery,
-  useImagePostModal,
-  useUpdatePostMutation,
-  useUploadPostImageMutation,
-} from '@/features'
-import { createBadRequestSchema, handleErrorResponse } from '@/shared/utils'
-import { zodResolver } from '@hookform/resolvers/zod'
+import { usePostForm } from '@/features'
 import { Button, FormTextArea, Typography } from '@photo-fiesta/ui-lib'
-import { z } from 'zod'
 
 import styles from './postForm.module.scss'
-
-/** Validation schema for the post description */
-const postDescriptionSchema = z.object({
-  description: z
-    .string()
-    .min(1, 'Minimum number of characters 1')
-    .max(500, 'Maximum number of characters 500'),
-  // location: z.string(),
-  //TODO: check type of this field(location)
-})
-const badRequestSchema = createBadRequestSchema(['description'])
-
-export type FormValues = z.infer<typeof postDescriptionSchema>
 
 type PostFormProps = {
   handleClose: () => void
@@ -38,64 +15,8 @@ type PostFormProps = {
  * The PostForm component handles creating and editing posts description with controlled textarea and zod-validation.
  */
 export const PostForm = ({ handleClose, isEditing, postId, selectedImage }: PostFormProps) => {
-  const [createPost] = useCreatePostMutation()
-  const [uploadImage] = useUploadPostImageMutation()
-  const [updateDescription] = useUpdatePostMutation()
-  const { data: post } = useGetPostByIdQuery({ postId }, { skip: !postId })
-  const { setIsEditing, setIsOpenModal } = useImagePostModal({ handleClose, postId })
-
-  const [charCount, setCharCount] = useState(0)
-
-  const {
-    control,
-    formState: { errors },
-    handleSubmit,
-    setError,
-  } = useForm<FormValues>({
-    defaultValues: { description: post?.description || '' },
-    mode: 'onBlur',
-    resolver: zodResolver(postDescriptionSchema),
-  })
-
-  /** Submit function for create description in post modal */
-  const onSubmit = handleSubmit(async (data: FormValues) => {
-    try {
-      if (!selectedImage) {
-        throw new Error('No image selected')
-      }
-      const formData = new FormData()
-
-      const blob = await (await fetch(selectedImage)).blob()
-
-      formData.append('file', blob, 'image.jpg')
-
-      const imageUploadData = await uploadImage(formData).unwrap()
-
-      await createPost({
-        childrenMetadata: Array.isArray(imageUploadData)
-          ? imageUploadData.map(img => ({ uploadId: img.uploadId }))
-          : [{ uploadId: imageUploadData.images[0]?.uploadId }],
-        description: data.description,
-      })
-
-      handleClose()
-      setIsOpenModal(false)
-    } catch (error) {
-      console.error('Error during post creation', error)
-      handleErrorResponse<FormValues>({ badRequestSchema, error, setError })
-    }
-  })
-
-  /** Submit function for edit description in post modal */
-  const saveDescriptionChanges = handleSubmit(async (data: FormValues) => {
-    try {
-      await updateDescription({ description: data.description, postId })
-      setIsEditing(false)
-      handleClose()
-    } catch (error) {
-      handleErrorResponse<FormValues>({ badRequestSchema, error, setError })
-    }
-  })
+  const { charCount, control, errors, onSubmit, saveDescriptionChanges, setCharCount } =
+    usePostForm({ handleClose, postId, selectedImage })
 
   /**
    * This constant is used to render the `FormTextArea` component with the appropriate label and placeholder
