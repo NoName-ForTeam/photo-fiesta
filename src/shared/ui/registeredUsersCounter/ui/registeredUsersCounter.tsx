@@ -4,12 +4,7 @@ import { Card, Typography } from '@photo-fiesta/ui-lib'
 import styles from './registeredUsersCounter.module.scss'
 
 /**
- * RegisteredUsersCounter Component
- *
  * This component displays the total number of registered users, formatting the number
- * to always be 6 digits long, padding with zeros if necessary. The number is fetched from
- * the API using the `useGetCountUsersQuery` hook and displayed in a styled card component.
- *
  * @example
  * const App = () => {
  *   return <RegisteredUsersCounter />;
@@ -27,6 +22,8 @@ export const RegisteredUsersCounter = () => {
     wrapper: styles.wrapper,
   } as const
 
+  const emptyUsersNode = <Typography variant={'h2'}>0</Typography>
+
   return (
     <Card className={classNames.wrapper}>
       <Typography variant={'h2'}>Registered users:</Typography>
@@ -39,7 +36,8 @@ export const RegisteredUsersCounter = () => {
           ))}
         </div>
       ) : (
-        <Typography variant={'h2'}>Error get count users</Typography>
+        /*TODO: maybe change in future*/
+        emptyUsersNode
       )}
     </Card>
   )

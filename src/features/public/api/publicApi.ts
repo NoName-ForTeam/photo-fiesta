@@ -9,11 +9,7 @@ GET_TOTAL_COUNT_USERS
 
 
 /**
- * publicApi - API object for handling public API requests, specifically for
- * retrieving the total number of registered users.
- *
- * This API is integrated using the `baseApi` object and provides a query to fetch
- * the total user count.
+ * API service for public-page endpoints.
  */
 export const publicApi = baseApi.injectEndpoints({
     endpoints: builder => ({
