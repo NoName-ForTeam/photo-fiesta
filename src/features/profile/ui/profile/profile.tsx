@@ -1,14 +1,12 @@
 import { ComponentPropsWithoutRef } from 'react'
 
-import { PostList } from '@/features'
+import { PostList, useProfile } from '@/features'
 import { ProfileAvatar, ProfileStat } from '@/shared/ui'
 import { useTranslation } from '@/shared/utils'
 import { Button, Typography } from '@photo-fiesta/ui-lib'
 import clsx from 'clsx'
 
 import styles from './profile.module.scss'
-
-import { useProfile } from './useProfile'
 
 export type ProfileProps = ComponentPropsWithoutRef<'div'>
 
@@ -25,9 +23,9 @@ export type ProfileProps = ComponentPropsWithoutRef<'div'>
  */
 //TODO: add translations
 export const Profile = ({ className }: ProfileProps) => {
-  const { authData, handleProfileSettings, isError, isOwnProfile, profileInfo } = useProfile()
   const { t } = useTranslation()
-
+  const { authData, handleProfileSettings, isError, isOwnProfile, profileInfo } = useProfile()
+  const userAvatar = profileInfo?.avatars.length ? [profileInfo.avatars[0]] : []
   const classNames = {
     bio: styles.bio,
     btnContainer: styles.btnContainer,
@@ -85,7 +83,8 @@ export const Profile = ({ className }: ProfileProps) => {
           </Typography>
         </div>
       </div>
-      <PostList />
+      {/*TODO: fix type of userId*/}
+      <PostList avatar={userAvatar} userId={authData?.userId ?? 0} />
     </div>
   )
 }

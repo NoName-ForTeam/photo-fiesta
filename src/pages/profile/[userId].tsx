@@ -13,6 +13,7 @@ const ProfilePage = () => {
       toast.error('Failed to load profile. Retrying...')
       refetch()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isError])
 
   if (isLoading) {

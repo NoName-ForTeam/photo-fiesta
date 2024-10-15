@@ -142,6 +142,7 @@ export const GeneralInfo = ({ className }: GeneralInfoProps) => {
         <FormTextArea
           className={classNames.textarea}
           control={control}
+          error={errors.aboutMe?.message}
           label={t.settings.me}
           name={'aboutMe'}
         />
