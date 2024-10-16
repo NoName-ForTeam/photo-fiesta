@@ -52,16 +52,14 @@ export const PostForm = ({ handleClose, isEditing, postId, selectedImage }: Post
 
   return (
     <div>
-      <div>
-        <form id={'postDescription'} onSubmit={isEditing ? saveDescriptionChanges : onSubmit}>
-          {formContent}
-          {isEditing && (
-            <Button type={'submit'} variant={'primary'}>
-              Save Changes
-            </Button>
-          )}
-        </form>
-      </div>
+      <form id={'postDescription'} onSubmit={isEditing ? saveDescriptionChanges : onSubmit}>
+        {formContent}
+        {isEditing && (
+          <Button type={'submit'} variant={'primary'}>
+            Save Changes
+          </Button>
+        )}
+      </form>
     </div>
   )
 }

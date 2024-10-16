@@ -129,21 +129,27 @@ export const ImagePostModal = forwardRef<HTMLFormElement, ImagePostModalProps>(
             </section>
             {viewMode && postById && (
               <section className={styles.viewMode}>
-                <div className={styles.profileInfo}>
-                  <CloseOutline onClick={() => setShowConfirmDeleteModal(true)} />
-                  <Edit2 onClick={() => setIsEditing(true)} />
-                  <ProfileAvatar avatarOwner={avatar?.[0]?.url} />
-                  <Typography variant={'h3'}>{userId}</Typography>
+                <div className={styles.profileInfoContainer}>
+                  <div className={styles.options}>
+                    <CloseOutline onClick={() => setShowConfirmDeleteModal(true)} />
+                    <Edit2 onClick={() => setIsEditing(true)} />
+                  </div>
+                  <div className={styles.profileInfo}>
+                    <ProfileAvatar avatarOwner={avatar?.[0]?.url} />
+                    <Typography variant={'h3'}>{userId}</Typography>
+                  </div>
                 </div>
                 <div className={styles.postDetails}>
                   {isEditing ? (
-                    <div>
-                      <PostForm
-                        handleClose={handleClose}
-                        isEditing
-                        postId={postId}
-                        selectedImage={selectedImage}
-                      />
+                    <>
+                      <div className={styles.editPost}>
+                        <PostForm
+                          handleClose={handleClose}
+                          isEditing
+                          postId={postId}
+                          selectedImage={selectedImage}
+                        />
+                      </div>
                       {showConfirmCloseModal && (
                         <ConfirmationModal
                           closeModal={() => setShowConfirmCloseModal(false)}
@@ -156,9 +162,11 @@ export const ImagePostModal = forwardRef<HTMLFormElement, ImagePostModalProps>(
                           title={'Close Post'}
                         />
                       )}
-                    </div>
+                    </>
                   ) : (
-                    <Typography variant={'h3'}>{postById?.description}</Typography> // Иначе показываем описание
+                    <div className={styles.postDescription}>
+                      <Typography variant={'h3'}>{postById?.description}</Typography>
+                    </div>
                   )}
                   {showConfirmDeleteModal && (
                     <ConfirmationModal
