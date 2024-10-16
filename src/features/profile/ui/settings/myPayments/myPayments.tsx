@@ -1,38 +1,38 @@
-import { useState } from 'react'
-
-import { MyPaymentsList, useGetMyPaymentsQuery } from '@/features'
+import { MyPaymentsList, useMyPayments } from '@/features'
 import { Pagination, Select, SelectContainer, SelectItem } from '@photo-fiesta/ui-lib'
 
 import styles from './myPayments.module.scss'
 
 const classNames = {
+  container: styles.container,
+  pagination: styles.pagination,
   root: styles.root,
 } as const
 
-const options = [
-  { id: 0, title: '10', value: '10' },
-  { id: 1, title: '20', value: '20' },
-  { id: 2, title: '50', value: '50' },
-  { id: 3, title: '100', value: '100' },
-]
-
+/**
+ * The MyPayments component displays a list of user's payments with pagination
+ * and a select dropdown to change the number of items per page.
+ */
 export const MyPayments = () => {
-  const { data: myPayments } = useGetMyPaymentsQuery()
-  const [option, setOption] = useState('10')
-  const [currentPage, setCurrentPage] = useState<number>(1)
-  const [pageSize, setPageSize] = useState<number>(10)
-  const handleOptionChange = (value: string) => {
-    setOption(value)
-    setPageSize(Number(value))
-  }
-  const handlePageChange = (num: number) => {
-    setCurrentPage(num)
+  const {
+    currentPage,
+    handleOptionChange,
+    handlePageChange,
+    isLoading,
+    myPayments,
+    option,
+    options,
+    pageSize,
+  } = useMyPayments()
+
+  if (isLoading) {
+    return <div>Loading</div>
   }
 
   return (
     <div className={classNames.root}>
       {myPayments && myPayments.length && (
-        <div>
+        <div className={classNames.container}>
           <MyPaymentsList payments={myPayments} />
           <Pagination
             currentPage={currentPage}

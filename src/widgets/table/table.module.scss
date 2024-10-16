@@ -1,29 +1,15 @@
-.table {
-  table-layout: fixed;
+.tableWrapper {
   border-collapse: collapse;
   width: 100%;
-  border: 1px solid var(--color-dark-500);
-
-  th {
-    word-break: normal;
-  }
-
-  td {
-    word-break: break-all;
-  }
-}
-
-.tableWrapper {
-  border: 1px solid var(--color-dark-500);
+  border: 1px solid var(--dark-500);
+  border-radius: 2px;
 }
 
 .tableHead {
-  font-size: 14px;
-  font-weight: bold;
-  color: var(--color-light-100);
-  text-align: left;
-
-  background-color: var(--color-dark-500);
+  font-size: var(--font-size-s);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-m);
+  color: var(--light-100);
 }
 
 .tableCell {
@@ -32,13 +18,12 @@
   margin: 0;
   padding: 6px 24px;
 
-  font-size: 14px;
+  font-size: var(--font-size-s);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--line-height-m);
+  text-align: left;
 
-  border-bottom: 1px solid var(--color-dark-500);
-
-  a {
-    text-decoration: none;
-  }
+  border-bottom: 1px solid var(--dark-500);
 }
 
 .tableBody .tableRow:last-child .tableCell {
@@ -47,8 +32,4 @@
 
 .tableRow .tableBodyCell:last-child {
   padding: 12px 24px;
-}
-
-.descIcon {
-  transform: rotate(180deg);
 }
