@@ -72,7 +72,8 @@ export const useSidebar = () => {
 
   const handleOpenPostModal = () => setModalState(prev => ({ ...prev, openPostModal: true }))
 
-  const { postId } = useImagePostModal({ handleClose: handleOpenPostModal })
+  const postId = 0
+  const {} = useImagePostModal({ handleClose: handleOpenPostModal, postId })
 
   const handleCloseAddPhotoModal = () => {
     closeCreateModal()
