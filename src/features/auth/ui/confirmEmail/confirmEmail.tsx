@@ -1,6 +1,7 @@
 import { ExpiredEmail, useConfirmRegistrationQuery } from '@/features'
 import { bro } from '@/shared/assets'
 import { ROUTES } from '@/shared/config'
+import { Loader } from '@/shared/ui'
 import { useTranslation } from '@/shared/utils'
 import { Button, Typography } from '@photo-fiesta/ui-lib'
 import Image from 'next/image'
@@ -43,7 +44,7 @@ export const ConfirmEmail = () => {
   } as const
 
   if (isLoading) {
-    return <div>Loading...</div>
+    return <Loader />
   }
 
   if (error) {

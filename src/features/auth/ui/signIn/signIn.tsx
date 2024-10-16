@@ -3,6 +3,7 @@ import { Controller, FieldErrors } from 'react-hook-form'
 import { AuthCard } from '@/features'
 import { FormInputs, useSignIn } from '@/features/auth/ui/signIn/useSignIn'
 import { ROUTES } from '@/shared/config'
+import { Loader } from '@/shared/ui'
 import { useTranslation } from '@/shared/utils'
 import { Button, Input, Typography } from '@photo-fiesta/ui-lib'
 import Link from 'next/link'
@@ -22,11 +23,15 @@ import styles from './signIn.module.scss'
 
 export const SignIn = () => {
   const { t } = useTranslation()
-  const { control, errors, onSubmit } = useSignIn()
+  const { control, errors, isShowLoading, onSubmit } = useSignIn()
   const classNames = {
     container: styles.container,
     form: styles.form,
   } as const
+
+  if (isShowLoading) {
+    return <Loader />
+  }
 
   return (
     <AuthCard
