@@ -13,6 +13,7 @@ import {
 import styles from './confirmationModal.module.scss'
 
 type ModalProps = {
+  buttonTitle?: string
   closeModal: () => void
   confirmation: () => void
   content: string
@@ -23,6 +24,7 @@ type ModalProps = {
 }
 //TODO: add translations
 export const ConfirmationModal = ({
+  buttonTitle = 'Ok',
   closeModal,
   confirmation,
   content,
@@ -74,7 +76,7 @@ export const ConfirmationModal = ({
                 onClick={confirmation}
                 variant={'primary'}
               >
-                Ok
+                {buttonTitle}
               </Button>
             )}
           </ModalFooter>

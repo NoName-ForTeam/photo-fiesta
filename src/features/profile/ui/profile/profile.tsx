@@ -1,7 +1,7 @@
 import { ComponentPropsWithoutRef } from 'react'
 
 import { PostList, useProfile } from '@/features'
-import { ProfileAvatar, ProfileStat } from '@/shared/ui'
+import { Loader, ProfileAvatar, ProfileStat } from '@/shared/ui'
 import { useTranslation } from '@/shared/utils'
 import { Button, Typography } from '@photo-fiesta/ui-lib'
 import clsx from 'clsx'
@@ -24,7 +24,8 @@ export type ProfileProps = ComponentPropsWithoutRef<'div'>
 //TODO: add translations
 export const Profile = ({ className }: ProfileProps) => {
   const { t } = useTranslation()
-  const { authData, handleProfileSettings, isError, isOwnProfile, profileInfo } = useProfile()
+  const { authData, handleProfileSettings, isError, isLoading, isOwnProfile, profileInfo } =
+    useProfile()
   const userAvatar = profileInfo?.avatars.length ? [profileInfo.avatars[0]] : []
   const classNames = {
     bio: styles.bio,
@@ -40,6 +41,9 @@ export const Profile = ({ className }: ProfileProps) => {
 
   if (isError) {
     return null
+  }
+  if (isLoading) {
+    return <Loader />
   }
   const profileButton = isOwnProfile ? (
     <Button onClick={handleProfileSettings} variant={'secondary'}>

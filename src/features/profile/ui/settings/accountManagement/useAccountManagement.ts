@@ -1,18 +1,27 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useCallback, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
-import { useGetCurrentPaymentQuery, usePostSubscriptionMutation } from '@/features/profile/api'
+import {
+  useGetCurrentPaymentQuery,
+  useGetProfileQuery,
+  usePostCancelAutoRenewalMutation,
+  usePostSubscriptionMutation,
+} from '@/features'
 import { ErrorResponse } from '@/shared/api'
-import { PAYMENT_DELAY } from '@/shared/config'
-import { checkErrorMessages, useDelayedLoading } from '@/shared/utils'
+import { LOADING_DELAY } from '@/shared/config'
+import {
+  checkErrorMessages,
+  computeSubscriptionDates,
+  getBaseUrl,
+  useDelayedLoading,
+  useModal,
+} from '@/shared/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/router'
 import { z } from 'zod'
 
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || process.env.NEXT_PUBLIC_BASE_URL_VERCEL || ''
-
 type AccountType = 'business' | 'personal'
-type ModalType = 'Error' | 'Success' | null
 
 /** Array of available account types */
 const accountTypes = [
@@ -39,41 +48,79 @@ type FormData = z.infer<typeof formSchema>
 
 /**
  * Custom hook for managing account and subscription logic
+ * This hook provides functionality for handling user account types,
+ * subscription management, and payment processing. It also manages
+ * modal states for success and error messages.
  */
+
 export const useAccountManagement = () => {
   const router = useRouter()
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [accountType, setAccountType] = useState<AccountType>('personal')
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [modalTitle, setModalTitle] = useState<ModalType>(null)
 
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
+  const { isModalOpen, modalTitle, setIsModalOpen, setModalTitle } = useModal()
+
+  const { isLoading: isFetchingProfile } = useGetProfileQuery()
   const [postSubscription, { isLoading }] = usePostSubscriptionMutation()
+  const [postCancelAutoRenewal] = usePostCancelAutoRenewalMutation()
+
   //when true we see loading component
-  const showLoading = useDelayedLoading(isLoading, PAYMENT_DELAY)
+  const showLoading = useDelayedLoading(isLoading, LOADING_DELAY)
+
+  const { data: currentPaymentData, refetch: refetchCurrentPayment } = useGetCurrentPaymentQuery()
+
+  const renewal = currentPaymentData?.hasAutoRenewal
+
+  // {userId,subscriptionId,dateOfPayment,endDateOfSubscription,autoRenewal}
+  // get current payments
+  const currentPayments = currentPaymentData?.data || []
+
+  const initialCheckedState = currentPaymentData?.hasAutoRenewal || false
+  const [checked, setChecked] = useState(initialCheckedState)
+
+  // logic for autoRenewal
+  const handleAutoRenewalChange = (value: boolean) => {
+    if (!value) {
+      postCancelAutoRenewal()
+    }
+    setChecked(value)
+  }
+
   const { control, handleSubmit, setError, setValue } = useForm<FormData>({
     defaultValues: {
       amount: 10,
       autoRenewal: false,
-      baseUrl: BASE_URL,
+      baseUrl: getBaseUrl(),
       paymentType: 'STRIPE',
       typeSubscription: 'DAY',
     },
     resolver: zodResolver(formSchema),
   })
 
-  const { data: currentPaymentData, refetch: refetchCurrentPayment } = useGetCurrentPaymentQuery()
+  //get end date of subscription and next payment date
+  const {
+    endDate: endDateOfSubscription,
+    isSubscriptionActive,
+    nextPaymentDate,
+  } = computeSubscriptionDates(currentPayments)
 
-  //{userId,subscriptionId,dateOfPayment,endDateOfSubscription,autoRenewal}
-  const currentPayment = currentPaymentData?.data[0]
+  const [accountType, setAccountType] = useState<AccountType>(
+    isSubscriptionActive ? 'business' : 'personal'
+  )
 
-  const isSubscriptionActive =
-    !!currentPayment && new Date(currentPayment.endDateOfSubscription) > new Date()
+  //check is subscription active and set account type
+  useEffect(() => {
+    setAccountType(isSubscriptionActive ? 'business' : 'personal')
+  }, [isSubscriptionActive])
+
+  //* Account type handling
 
   // Effect for refetching current payment when account type changes to business
   useEffect(() => {
     if (accountType === 'business') {
       refetchCurrentPayment()
     }
+    setChecked(currentPaymentData?.hasAutoRenewal || false)
   }, [accountType, refetchCurrentPayment])
 
   /**
@@ -84,17 +131,20 @@ export const useAccountManagement = () => {
     setAccountType(value)
   }
 
-  const handleModalClose = () => {
-    setIsModalOpen(false)
-  }
-
+  //* Payment handling
   const onSubmit = async (data: FormData) => {
     if (isSubmitting) {
       return
     }
+    //put in autoRenewal actual state of checkbox
+    const updatedData = {
+      ...data,
+      autoRenewal: checked, // use current state of checkbox
+    }
+
     setIsSubmitting(true)
     try {
-      const response = await postSubscription(data).unwrap()
+      const response = await postSubscription(updatedData).unwrap()
 
       router.push(response.url)
     } catch (error) {
@@ -107,33 +157,23 @@ export const useAccountManagement = () => {
   }
 
   /**
-   * Handles confirmation in the modal
-   */
-  const handleConfirmation = () => {
-    setModalTitle(null)
-    setIsModalOpen(false)
-  }
-
-  /**
-   * Handles change in subscription type
-   * @param {string} value - The new subscription type
-   */
-  const handleSubscriptionChange = (value: string) => {
-    const subscription = subscriptionCosts.find(cost => cost.value === value)
-
-    if (subscription) {
-      setValue('typeSubscription', subscription.value)
-      setValue('amount', subscription.amount)
-    }
-  }
-
-  /**
    * Handles payment submission
    * @param {FormData['paymentType']} paymentType - The payment type
    */
   const handlePaymentSubmit = (paymentType: FormData['paymentType']) => {
     setValue('paymentType', paymentType)
     handleSubmit(onSubmit)()
+  }
+
+  //* Modal handling
+
+  const handleModalClose = () => {
+    setIsModalOpen(false)
+  }
+
+  const handleConfirmation = () => {
+    setModalTitle(null)
+    setIsModalOpen(false)
   }
 
   const handleSuccessfulPayment = useCallback(() => {
@@ -147,27 +187,52 @@ export const useAccountManagement = () => {
 
     if (success === 'true') {
       handleSuccessfulPayment()
+      //change current url removing query params success
       router.replace(router.pathname, undefined, { shallow: true })
     }
-  }, [router, handleSuccessfulPayment])
+    if (success === 'false') {
+      setModalTitle('Error')
+      setIsModalOpen(true)
+      router.replace(router.pathname, undefined, { shallow: true })
+    }
+  }, [router.query.success, handleSuccessfulPayment])
+
+  //* Subscription handling
+  /**
+   * Handles change in subscription type
+   * @param {string} value - The new subscription type
+   */
+  const handleSubscriptionChange = (value: string) => {
+    const subscription = subscriptionCosts.find(cost => cost.value === value)
+
+    if (subscription) {
+      setValue('typeSubscription', subscription.value)
+      setValue('amount', subscription.amount)
+    }
+  }
 
   return {
     accountType,
     accountTypes,
+    checked,
     control,
-    currentPayment,
+    endDateOfSubscription,
     handleAccountTypeChange,
+    handleAutoRenewalChange,
     handleConfirmation,
     handleModalClose,
     handlePaymentSubmit,
     handleSubmit,
     handleSubscriptionChange,
+    isFetchingProfile,
     isLoading,
     isModalOpen,
     isSubmitting,
     isSubscriptionActive,
     modalTitle,
+    nextPaymentDate,
     onSubmit,
+    renewal,
     showLoading,
     subscriptionCosts,
   }

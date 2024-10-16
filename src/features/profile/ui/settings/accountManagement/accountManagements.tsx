@@ -2,6 +2,7 @@ import { ComponentPropsWithoutRef } from 'react'
 import { Controller } from 'react-hook-form'
 
 import { PaypalSvgrepoCom4, StripeSvgrepoCom4 } from '@/shared/assets'
+import { Loader } from '@/shared/ui'
 import { ConfirmationModal } from '@/widgets'
 import { Button, FormCheckbox, RadioGroup, RadioGroupItem, Typography } from '@photo-fiesta/ui-lib'
 import clsx from 'clsx'
@@ -18,18 +19,22 @@ export const AccountManagements = () => {
   const {
     accountType,
     accountTypes,
+    checked,
     control,
-    currentPayment,
+    endDateOfSubscription,
     handleAccountTypeChange,
+    handleAutoRenewalChange,
     handleConfirmation,
     handleModalClose,
     handlePaymentSubmit,
     handleSubmit,
     handleSubscriptionChange,
+    isFetchingProfile,
     isModalOpen,
     isSubmitting,
     isSubscriptionActive,
     modalTitle,
+    nextPaymentDate,
     onSubmit,
     showLoading,
     subscriptionCosts,
@@ -56,14 +61,18 @@ export const AccountManagements = () => {
     <RadioBlock key={cost.value} title={cost.title} value={cost.value} />
   ))
 
-  // TODO: add loading component
-  if (showLoading) {
-    return <div>Loading...</div>
+  if (showLoading || isFetchingProfile) {
+    return <Loader />
   }
+  const buttonTitleModal = modalTitle === 'Success' ? 'Ok' : 'Back to payment'
+  const contentModal =
+    modalTitle === 'Success'
+      ? 'Payment was successful'
+      : 'Transaction failed.Please,write to support'
 
   return (
     <form className={classNames.form} onSubmit={handleSubmit(onSubmit)}>
-      {accountType === 'business' && isSubscriptionActive && currentPayment && (
+      {accountType === 'business' && isSubscriptionActive && (
         <div className={classNames.subscription}>
           <Typography className={classNames.title} variant={'h3'}>
             Current Subscription:
@@ -71,24 +80,19 @@ export const AccountManagements = () => {
           <div className={clsx(classNames.container, classNames.data)}>
             <div>
               <Typography variant={'text14'}>Expire at</Typography>
-              <Typography variant={'textBold14'}>
-                {' '}
-                {new Date(currentPayment.endDateOfSubscription).toLocaleDateString()}
-              </Typography>
+              <Typography variant={'textBold14'}> {endDateOfSubscription}</Typography>
             </div>
             <div>
               <Typography variant={'text14'}>Next payment</Typography>
-              <Typography variant={'textBold14'}>
-                {' '}
-                {new Date(currentPayment.dateOfPayment).toLocaleDateString()}
-              </Typography>
+              {checked && <Typography variant={'textBold14'}> {nextPaymentDate}</Typography>}
             </div>
           </div>
           <label className={classNames.renewal}>
             <FormCheckbox
+              checked={checked}
               control={control}
-              defaultChecked={currentPayment?.autoRenewal}
               name={'autoRenewal'}
+              onCheckedChange={handleAutoRenewalChange}
             />
             <Typography variant={'text14'}>Auto-renewal</Typography>
           </label>
@@ -150,13 +154,10 @@ export const AccountManagements = () => {
       )}
       {isModalOpen && (
         <ConfirmationModal
+          buttonTitle={buttonTitleModal}
           closeModal={handleModalClose}
           confirmation={handleConfirmation}
-          content={
-            modalTitle === 'Success'
-              ? 'Payment was successful'
-              : 'Transaction failed.Please,write to support'
-          }
+          content={contentModal}
           isOpen={isModalOpen}
           isTwoButtons={false}
           title={modalTitle ?? ''}

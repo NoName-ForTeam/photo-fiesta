@@ -1,13 +1,14 @@
 import { useForm } from 'react-hook-form'
 
-import { useSignInMutation } from '@/features'
-import { ROUTES } from '@/shared/config'
+import { useLazyAuthMeQuery, useSignInMutation } from '@/features'
+import { LOADING_DELAY, ROUTES } from '@/shared/config'
 import {
   Storage,
   commonEmailSchema,
   commonPasswordSchema,
   createBadRequestSchema,
   handleErrorResponse,
+  useDelayedLoading,
 } from '@/shared/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/router'
@@ -36,8 +37,12 @@ export const useSignIn = () => {
     mode: 'onBlur',
     resolver: zodResolver(signInSchema),
   })
-  const [signIn] = useSignInMutation()
-  //const [getMe] = useLazyAuthMeQuery()
+  const [signIn, { isLoading }] = useSignInMutation()
+  const [getMe] = useLazyAuthMeQuery()
+
+  //when true we see loading component
+  const isShowLoading = useDelayedLoading(isLoading, LOADING_DELAY)
+
   /**
    * This function is used to submit login credentials, store the received access token,
    * extract the `userId` from the token, and redirect the user to their profile page.
@@ -46,6 +51,7 @@ export const useSignIn = () => {
    * - If the token doesn't contain a `userId`, an additional API call to `getMe` is made to retrieve the user's data.
    * - In case of errors during the login process, appropriate form errors are displayed using `handleErrorResponse`.
    */
+
   const onSubmit = handleSubmit(data => {
     signIn(data)
       .unwrap()
@@ -70,8 +76,9 @@ export const useSignIn = () => {
           userId = parsed.userId
         } else {
           // If not, fetch the user data from the `auth/me` endpoint
-          // const meRes = await getMe()
-          // userId = meRes?.data?.userId
+          const meRes = await getMe()
+
+          userId = meRes?.data?.userId
         }
         // If no userId is found, do nothing
         if (!userId) {
@@ -92,6 +99,7 @@ export const useSignIn = () => {
   return {
     control,
     errors,
+    isShowLoading,
     onSubmit,
   }
 }

@@ -1,10 +1,10 @@
-import { useState } from 'react'
 import { toast } from 'react-toastify'
 
 import { useDeleteAvatarMutation } from '@/features'
+import { useModal } from '@/shared/utils'
 
 export const usePhotoPreview = (onDeletePhoto: () => void) => {
-  const [isOpen, setIsOpen] = useState(false)
+  const { isModalOpen: isOpen, setIsModalOpen: setIsOpen } = useModal()
   const [deleteAvatar] = useDeleteAvatarMutation()
 
   const handleOpenModal = () => {
