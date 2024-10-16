@@ -32,6 +32,8 @@ export const PostList = ({ avatar, userId }: Props) => {
     setOpenModal(true)
   }
 
+  // TODO: scroll for posts
+
   return (
     <div className={styles.postGrid}>
       {userPosts.items.map(post => (

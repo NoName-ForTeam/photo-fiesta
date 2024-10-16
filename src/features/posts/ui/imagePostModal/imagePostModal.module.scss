@@ -2,7 +2,7 @@
 
 .overlay {
   position: fixed;
-  z-index: 1000;
+  z-index: 0;
   top: 0;
   left: 0;
 
@@ -10,10 +10,15 @@
   align-items: center;
   justify-content: center;
 
+  width: 100vw;
+  height: 100vh;
+
   background-color: rgb(0 0 0 / 50%);
 }
 
 .modalContent {
+  position: relative;
+
   display: flex;
   flex-direction: column;
 
@@ -22,13 +27,13 @@
   max-height: 564px;
 
   background-color: var(--dark-100);
-  box-shadow: 0 2px 10px rgb(0 0 0 / 10%);
-
-  transition: all 0.3s ease;
 }
 
-.autoSize {
-  width: auto;
+.closeIcon {
+  cursor: pointer;
+  position: absolute;
+  top: -23px;
+  right: -25px;
 }
 
 .header {
@@ -37,73 +42,53 @@
   align-items: center;
   justify-content: space-between;
 
-  padding: 20px 20px 0;
+  padding: 10px 20px;
+
+  border-bottom: 1px solid var(--light-900);
 }
 
 .body {
   display: flex;
-  margin-top: 10px;
 }
 
 .imageSection {
-  align-items: center;
   width: 50%;
-  margin-right: 20px;
+  max-height: 432px;
+}
 
-  img {
+.autoSize {
+  width: auto;
+  max-width: 492px;
+
+  .imageSection {
     width: 100%;
-    height: 100%;
-    object-fit: contain;
   }
 }
 
-.closeModalContainer {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+.selectedImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 
+.viewMode {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
 
-  width: 100%;
-  max-width: 486px;
-  margin: 0 auto;
-  padding: 24px;
-
-  background-color: var(--dark-300);
+  width: 50%;
+  height: 100%;
+  margin: 20px 24px;
 }
 
-.closeModalHeader {
-  @include modal-header;
-
-  margin-bottom: 30px;
-  padding: 0 24px;
-}
-
-.content {
-  width: 100%;
-  max-width: 380px;
-}
-
-.closeModalDescription {
-  margin-bottom: 30px;
-  text-align: center;
-}
-
-.closeModalFooter {
+.profileInfo {
   display: flex;
-  gap: 12px;
-  justify-content: center;
+  flex-direction: row;
+  gap: 10px;
+  align-items: center;
 
-  button {
-    margin-top: 30px;
-    font-size: 16px;
-  }
+  margin-bottom: 20px;
 }
 
-.icon {
-  @include modal-close;
+.postDetails {
+  display: flex;
 }

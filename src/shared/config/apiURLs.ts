@@ -35,6 +35,10 @@ export const API_URLS = {
     POST_AVATAR: 'v1/users/profile/avatar',
     UPDATE_PROFILE: 'v1/users/profile',
   },
+
+  PUBLIC_USERS: {
+    GET_TOTAL_COUNT_USERS: 'v1/public-user',
+  },
   SUBSCRIPTIONS: {
     GET_MY_PAYMENTS: 'v1/subscriptions/my-payments',
     GET_SUBSCRIPTIONS_COST_PAYMENT: 'v1/subscriptions/cost-of-payment-subscriptions',
