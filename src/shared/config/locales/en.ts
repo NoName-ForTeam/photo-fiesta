@@ -57,6 +57,13 @@ export const en = {
     password: 'Enter your password',
     username: 'Enter your username',
   },
+  myPayments: {
+    dateOfPayment: 'Date of Payment',
+    endDateOfPayment: 'End date of subscription',
+    paymentType: 'Payment Type',
+    price: 'Price',
+    subscriptionType: 'Subscription Type',
+  },
   myProfile: {
     follow: 'Follow',
     followers: 'Followers',

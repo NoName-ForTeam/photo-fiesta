@@ -24,11 +24,10 @@
   margin-top: 5px;
 }
 
-// TODO: hard code width 121.09% - problem in settings.module.scss
 .account,
 .costs,
 .subscription {
-  width: 121.09%;
+  width: 100%;
 }
 
 .account {
@@ -47,7 +46,7 @@
   justify-content: flex-end;
   order: 3;
 
-  width: 121.09%;
+  width: 100%;
 }
 
 .container {

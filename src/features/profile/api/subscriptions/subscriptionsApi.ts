@@ -1,13 +1,12 @@
 import { baseApi } from '@/app/api'
-import { API_URLS, METHOD } from '@/shared/config'
-
 import {
   RequestSubscription,
   ResponseCostPayment,
   ResponseCurrentPayment,
   ResponseMyPayments,
   ResponseSubscription,
-} from './subscriptions.types'
+} from '@/features'
+import { API_URLS, METHOD } from '@/shared/config'
 
 const { POST } = METHOD
 

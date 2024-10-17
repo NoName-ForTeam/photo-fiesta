@@ -61,6 +61,13 @@ export const ru: LocaleType = {
     password: 'Введите свой пароль',
     username: 'Укажите свой никнейм',
   },
+  myPayments: {
+    dateOfPayment: 'Дата оплаты',
+    endDateOfPayment: 'Последний день подписки',
+    paymentType: 'Тип оплаты',
+    price: 'Цена',
+    subscriptionType: 'Тип подписки',
+  },
   myProfile: {
     follow: 'Подписаться',
     followers: 'Подписчики',
