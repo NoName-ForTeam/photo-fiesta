@@ -44,7 +44,7 @@ const formSchema = z.object({
   typeSubscription: z.enum(['MONTHLY', 'DAY', 'WEEKLY']),
 })
 
-type FormData = z.infer<typeof formSchema>
+export type FormData = z.infer<typeof formSchema>
 
 /**
  * Custom hook for managing account and subscription logic

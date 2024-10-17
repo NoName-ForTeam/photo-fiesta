@@ -14,20 +14,19 @@
   }
 }
 
-.renewal {
-  cursor: pointer;
+// .renewal {
+//   cursor: pointer;
 
-  display: flex;
-  gap: 4px;
-  align-items: center;
+//   display: flex;
+//   gap: 4px;
+//   align-items: center;
 
-  margin-top: 5px;
-}
+//   margin-top: 5px;
+// }
 
 // TODO: hard code width 121.09% - problem in settings.module.scss
 .account,
-.costs,
-.subscription {
+.costs {
   width: 121.09%;
 }
 
