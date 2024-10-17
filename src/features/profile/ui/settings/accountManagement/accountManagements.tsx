@@ -26,16 +26,11 @@ import { z } from 'zod'
 
 import styles from './accountManagement.module.scss'
 
+import { AccountTypes } from './accountTypes'
 import { CurrentSubscription } from './currentSubscription'
 import { RadioBlock } from './radioBlock'
 
-type AccountType = 'business' | 'personal'
-
-/** Array of available account types */
-const accountTypes = [
-  { title: 'Personal', value: 'personal' },
-  { title: 'Business', value: 'business' },
-] as const
+export type AccountType = 'business' | 'personal'
 
 /** Array of available subscription costs */
 const subscriptionCosts = [
@@ -121,9 +116,9 @@ export const AccountManagements = () => {
    * Handles change in account type
    * @param {AccountType} value - The new account type
    */
-  const handleAccountTypeChange = (value: AccountType) => {
-    setAccountType(value)
-  }
+  // const handleAccountTypeChange = (value: AccountType) => {
+  //   setAccountType(value)
+  // }
 
   //* Payment handling
   const onSubmit = async (data: FormData) => {
@@ -215,10 +210,6 @@ export const AccountManagements = () => {
     title: styles.title,
   } as const
 
-  const AccountTypeBlocks = accountTypes.map(type => (
-    <RadioBlock key={type.value} title={type.title} value={type.value} />
-  ))
-
   const SubscriptionCostBlocks = subscriptionCosts.map(cost => (
     <RadioBlock key={cost.value} title={cost.title} value={cost.value} />
   ))
@@ -245,19 +236,7 @@ export const AccountManagements = () => {
           setChecked={setChecked}
         />
       )}
-
-      <div className={classNames.account}>
-        <Typography className={classNames.title} variant={'h3'}>
-          Account type:
-        </Typography>
-        <RadioGroup
-          className={classNames.container}
-          onValueChange={handleAccountTypeChange}
-          value={accountType}
-        >
-          {AccountTypeBlocks}
-        </RadioGroup>
-      </div>
+      <AccountTypes accountType={accountType} setAccountType={setAccountType} />
       {accountType == 'business' && (
         <>
           <div className={classNames.costs}>

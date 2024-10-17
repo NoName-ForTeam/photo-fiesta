@@ -25,17 +25,14 @@
 // }
 
 // TODO: hard code width 121.09% - problem in settings.module.scss
-.account,
-.costs {
-  width: 121.09%;
-}
 
-.account {
-  order: 1;
-}
+// .account {
+//   order: 1;
+// }
 
 .costs {
   order: 2;
+  width: 121.09%;
 }
 
 .buttons {
