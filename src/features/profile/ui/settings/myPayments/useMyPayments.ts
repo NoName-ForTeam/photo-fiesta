@@ -1,10 +1,6 @@
 import { useState } from 'react'
 
-import { useGetMyPaymentsQuery } from '@/features'
-
 export const useMyPayments = () => {
-  const { data: myPayments, isLoading } = useGetMyPaymentsQuery()
-
   const [option, setOption] = useState('10')
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [pageSize, setPageSize] = useState<number>(10)
@@ -27,8 +23,6 @@ export const useMyPayments = () => {
     currentPage,
     handleOptionChange,
     handlePageChange,
-    isLoading,
-    myPayments,
     option,
     options,
     pageSize,

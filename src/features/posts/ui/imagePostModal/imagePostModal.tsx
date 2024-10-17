@@ -86,7 +86,7 @@ export const ImagePostModal = forwardRef<HTMLFormElement, ImagePostModalProps>(
           ref={modalRef}
         >
           {viewMode && !isEditing && (
-            <CloseOutline className={styles.closeIcon} onClick={() => handleClose()} />
+            <CloseOutline className={styles.closeIcon} onClick={handleClose} />
           )}
           {!viewMode && (
             <div className={styles.header}>
@@ -153,7 +153,7 @@ export const ImagePostModal = forwardRef<HTMLFormElement, ImagePostModalProps>(
                       {showConfirmCloseModal && (
                         <ConfirmationModal
                           closeModal={() => setShowConfirmCloseModal(false)}
-                          confirmation={() => handleClose()}
+                          confirmation={handleClose}
                           content={
                             'Do you really want to close the edition of the publication? If you close changes won`t be saved'
                           }

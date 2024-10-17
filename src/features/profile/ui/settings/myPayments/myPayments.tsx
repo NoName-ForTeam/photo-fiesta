@@ -1,4 +1,4 @@
-import { MyPaymentsList, useMyPayments } from '@/features'
+import { MyPaymentsList, useGetMyPaymentsQuery, useMyPayments } from '@/features'
 import { Pagination, Select, SelectContainer, SelectItem } from '@photo-fiesta/ui-lib'
 
 import styles from './myPayments.module.scss'
@@ -14,16 +14,10 @@ const classNames = {
  * and a select dropdown to change the number of items per page.
  */
 export const MyPayments = () => {
-  const {
-    currentPage,
-    handleOptionChange,
-    handlePageChange,
-    isLoading,
-    myPayments,
-    option,
-    options,
-    pageSize,
-  } = useMyPayments()
+  const { data: myPayments, isLoading } = useGetMyPaymentsQuery()
+
+  const { currentPage, handleOptionChange, handlePageChange, option, options, pageSize } =
+    useMyPayments()
 
   if (isLoading) {
     return <div>Loading</div>
