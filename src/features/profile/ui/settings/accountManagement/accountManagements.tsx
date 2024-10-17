@@ -1,6 +1,5 @@
-/* eslint-disable max-lines */
 import { useCallback, useEffect, useState } from 'react'
-import { Controller, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 
 import {
   useGetCurrentPaymentQuery,
@@ -20,7 +19,7 @@ import {
 } from '@/shared/utils'
 import { ConfirmationModal } from '@/widgets'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Button, RadioGroup, Typography } from '@photo-fiesta/ui-lib'
+import { Button, Typography } from '@photo-fiesta/ui-lib'
 import { useRouter } from 'next/router'
 import { z } from 'zod'
 
@@ -28,16 +27,9 @@ import styles from './accountManagement.module.scss'
 
 import { AccountTypes } from './accountTypes'
 import { CurrentSubscription } from './currentSubscription'
-import { RadioBlock } from './radioBlock'
+import { SubscriptionCosts } from './subscriptionCosts'
 
 export type AccountType = 'business' | 'personal'
-
-/** Array of available subscription costs */
-const subscriptionCosts = [
-  { amount: 10, title: '$10 per 1 Day', value: 'DAY' },
-  { amount: 50, title: '$50 per 7 Day', value: 'WEEKLY' },
-  { amount: 100, title: '$100 per month', value: 'MONTHLY' },
-] as const
 
 const formSchema = z.object({
   amount: z.number(),
@@ -112,14 +104,6 @@ export const AccountManagements = () => {
     setChecked(currentPaymentData?.hasAutoRenewal || false)
   }, [accountType, refetchCurrentPayment])
 
-  /**
-   * Handles change in account type
-   * @param {AccountType} value - The new account type
-   */
-  // const handleAccountTypeChange = (value: AccountType) => {
-  //   setAccountType(value)
-  // }
-
   //* Payment handling
   const onSubmit = async (data: FormData) => {
     if (isSubmitting) {
@@ -186,42 +170,21 @@ export const AccountManagements = () => {
     }
   }, [router.query.success, handleSuccessfulPayment])
 
-  //* Subscription handling
-  /**
-   * Handles change in subscription type
-   * @param {string} value - The new subscription type
-   */
-  const handleSubscriptionChange = (value: string) => {
-    const subscription = subscriptionCosts.find(cost => cost.value === value)
-
-    if (subscription) {
-      setValue('typeSubscription', subscription.value)
-      setValue('amount', subscription.amount)
-    }
-  }
-
   const classNames = {
-    account: styles.account,
     buttons: styles.buttons,
-    container: styles.container,
-    costs: styles.costs,
     form: styles.form,
     icon: styles.icon,
-    title: styles.title,
   } as const
 
-  const SubscriptionCostBlocks = subscriptionCosts.map(cost => (
-    <RadioBlock key={cost.value} title={cost.title} value={cost.value} />
-  ))
-
-  if (showLoading || isFetchingProfile) {
-    return <Loader />
-  }
   const buttonTitleModal = modalTitle === 'Success' ? 'Ok' : 'Back to payment'
   const contentModal =
     modalTitle === 'Success'
       ? 'Payment was successful'
       : 'Transaction failed.Please,write to support'
+
+  if (showLoading || isFetchingProfile) {
+    return <Loader />
+  }
 
   return (
     <form className={classNames.form} onSubmit={handleSubmit(onSubmit)}>
@@ -239,26 +202,7 @@ export const AccountManagements = () => {
       <AccountTypes accountType={accountType} setAccountType={setAccountType} />
       {accountType == 'business' && (
         <>
-          <div className={classNames.costs}>
-            <Typography variant={'h3'}>Your subscription costs:</Typography>
-            <Controller
-              control={control}
-              name={'typeSubscription'}
-              render={({ field }) => (
-                <RadioGroup
-                  className={classNames.container}
-                  defaultValue={'MONTHLY'}
-                  onValueChange={value => {
-                    field.onChange(value)
-                    handleSubscriptionChange(value)
-                  }}
-                  value={field.value}
-                >
-                  {SubscriptionCostBlocks}
-                </RadioGroup>
-              )}
-            />
-          </div>
+          <SubscriptionCosts control={control} setValue={setValue} />
           <div className={classNames.buttons}>
             <Button
               disabled={isSubmitting}

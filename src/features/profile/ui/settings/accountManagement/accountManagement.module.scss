@@ -7,32 +7,6 @@
   width: 100%;
   height: 100%;
   margin-top: 20px;
-
-  // & .radio {
-  //   width: 15px;
-  //   height: 15px;
-  // }
-}
-
-// .renewal {
-//   cursor: pointer;
-
-//   display: flex;
-//   gap: 4px;
-//   align-items: center;
-
-//   margin-top: 5px;
-// }
-
-// TODO: hard code width 121.09% - problem in settings.module.scss
-
-// .account {
-//   order: 1;
-// }
-
-.costs {
-  order: 2;
-  width: 121.09%;
 }
 
 .buttons {
@@ -44,32 +18,6 @@
   order: 3;
 
   width: 121.09%;
-}
-
-.container {
-  padding: 14px 20px;
-  background-color: var(--dark-500);
-  outline: 1px solid var(--dark-300);
-
-  &.data {
-    display: flex;
-    gap: 48px;
-
-    & > div {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-  }
-}
-
-// .block {
-//   display: flex;
-//   gap: 8px;
-// }
-
-.title {
-  margin-bottom: 5px;
 }
 
 .icon {
