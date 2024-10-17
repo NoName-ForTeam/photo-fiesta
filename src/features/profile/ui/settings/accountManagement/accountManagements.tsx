@@ -1,5 +1,5 @@
 /* eslint-disable max-lines */
-import { ComponentPropsWithoutRef, useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 
 import {
@@ -20,13 +20,14 @@ import {
 } from '@/shared/utils'
 import { ConfirmationModal } from '@/widgets'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Button, RadioGroup, RadioGroupItem, Typography } from '@photo-fiesta/ui-lib'
+import { Button, RadioGroup, Typography } from '@photo-fiesta/ui-lib'
 import { useRouter } from 'next/router'
 import { z } from 'zod'
 
 import styles from './accountManagement.module.scss'
 
 import { CurrentSubscription } from './currentSubscription'
+import { RadioBlock } from './radioBlock'
 
 type AccountType = 'business' | 'personal'
 
@@ -96,13 +97,6 @@ export const AccountManagements = () => {
     },
     resolver: zodResolver(formSchema),
   })
-
-  //get end date of subscription and next payment date
-  // const {
-  //   endDate: endDateOfSubscription,
-  //   isSubscriptionActive,
-  //   nextPaymentDate,
-  // } = computeSubscriptionDates(currentPayments)
 
   const [accountType, setAccountType] = useState<AccountType>(
     isSubscriptionActive ? 'business' : 'personal'
@@ -317,29 +311,5 @@ export const AccountManagements = () => {
         />
       )}
     </form>
-  )
-}
-
-//RadioBlock
-type RadioBlockProps = {
-  title: string
-  value: string
-} & ComponentPropsWithoutRef<'div'>
-
-/**
- * RadioBlock component for rendering a radio button with a label
- */
-
-const RadioBlock = ({ title, value }: RadioBlockProps) => {
-  const classNames = {
-    block: styles.block,
-    radio: styles.radio,
-  } as const
-
-  return (
-    <div className={classNames.block}>
-      <RadioGroupItem className={classNames.radio} value={value} />
-      <Typography variant={'text14'}>{title}</Typography>
-    </div>
   )
 }
