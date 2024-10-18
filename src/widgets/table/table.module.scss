@@ -1,0 +1,35 @@
+@use '@/app/styles/mixins' as *;
+
+.tableWrapper {
+  border-collapse: collapse;
+  width: 100%;
+  border: 1px solid var(--dark-500);
+  border-radius: 2px;
+}
+
+.tableHead {
+  @include font(var(--font-size-s), var(--line-height-m), var(--font-weight-semibold));
+
+  color: var(--light-100);
+}
+
+.tableCell {
+  display: table-cell;
+
+  margin: 0;
+  padding: 6px 24px;
+
+  @include font(var(--font-size-s), var(--line-height-m), var(--font-weight-regular));
+
+  text-align: left;
+
+  border-bottom: 1px solid var(--dark-500);
+}
+
+.tableBody .tableRow:last-child .tableCell {
+  border-bottom: none;
+}
+
+.tableRow .tableBodyCell:last-child {
+  padding: 12px 24px;
+}
