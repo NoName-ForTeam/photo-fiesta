@@ -1,3 +1,5 @@
+@use '@/app/styles/mixins' as *;
+
 .tableWrapper {
   border-collapse: collapse;
   width: 100%;
@@ -6,9 +8,8 @@
 }
 
 .tableHead {
-  font-size: var(--font-size-s);
-  font-weight: var(--font-weight-semibold);
-  line-height: var(--line-height-m);
+  @include font(var(--font-size-s), var(--line-height-m), var(--font-weight-semibold));
+
   color: var(--light-100);
 }
 
@@ -18,9 +19,8 @@
   margin: 0;
   padding: 6px 24px;
 
-  font-size: var(--font-size-s);
-  font-weight: var(--font-weight-regular);
-  line-height: var(--line-height-m);
+  @include font(var(--font-size-s), var(--line-height-m), var(--font-weight-regular));
+
   text-align: left;
 
   border-bottom: 1px solid var(--dark-500);

@@ -73,15 +73,15 @@ export type ResponseCurrentPayment = {
   data: CurrentPayment[]
   hasAutoRenewal: boolean
 }
-export type PaymentType = 'CREDIT_CARD' | 'PAYPAL' | 'STRIPE'
-export type SubscriptionType = 'DAY' | 'MONTHLY' | 'WEEKLY'
+export type PaymentMethods = 'CREDIT_CARD' | 'PAYPAL' | 'STRIPE'
+export type SubscriptionOptions = 'DAY' | 'MONTHLY' | 'WEEKLY'
 
 export type DetailedPayment = {
   dateOfPayment: string
   endDateOfSubscription: string
-  paymentType: PaymentType
+  paymentType: PaymentMethods
   price: number
-  subscriptionType: SubscriptionType
+  subscriptionType: SubscriptionOptions
 } & BaseSubscription
 
 /**

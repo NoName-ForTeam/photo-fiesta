@@ -1,5 +1,6 @@
 import { DetailedPayment } from '@/features'
 import { useTranslation } from '@/shared/utils'
+import { getFormatDate } from '@/shared/utils/getFormatDate'
 import {
   TableBody,
   TableBodyCell,
@@ -23,33 +24,30 @@ import styles from './myPaymentsList.module.scss'
 export const MyPaymentsList = ({ payments }: { payments: DetailedPayment[] }) => {
   const { t } = useTranslation()
   const headers = [
-    t.myPayments.dateOfPayment,
-    t.myPayments.endDateOfPayment,
-    t.myPayments.price,
-    t.myPayments.subscriptionType,
-    t.myPayments.paymentType,
+    { key: 'dateOfPayment', label: t.myPayments.dateOfPayment },
+    { key: 'endDateOfSubscription', label: t.myPayments.endDateOfPayment },
+    { key: 'price', label: t.myPayments.price },
+    { key: 'subscriptionType', label: t.myPayments.subscriptionType },
+    { key: 'paymentType', label: t.myPayments.paymentType },
   ]
+  const tableHeaders = headers.map((header, index) => (
+    <TableHeadCell key={index}>{header.label}</TableHeadCell>
+  ))
 
-  const formatDate = (date: string) => new Date(date).toLocaleDateString()
+  const paymentsCells = payments.map(payment => (
+    <TableBodyRow key={payment.subscriptionId}>
+      <TableBodyCell>{getFormatDate(payment.dateOfPayment)}</TableBodyCell>
+      <TableBodyCell>{getFormatDate(payment.endDateOfSubscription)}</TableBodyCell>
+      <TableBodyCell>${payment.price}</TableBodyCell>
+      <TableBodyCell>{payment.subscriptionType}</TableBodyCell>
+      <TableBodyCell>{payment.paymentType}</TableBodyCell>
+    </TableBodyRow>
+  ))
 
   return (
     <TableWrapper>
-      <TableHead className={styles.head}>
-        {headers.map((header, index) => (
-          <TableHeadCell key={index}>{header}</TableHeadCell>
-        ))}
-      </TableHead>
-      <TableBody>
-        {payments.map(payment => (
-          <TableBodyRow key={payment.subscriptionId}>
-            <TableBodyCell>{formatDate(payment.dateOfPayment)}</TableBodyCell>
-            <TableBodyCell>{formatDate(payment.endDateOfSubscription)}</TableBodyCell>
-            <TableBodyCell>${payment.price}</TableBodyCell>
-            <TableBodyCell>{payment.subscriptionType}</TableBodyCell>
-            <TableBodyCell>{payment.paymentType}</TableBodyCell>
-          </TableBodyRow>
-        ))}
-      </TableBody>
+      <TableHead className={styles.head}>{tableHeaders}</TableHead>
+      <TableBody>{paymentsCells}</TableBody>
     </TableWrapper>
   )
 }
