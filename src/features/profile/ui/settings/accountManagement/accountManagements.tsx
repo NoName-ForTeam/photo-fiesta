@@ -7,7 +7,6 @@ import {
   usePostSubscriptionMutation,
 } from '@/features'
 import { ErrorResponse } from '@/shared/api'
-import { PaypalSvgrepoCom4, StripeSvgrepoCom4 } from '@/shared/assets'
 import { LOADING_DELAY } from '@/shared/config'
 import { Loader } from '@/shared/ui'
 import {
@@ -19,7 +18,6 @@ import {
 } from '@/shared/utils'
 import { ConfirmationModal } from '@/widgets'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Button, Typography } from '@photo-fiesta/ui-lib'
 import { useRouter } from 'next/router'
 import { z } from 'zod'
 
@@ -27,6 +25,7 @@ import styles from './accountManagement.module.scss'
 
 import { AccountTypes } from './accountTypes'
 import { CurrentSubscription } from './currentSubscription'
+import { PaymentMethodSelector } from './paymentMethodSelector'
 import { SubscriptionCosts } from './subscriptionCosts'
 
 export type AccountType = 'business' | 'personal'
@@ -55,12 +54,10 @@ export const AccountManagements = () => {
   const { isLoading: isFetchingProfile } = useGetProfileQuery()
   const [postSubscription, { isLoading }] = usePostSubscriptionMutation()
 
-  //when true we see loading component
+  //when true we see loading component and the delay avoids picture jerkiness
   const showLoading = useDelayedLoading(isLoading, LOADING_DELAY)
 
   const { data: currentPaymentData, refetch: refetchCurrentPayment } = useGetCurrentPaymentQuery()
-
-  // const renewal = currentPaymentData?.hasAutoRenewal
 
   // {userId,subscriptionId,dateOfPayment,endDateOfSubscription,autoRenewal}
   // get current payments
@@ -129,15 +126,6 @@ export const AccountManagements = () => {
     }
   }
 
-  /**
-   * Handles payment submission
-   * @param {FormData['paymentType']} paymentType - The payment type
-   */
-  const handlePaymentSubmit = (paymentType: FormData['paymentType']) => {
-    setValue('paymentType', paymentType)
-    handleSubmit(onSubmit)()
-  }
-
   //* Modal handling
 
   const handleModalClose = () => {
@@ -171,9 +159,7 @@ export const AccountManagements = () => {
   }, [router.query.success, handleSuccessfulPayment])
 
   const classNames = {
-    buttons: styles.buttons,
     form: styles.form,
-    icon: styles.icon,
   } as const
 
   const buttonTitleModal = modalTitle === 'Success' ? 'Ok' : 'Back to payment'
@@ -203,23 +189,12 @@ export const AccountManagements = () => {
       {accountType == 'business' && (
         <>
           <SubscriptionCosts control={control} setValue={setValue} />
-          <div className={classNames.buttons}>
-            <Button
-              disabled={isSubmitting}
-              onClick={() => handlePaymentSubmit('PAYPAL')}
-              variant={'icon-link'}
-            >
-              <PaypalSvgrepoCom4 className={classNames.icon} />
-            </Button>
-            <Typography variant={'text14'}>Or</Typography>
-            <Button
-              disabled={isSubmitting}
-              onClick={() => handlePaymentSubmit('STRIPE')}
-              variant={'icon-link'}
-            >
-              <StripeSvgrepoCom4 className={classNames.icon} />
-            </Button>
-          </div>
+          <PaymentMethodSelector
+            handleSubmit={handleSubmit}
+            isSubmitting={isSubmitting}
+            onSubmit={onSubmit}
+            setValue={setValue}
+          />
         </>
       )}
       {isModalOpen && (
