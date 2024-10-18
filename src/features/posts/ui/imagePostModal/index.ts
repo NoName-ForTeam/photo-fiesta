@@ -1,2 +1,2 @@
+export * from './CreatePostModal'
 export * from './imagePostModal'
-export * from './useImagePostModal'

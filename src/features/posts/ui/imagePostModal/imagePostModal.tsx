@@ -1,10 +1,17 @@
-import { forwardRef, useEffect, useRef } from 'react'
+import { forwardRef, useState } from 'react'
 
-import { Avatar, Post, PostForm, useImagePostModal } from '@/features'
-import { ArrowIosBackOutline, Close, CloseOutline, Edit2 } from '@/shared/assets'
+import {
+  Avatar,
+  PostForm,
+  useDeletePostMutation,
+  useDeleteUploadImageMutation,
+  useGetPostByIdQuery,
+} from '@/features'
+import { Close, CloseOutline, Edit2 } from '@/shared/assets'
 import { ProfileAvatar } from '@/shared/ui'
+import { useChangeTitle } from '@/shared/utils/hooks/useChangeTitle'
 import { ConfirmationModal } from '@/widgets'
-import { Button, Typography } from '@photo-fiesta/ui-lib'
+import { Typography } from '@photo-fiesta/ui-lib'
 import clsx from 'clsx'
 import Image from 'next/image'
 
@@ -13,7 +20,7 @@ import styles from './imagePostModal.module.scss'
 type ImagePostModalProps = {
   avatar: Avatar[] | undefined
   handleClose: () => void
-  postId: number
+  postId: number | undefined
   selectedImage: null | string
   userId: number | undefined
   viewMode?: boolean
@@ -35,84 +42,39 @@ type ImagePostModalProps = {
 
 export const ImagePostModal = forwardRef<HTMLFormElement, ImagePostModalProps>(
   ({ avatar, handleClose, postId, selectedImage, userId, viewMode = false }) => {
-    const {
-      changeStep,
-      confirmDelete,
-      getStepTitle,
-      interruptionCreatePost,
-      isEditing,
-      postById,
-      setIsEditing,
-      setShowConfirmCloseModal,
-      setShowConfirmDeleteModal,
-      setShowConfirmModal,
-      showConfirmCloseModal,
-      showConfirmDeleteModal,
-      showConfirmModal,
-      step,
-    } = useImagePostModal({
-      handleClose,
-      postId,
-      selectedImage,
-    })
+    const { data: postById } = useGetPostByIdQuery({ postId }, { skip: !postId })
+    const [deleteImage] = useDeleteUploadImageMutation()
+    const [deletePost] = useDeletePostMutation()
+
+    const [showConfirmDeleteModal, setShowConfirmDeleteModal] = useState(false)
+    const [showConfirmCloseModal, setShowConfirmCloseModal] = useState(false)
+    const [isEditing, setIsEditing] = useState(false)
+    const { getStepTitle } = useChangeTitle({ isEditing, viewMode })
+
+    /** Delete post function */
+    const confirmDelete = async () => {
+      if (postId) {
+        if (selectedImage) {
+          /**  Delete the image, and if the operation is successful, then delete all posts with the same description */
+          await deleteImage({ uploadId: selectedImage })
+        }
+        await deletePost({ postId })
+      }
+      handleClose()
+    }
 
     // TODO: addTranslate
 
-    const modalRef = useRef<HTMLDivElement>(null)
-
-    /**
-     * Sets up an event listener for mouse down events on the document (ImagePostModal for creating post).
-     * When a click event occurs outside the modal reference element and the modal is not in view mode,
-     * it sets `showConfirmModal` to true.
-     */
-    useEffect(() => {
-      const handleClickOutside = (event: MouseEvent) => {
-        if (!viewMode && modalRef.current && !modalRef.current.contains(event.target as Node)) {
-          setShowConfirmModal(true)
-        }
-      }
-
-      document.addEventListener('mousedown', handleClickOutside)
-
-      return () => document.removeEventListener('mousedown', handleClickOutside)
-    }, [viewMode])
-
-    // TODO: rebase handleClickOutside in useImagePostModal(and fix bugs)
-
     return (
       <div className={styles.overlay}>
-        <div
-          className={clsx(styles.modalContent, step === 'cropping' ? styles.autoSize : '')}
-          ref={modalRef}
-        >
-          {viewMode && !isEditing && (
-            <CloseOutline className={styles.closeIcon} onClick={() => handleClose()} />
-          )}
-          {!viewMode && (
-            <div className={styles.header}>
-              <Button onClick={() => changeStep('prev')} variant={'icon-link'}>
-                <ArrowIosBackOutline />
-              </Button>
-              <Typography variant={'h1'}>{getStepTitle()}</Typography>
-              {step !== 'publication' && (
-                <Button onClick={() => changeStep('next')} variant={'ghost'}>
-                  Next
-                </Button>
-              )}
-              {step === 'publication' && (
-                <Button form={'postDescription'} variant={'ghost'}>
-                  Publish
-                </Button>
-              )}
-            </div>
-          )}
+        <div className={clsx(styles.modalContent)}>
+          {!isEditing && <CloseOutline className={styles.closeIcon} onClick={handleClose} />}
           {isEditing && (
             <div className={styles.header}>
               <Typography variant={'h1'}>{getStepTitle()}</Typography>
               <Close onClick={() => setShowConfirmCloseModal(true)} />
             </div>
           )}
-
           <div className={styles.body}>
             <section className={styles.imageSection}>
               {selectedImage ? (
@@ -127,73 +89,51 @@ export const ImagePostModal = forwardRef<HTMLFormElement, ImagePostModalProps>(
                 <Typography variant={'h2'}>No image selected</Typography>
               )}
             </section>
-            {viewMode && postById && (
-              <section className={styles.viewMode}>
-                <div className={styles.profileInfo}>
-                  <CloseOutline onClick={() => setShowConfirmDeleteModal(true)} />
-                  <Edit2 onClick={() => setIsEditing(true)} />
-                  <ProfileAvatar avatarOwner={avatar?.[0]?.url} />
-                  <Typography variant={'h3'}>{userId}</Typography>
-                </div>
-                <div className={styles.postDetails}>
-                  {isEditing ? (
-                    <div>
-                      <PostForm
-                        handleClose={handleClose}
-                        isEditing
-                        postId={postId}
-                        selectedImage={selectedImage}
-                      />
-                      {showConfirmCloseModal && (
-                        <ConfirmationModal
-                          closeModal={() => setShowConfirmCloseModal(false)}
-                          confirmation={() => handleClose()}
-                          content={
-                            'Do you really want to close the edition of the publication? If you close changes won`t be saved'
-                          }
-                          isOpen={showConfirmCloseModal}
-                          isTwoButtons
-                          title={'Close Post'}
-                        />
-                      )}
-                    </div>
-                  ) : (
-                    <Typography variant={'h3'}>{postById?.description}</Typography> // Иначе показываем описание
-                  )}
-                  {showConfirmDeleteModal && (
-                    <ConfirmationModal
-                      closeModal={() => setShowConfirmDeleteModal(false)}
-                      confirmation={confirmDelete}
-                      content={'Are you sure you want to delete this post?'}
-                      isOpen={showConfirmDeleteModal}
-                      isTwoButtons
-                      title={'Delete Post'}
+            <section className={styles.viewMode}>
+              <div className={styles.profileInfo}>
+                <CloseOutline onClick={() => setShowConfirmDeleteModal(true)} />
+                <Edit2 onClick={() => setIsEditing(true)} />
+                <ProfileAvatar avatarOwner={avatar?.[0]?.url} />
+                <Typography variant={'h3'}>{userId}</Typography>
+              </div>
+              <div className={styles.postDetails}>
+                {isEditing ? (
+                  <div>
+                    <PostForm
+                      handleClose={handleClose}
+                      isEditing
+                      postId={postId}
+                      selectedImage={selectedImage}
+                      setIsEditing={setIsEditing}
                     />
-                  )}
-                </div>
-              </section>
-            )}
-            {!viewMode && (
-              <Post
-                avatar={avatar}
-                handleClose={handleClose}
-                postId={postId}
-                selectedImage={selectedImage}
-                step={step}
-                userId={userId}
-              />
-            )}
-            {showConfirmModal && (
-              <ConfirmationModal
-                closeModal={() => setShowConfirmModal(false)}
-                confirmation={interruptionCreatePost}
-                content={
-                  'Do you really want to close the creation of a publication? If you close everything will be deleted.'
-                }
-                isOpen={showConfirmModal}
-                title={'Close'}
-              />
-            )}
+                    {showConfirmCloseModal && (
+                      <ConfirmationModal
+                        closeModal={() => setShowConfirmCloseModal(false)}
+                        confirmation={handleClose}
+                        content={
+                          'Do you really want to close the edition of the publication? If you close changes won`t be saved'
+                        }
+                        isOpen={showConfirmCloseModal}
+                        isTwoButtons
+                        title={'Close Post'}
+                      />
+                    )}
+                  </div>
+                ) : (
+                  <Typography variant={'h3'}>{postById?.description}</Typography> // Иначе показываем описание
+                )}
+                {showConfirmDeleteModal && (
+                  <ConfirmationModal
+                    closeModal={() => setShowConfirmDeleteModal(false)}
+                    confirmation={confirmDelete}
+                    content={'Are you sure you want to delete this post?'}
+                    isOpen={showConfirmDeleteModal}
+                    isTwoButtons
+                    title={'Delete Post'}
+                  />
+                )}
+              </div>
+            </section>
           </div>
         </div>
       </div>

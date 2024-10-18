@@ -5,7 +5,6 @@ import { toast } from 'react-toastify'
 import {
   useCreatePostMutation,
   useGetPostByIdQuery,
-  useImagePostModal,
   useUpdatePostMutation,
   useUploadPostImageMutation,
 } from '@/features'
@@ -18,16 +17,23 @@ const badRequestSchema = createBadRequestSchema(['description'])
 
 type UsePostFormProps = {
   handleClose: () => void
-  postId: number
+  postId?: number | undefined
   selectedImage?: null | string
+  setIsEditing: (isEditing: boolean) => void // пропс для изменения состояния
 }
 
-export const usePostForm = ({ handleClose, postId, selectedImage }: UsePostFormProps) => {
+export const usePostForm = ({
+  handleClose,
+  postId,
+  selectedImage,
+  setIsEditing,
+}: UsePostFormProps) => {
   const [createPost] = useCreatePostMutation()
   const [uploadImage] = useUploadPostImageMutation()
   const [updateDescription] = useUpdatePostMutation()
   const { data: post } = useGetPostByIdQuery({ postId }, { skip: !postId })
-  const { setIsEditing, setIsOpenModal } = useImagePostModal({ handleClose, postId })
+
+  const [isOpenModal, setIsOpenModal] = useState<boolean>(true)
 
   const [charCount, setCharCount] = useState(0)
 
@@ -75,12 +81,14 @@ export const usePostForm = ({ handleClose, postId, selectedImage }: UsePostFormP
 
   /** Submit function for edit description in post modal */
   const saveDescriptionChanges = handleSubmit(async (data: FormValues) => {
-    try {
-      await updateDescription({ description: data.description, postId })
-      setIsEditing(false)
-      handleClose()
-    } catch (error) {
-      handleErrorResponse<FormValues>({ badRequestSchema, error, setError })
+    if (postId) {
+      try {
+        await updateDescription({ description: data.description, postId })
+        setIsEditing(false)
+        handleClose()
+      } catch (error) {
+        handleErrorResponse<FormValues>({ badRequestSchema, error, setError })
+      }
     }
   })
 
@@ -88,6 +96,7 @@ export const usePostForm = ({ handleClose, postId, selectedImage }: UsePostFormP
     charCount,
     control,
     errors,
+    isOpenModal,
     onSubmit,
     saveDescriptionChanges,
     setCharCount,
