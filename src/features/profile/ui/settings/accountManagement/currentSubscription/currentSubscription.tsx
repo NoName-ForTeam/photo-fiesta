@@ -1,60 +1,52 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect } from 'react'
 import { Control } from 'react-hook-form'
 
 import { ResponseCurrentPayment, usePostCancelAutoRenewalMutation } from '@/features'
+import { Loader } from '@/shared/ui'
+import { computeSubscriptionDates } from '@/shared/utils'
 import { FormCheckbox, Typography } from '@photo-fiesta/ui-lib'
 import clsx from 'clsx'
 
 import styles from './currentSubscription.module.scss'
 
-import { FormData } from '../useAccountManagement'
+import { AccountType, FormData } from '../accountManagements'
 
 type CurrentSubscriptionProps = {
-  checked: boolean
+  accountType: AccountType
+  autoRenewalEnabled: boolean
   control: Control<FormData>
   currentPaymentData: ResponseCurrentPayment | undefined
-  endDateOfSubscription: null | string
-  isSubscriptionActive: boolean
-  nextPaymentDate: null | string
-  setChecked: (value: boolean) => void
+  setAutoRenewalEnabled: (value: boolean) => void
 }
 
 export const CurrentSubscription = ({
-  checked,
+  accountType,
+  autoRenewalEnabled,
   control,
   currentPaymentData,
-  endDateOfSubscription,
-  isSubscriptionActive,
-  nextPaymentDate,
-  setChecked,
+  setAutoRenewalEnabled,
 }: CurrentSubscriptionProps) => {
-  const [postCancelAutoRenewal] = usePostCancelAutoRenewalMutation()
-  // const { data: currentPaymentData, refetch: refetchCurrentPayment } = useGetCurrentPaymentQuery()
+  const [postCancelAutoRenewal, { isLoading }] = usePostCancelAutoRenewalMutation()
 
-  //const currentPayments = currentPaymentData?.data || []
+  const currentPayments = currentPaymentData?.data || []
 
-  // const initialCheckedState = currentPaymentData?.hasAutoRenewal || false
-  // const [checked, setChecked] = useState(initialCheckedState)
-
-  // const {
-  //   endDate: endDateOfSubscription,
-  //   isSubscriptionActive,
-  //   nextPaymentDate,
-  // } = computeSubscriptionDates(currentPayments)
+  const {
+    endDate: endDateOfSubscription,
+    isSubscriptionActive,
+    nextPaymentDate,
+  } = computeSubscriptionDates(currentPayments)
 
   useEffect(() => {
-    setChecked(currentPaymentData?.hasAutoRenewal || false)
+    setAutoRenewalEnabled(currentPaymentData?.hasAutoRenewal || false)
   }, [currentPaymentData?.hasAutoRenewal])
 
-  // useEffect(() => {
-  //   refetchCurrentPayment()
-  // }, [refetchCurrentPayment])
-
-  const handleAutoRenewalChange = (value: boolean) => {
+  const handleAutoRenewalChange = async (value: boolean) => {
     if (!value) {
-      postCancelAutoRenewal()
+      await postCancelAutoRenewal()
     }
-    setChecked(value)
+
+    setAutoRenewalEnabled(value)
   }
 
   const classNames = {
@@ -65,8 +57,11 @@ export const CurrentSubscription = ({
     title: styles.title,
   } as const
 
-  if (!isSubscriptionActive) {
+  if (!isSubscriptionActive || accountType !== 'business') {
     return null
+  }
+  if (isLoading) {
+    return <Loader />
   }
 
   return (
@@ -81,12 +76,12 @@ export const CurrentSubscription = ({
         </div>
         <div>
           <Typography variant={'text14'}>Next payment</Typography>
-          {checked && <Typography variant={'textBold14'}> {nextPaymentDate}</Typography>}
+          {autoRenewalEnabled && <Typography variant={'textBold14'}> {nextPaymentDate}</Typography>}
         </div>
       </div>
       <label className={classNames.renewal}>
         <FormCheckbox
-          checked={checked}
+          checked={autoRenewalEnabled}
           control={control}
           name={'autoRenewal'}
           onCheckedChange={handleAutoRenewalChange}

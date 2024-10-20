@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useCallback, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
@@ -29,6 +30,7 @@ import { PaymentMethodSelector } from './paymentMethodSelector'
 import { SubscriptionCosts } from './subscriptionCosts'
 
 export type AccountType = 'business' | 'personal'
+export type SubscriptionType = 'DAY' | 'MONTHLY' | 'WEEKLY'
 
 const formSchema = z.object({
   amount: z.number(),
@@ -53,53 +55,40 @@ export const AccountManagements = () => {
 
   const { isLoading: isFetchingProfile } = useGetProfileQuery()
   const [postSubscription, { isLoading }] = usePostSubscriptionMutation()
+  const {
+    data: currentPaymentData,
+    isLoading: isFetchingCurrentPayment,
+    refetch: refetchCurrentPayment,
+  } = useGetCurrentPaymentQuery()
+  const [autoRenewalEnabled, setAutoRenewalEnabled] = useState(
+    currentPaymentData?.hasAutoRenewal || false
+  )
+
+  const currentPayments = currentPaymentData?.data || []
+  const { isSubscriptionActive } = computeSubscriptionDates(currentPayments)
+  const [accountType, setAccountType] = useState<AccountType>(
+    isSubscriptionActive ? 'business' : 'personal'
+  )
+
+  useEffect(() => {
+    if (accountType === 'business') {
+      refetchCurrentPayment()
+    }
+  }, [accountType, refetchCurrentPayment])
 
   //when true we see loading component and the delay avoids picture jerkiness
   const showLoading = useDelayedLoading(isLoading, LOADING_DELAY)
 
-  const { data: currentPaymentData, refetch: refetchCurrentPayment } = useGetCurrentPaymentQuery()
-
-  // {userId,subscriptionId,dateOfPayment,endDateOfSubscription,autoRenewal}
-  // get current payments
-  const currentPayments = currentPaymentData?.data || []
-  const {
-    endDate: endDateOfSubscription,
-    isSubscriptionActive,
-    nextPaymentDate,
-  } = computeSubscriptionDates(currentPayments)
-
-  const initialCheckedState = currentPaymentData?.hasAutoRenewal || false
-  const [checked, setChecked] = useState(initialCheckedState)
-
   const { control, handleSubmit, setError, setValue } = useForm<FormData>({
     defaultValues: {
       amount: 10,
-      autoRenewal: false,
+      autoRenewal: autoRenewalEnabled,
       baseUrl: getBaseUrl(),
       paymentType: 'STRIPE',
       typeSubscription: 'DAY',
     },
     resolver: zodResolver(formSchema),
   })
-
-  const [accountType, setAccountType] = useState<AccountType>(
-    isSubscriptionActive ? 'business' : 'personal'
-  )
-
-  //check is subscription active and set account type
-  useEffect(() => {
-    setAccountType(isSubscriptionActive ? 'business' : 'personal')
-  }, [isSubscriptionActive])
-
-  //* Account type handling
-
-  // Effect for refetching current payment when account type changes to business
-  useEffect(() => {
-    if (accountType === 'business') {
-      refetchCurrentPayment()
-    }
-    setChecked(currentPaymentData?.hasAutoRenewal || false)
-  }, [accountType, refetchCurrentPayment])
 
   //* Payment handling
   const onSubmit = async (data: FormData) => {
@@ -109,7 +98,7 @@ export const AccountManagements = () => {
     //put in autoRenewal actual state of checkbox
     const updatedData = {
       ...data,
-      autoRenewal: checked, // use current state of checkbox
+      autoRenewal: autoRenewalEnabled, // use current state of checkbox
     }
 
     setIsSubmitting(true)
@@ -146,6 +135,12 @@ export const AccountManagements = () => {
   useEffect(() => {
     const { success } = router.query
 
+    if (isSubscriptionActive) {
+      setAccountType('business')
+    } else {
+      setAccountType('personal')
+    }
+
     if (success === 'true') {
       handleSuccessfulPayment()
       //change current url removing query params success
@@ -156,7 +151,7 @@ export const AccountManagements = () => {
       setIsModalOpen(true)
       router.replace(router.pathname, undefined, { shallow: true })
     }
-  }, [router.query.success, handleSuccessfulPayment])
+  }, [router.query.success, handleSuccessfulPayment, isSubscriptionActive])
 
   const classNames = {
     form: styles.form,
@@ -168,23 +163,19 @@ export const AccountManagements = () => {
       ? 'Payment was successful'
       : 'Transaction failed.Please,write to support'
 
-  if (showLoading || isFetchingProfile) {
+  if (showLoading || isFetchingProfile || isFetchingCurrentPayment) {
     return <Loader />
   }
 
   return (
     <form className={classNames.form} onSubmit={handleSubmit(onSubmit)}>
-      {accountType === 'business' && isSubscriptionActive && (
-        <CurrentSubscription
-          checked={checked}
-          control={control}
-          currentPaymentData={currentPaymentData}
-          endDateOfSubscription={endDateOfSubscription}
-          isSubscriptionActive={isSubscriptionActive}
-          nextPaymentDate={nextPaymentDate}
-          setChecked={setChecked}
-        />
-      )}
+      <CurrentSubscription
+        accountType={accountType}
+        autoRenewalEnabled={autoRenewalEnabled}
+        control={control}
+        currentPaymentData={currentPaymentData}
+        setAutoRenewalEnabled={setAutoRenewalEnabled}
+      />
       <AccountTypes accountType={accountType} setAccountType={setAccountType} />
       {accountType == 'business' && (
         <>

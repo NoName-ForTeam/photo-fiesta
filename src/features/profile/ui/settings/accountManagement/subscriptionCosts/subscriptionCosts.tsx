@@ -1,10 +1,11 @@
+import { useState } from 'react'
 import { Control, Controller, UseFormSetValue } from 'react-hook-form'
 
 import { RadioGroup, Typography } from '@photo-fiesta/ui-lib'
 
 import styles from './subscriptionCosts.module.scss'
 
-import { FormData } from '../accountManagements'
+import { FormData, SubscriptionType } from '../accountManagements'
 import { RadioBlock } from '../radioBlock'
 
 const subscriptionCosts = [
@@ -18,10 +19,19 @@ type SubscriptionCostsProps = {
   setValue: UseFormSetValue<FormData>
 }
 export const SubscriptionCosts = ({ control, setValue }: SubscriptionCostsProps) => {
+  const [currentSubscription, setCurrentSubscription] = useState<{
+    amount: number
+    value: SubscriptionType
+  }>({
+    amount: 10,
+    value: 'DAY',
+  })
+
   const handleSubscriptionChange = (value: string) => {
     const subscription = subscriptionCosts.find(cost => cost.value === value)
 
     if (subscription) {
+      setCurrentSubscription({ amount: subscription.amount, value: subscription.value })
       setValue('typeSubscription', subscription.value)
       setValue('amount', subscription.amount)
     }
@@ -49,7 +59,7 @@ export const SubscriptionCosts = ({ control, setValue }: SubscriptionCostsProps)
               field.onChange(value)
               handleSubscriptionChange(value)
             }}
-            value={field.value}
+            value={currentSubscription.value}
           >
             {SubscriptionCostBlocks}
           </RadioGroup>
