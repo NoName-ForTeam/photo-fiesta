@@ -1,6 +1,6 @@
-import { ReactNode } from 'react'
+import { ReactNode, useEffect, useState } from 'react'
 
-import { useAuthMeQuery } from '@/features'
+import { useLazyAuthMeQuery } from '@/features'
 import { Storage } from '@/shared/utils'
 import { Header, Sidebar } from '@/widgets'
 
@@ -25,10 +25,22 @@ import style from './layout.module.scss'
 
 //! Problem with 401 error here
 export const Layout = ({ children }: { children: ReactNode }) => {
-  const { data: authData } = useAuthMeQuery()
+  const [authData, { isSuccess }] = useLazyAuthMeQuery()
 
-  const isSuccess = !!authData && !!Storage.getToken()
+  const [isToken, setIsToken] = useState(false)
 
+  useEffect(() => {
+    // check if token is present on only client side
+    const token = Storage.getToken()
+
+    setIsToken(!!token)
+
+    if (token) {
+      authData() // request data if token is present
+    }
+  }, [authData])
+
+  const isAuthenticated = isSuccess && isToken
   const classNames = {
     main: style.main,
     wrapper: style.wrapper,
@@ -36,9 +48,9 @@ export const Layout = ({ children }: { children: ReactNode }) => {
 
   return (
     <>
-      <Header isAuth={isSuccess} />
+      <Header isAuth={isAuthenticated} />
       <div className={classNames.wrapper}>
-        {isSuccess && <Sidebar />}
+        {isAuthenticated && <Sidebar />}
         <main className={classNames.main}>{children}</main>
       </div>
     </>
