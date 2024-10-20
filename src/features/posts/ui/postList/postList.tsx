@@ -35,27 +35,31 @@ export const PostList = ({ avatar, userId }: Props) => {
   // TODO: scroll for posts
 
   return (
-    <div className={styles.postGrid}>
-      {userPosts.items.map(post => (
-        <Image
-          alt={'post image'}
-          height={228}
-          key={post.id}
-          onClick={() => handleOpenImageModal(post.id, post.images[0]?.url)}
-          src={post.images[0]?.url}
-          width={234}
-        />
-      ))}
+    <>
+      <div className={styles.postGrid}>
+        {userPosts.items.map(post => (
+          <Image
+            alt={'post image'}
+            height={228}
+            key={post.id}
+            onClick={() => handleOpenImageModal(post.id, post.images[0]?.url)}
+            src={post.images[0]?.url}
+            width={234}
+          />
+        ))}
+      </div>
       {openModal && selectedPostId && selectedImage && (
-        <ImagePostModal
-          avatar={avatar}
-          handleClose={() => setOpenModal(false)}
-          postId={selectedPostId}
-          selectedImage={selectedImage}
-          userId={userId}
-          viewMode
-        />
+        <div className={styles.postModal}>
+          <ImagePostModal
+            avatar={avatar}
+            handleClose={() => setOpenModal(false)}
+            postId={selectedPostId}
+            selectedImage={selectedImage}
+            userId={userId}
+            viewMode
+          />
+        </div>
       )}
-    </div>
+    </>
   )
 }
