@@ -8,7 +8,7 @@ import { useRouter } from 'next/router'
 
 export default function Home() {
   const router = useRouter()
-  //const [triggerAuthMe] = useLazyAuthMeQuery()
+  //const [data] = useLazyAuthMeQuery()
 
   useEffect(() => {
     const checkAuth = async () => {
