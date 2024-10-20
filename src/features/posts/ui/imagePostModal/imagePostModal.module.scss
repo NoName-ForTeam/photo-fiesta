@@ -80,6 +80,12 @@
   margin: 20px 24px;
 }
 
+.profileInfoContainer {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: space-between;
+}
+
 .profileInfo {
   display: flex;
   flex-direction: row;
@@ -89,6 +95,31 @@
   margin-bottom: 20px;
 }
 
+.options {
+  display: flex;
+  flex-direction: column;
+}
+
 .postDetails {
   display: flex;
+}
+
+.editPost {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.editPost textarea {
+  resize: none;
+  width: 100%;
+  max-width: 433px;
+  padding: 10px;
+}
+
+.postDescription {
+  display: flex;
+  width: 100%;
+  max-width: 433px;
+  padding: 10px;
 }
