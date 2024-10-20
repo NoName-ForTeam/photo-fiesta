@@ -1,10 +1,10 @@
+@use '@/app/styles/mixins' as *;
+
 .costs {
   order: 2;
   width: 121.09%;
 }
 
 .container {
-  padding: 14px 20px;
-  background-color: var(--dark-500);
-  outline: 1px solid var(--dark-300);
+  @include subscription-container;
 }
