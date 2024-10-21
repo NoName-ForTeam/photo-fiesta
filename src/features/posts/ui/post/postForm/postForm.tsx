@@ -9,7 +9,8 @@ type PostFormProps = {
   handleClose: () => void
   isEditing?: boolean // обязательный пропс
   postId?: number | undefined
-  selectedImage?: null | string | string[]
+  // selectedImage?: null | string | string[]
+  selectedImage?: null | string
   setIsEditing: (isEditing: boolean) => void // пропс для изменения состояния
 }
 /**
