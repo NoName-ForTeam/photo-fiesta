@@ -4,9 +4,9 @@ import { Avatar, Post } from '@/features'
 import { ArrowIosBackOutline } from '@/shared/assets'
 import { useChangeTitle } from '@/shared/utils/hooks/useChangeTitle'
 import { ConfirmationModal } from '@/widgets'
+import { Carousel } from '@/widgets/slider/slider'
 import { Button, Typography } from '@photo-fiesta/ui-lib'
 import clsx from 'clsx'
-import Image from 'next/image'
 
 import styles from './imagePostModal.module.scss'
 
@@ -84,13 +84,14 @@ export const CreatePostModal = ({
         <div className={styles.body}>
           <section className={styles.imageSection}>
             {selectedImage ? (
-              <Image
-                alt={'Selected'}
-                className={styles.selectedImage}
-                height={432}
-                src={selectedImage}
-                width={492}
-              />
+              // <Image
+              //   alt={'Selected'}
+              //   className={styles.selectedImage}
+              //   height={432}
+              //   src={selectedImage}
+              //   width={492}
+              // />
+              <Carousel handleCloseModal={handleClose} photos={selectedImage} step={step} />
             ) : (
               <Typography variant={'h2'}>No image selected</Typography>
             )}
@@ -104,6 +105,7 @@ export const CreatePostModal = ({
             step={step}
             userId={userId}
           />
+          {/*TODO: rename buttons*/}
           {showConfirmModal && (
             <ConfirmationModal
               closeModal={() => setShowConfirmModal(false)}

@@ -77,6 +77,7 @@ export const Sidebar = () => {
           title={t.sidebar.logout}
         />
       )}
+      {/*TODO: optimize function*/}
       {isCreateModalOpen && (
         <ModalAddPhoto
           handleCloseModal={handleCloseAddPhotoModal}
