@@ -11,6 +11,7 @@ type PostProps = {
   avatar: Avatar[] | undefined
   handleClose: () => void
   postId?: number
+  // selectedImage: null | string | string[]
   selectedImage: null | string
   setIsEditing: (isEditing: boolean) => void
   step: Step

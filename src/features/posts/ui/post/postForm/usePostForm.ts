@@ -18,6 +18,7 @@ const badRequestSchema = createBadRequestSchema(['description'])
 type UsePostFormProps = {
   handleClose: () => void
   postId?: number | undefined
+  // selectedImage?: null | string | string[]
   selectedImage?: null | string
   setIsEditing: (isEditing: boolean) => void // пропс для изменения состояния
 }
@@ -51,17 +52,28 @@ export const usePostForm = ({
   /** Submit function for createPage description in post modal */
   const onSubmit = handleSubmit(async (data: FormValues) => {
     try {
-      if (!selectedImage) {
+      if (!selectedImage || (Array.isArray(selectedImage) && selectedImage.length === 0)) {
         toast.error('No image selected')
 
         return
       }
       const formData = new FormData()
 
-      const blob = await (await fetch(selectedImage)).blob()
+      if (typeof selectedImage === 'string') {
+        const blob = await (await fetch(selectedImage)).blob()
 
-      formData.append('file', blob, 'image.jpg')
+        formData.append('file', blob, 'image.jpg')
+      }
 
+      // Если selectedImage — это массив строк, загружаем все изображения
+      if (Array.isArray(selectedImage)) {
+        for (let i = 0; i < selectedImage.length; i++) {
+          const image = selectedImage[i]
+          const blob = await (await fetch(image)).blob()
+
+          formData.append('file', blob, `image_${i}.jpg`)
+        }
+      }
       const imageUploadData = await uploadImage(formData).unwrap()
 
       await createPost({

@@ -15,8 +15,11 @@ type CreatePostModalProps = {
   handleClose: () => void
   isEditing?: boolean
   postId?: number | undefined
+  // selectedImage: null | string | string[]
   selectedImage: null | string
   setIsEditing: (isEditing: boolean) => void
+  // setSelectedImage: (image: null | string | string[]) => void
+  setSelectedImage: (image: null | string) => void
   userId: number | undefined
 }
 

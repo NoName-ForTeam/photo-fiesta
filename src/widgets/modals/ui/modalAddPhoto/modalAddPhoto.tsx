@@ -17,6 +17,8 @@ import { useModalAddPhoto } from './useModalAddPhoto'
 type ModalAddPhotoProps = {
   handleCloseModal: () => void
   isOpen: boolean
+  postPhoto?: boolean
+  // setImage: (image: null | string | string[]) => void
   setImage: (image: null | string) => void
 }
 
@@ -33,9 +35,14 @@ type ModalAddPhotoProps = {
  *     />
  */
 //TODO: add translations
-export const ModalAddPhoto = ({ handleCloseModal, isOpen, setImage }: ModalAddPhotoProps) => {
+export const ModalAddPhoto = ({
+  handleCloseModal,
+  isOpen,
+  postPhoto,
+  setImage,
+}: ModalAddPhotoProps) => {
   const { error, fileInputRef, handleClick, handleFileChange, handleSave, isSaved, selectedImage } =
-    useModalAddPhoto({ handleCloseModal, isOpen, setImage })
+    useModalAddPhoto({ handleCloseModal, isOpen, postPhoto, setImage })
 
   const classNames = {
     block: styles.block,

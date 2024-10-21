@@ -75,6 +75,7 @@ export const Sidebar = () => {
         <ModalAddPhoto
           handleCloseModal={handleCloseAddPhotoModal}
           isOpen={isCreateModalOpen}
+          postPhoto
           setImage={setSelectedImage}
         />
       )}
@@ -83,8 +84,10 @@ export const Sidebar = () => {
           avatar={profileInfo?.avatars}
           handleClose={handleClosePostModal}
           isEditing={isEditing}
+          // postPhoto
           selectedImage={selectedImage}
           setIsEditing={setIsEditing}
+          setSelectedImage={setSelectedImage}
           userId={profileInfo?.id}
         />
       )}
