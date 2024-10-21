@@ -23,7 +23,6 @@ import style from './layout.module.scss'
  * )
  */
 
-//! Problem with 401 error here
 export const Layout = ({ children }: { children: ReactNode }) => {
   const [authData, { isSuccess }] = useLazyAuthMeQuery()
   const [token, setToken] = useState<null | string>(null)
