@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { toast } from 'react-toastify'
 
 import { Profile, useAuthMeQuery } from '@/features'
+import { Loader } from '@/shared/ui'
 /**
  * it is  responsible for rendering the user's profile page.
  */
@@ -17,7 +18,7 @@ const ProfilePage = () => {
   }, [isError])
 
   if (isLoading) {
-    return <div>Loading profile...</div>
+    return <Loader />
   }
 
   if (isError) {

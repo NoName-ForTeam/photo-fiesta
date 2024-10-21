@@ -1,0 +1,34 @@
+@use '@/app/styles/mixins' as *;
+
+.subscription {
+  width: 100%;
+}
+
+.title {
+  margin-bottom: 5px;
+}
+
+.container {
+  @include subscription-container;
+
+  &.data {
+    display: flex;
+    gap: 48px;
+
+    & > div {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+  }
+}
+
+.renewal {
+  cursor: pointer;
+
+  display: flex;
+  gap: 4px;
+  align-items: center;
+
+  margin-top: 5px;
+}

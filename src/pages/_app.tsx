@@ -5,6 +5,7 @@ import { ToastContainer } from 'react-toastify'
 
 import { wrapper } from '@/app/store'
 import { Layout } from '@/widgets'
+import { Scroll } from '@photo-fiesta/ui-lib'
 import Head from 'next/head'
 
 import '@/app/styles/index.scss'
@@ -30,10 +31,12 @@ function MyApp({ Component, ...rest }: AppProps) {
         />
         <link href={'/favicon.jpg'} rel={'icon'} sizes={'32x32'} type={'image/png'} />
       </Head>
-      <Layout>
-        <Component {...props.pageProps} />
-        <ToastContainer />
-      </Layout>
+      <Scroll>
+        <Layout>
+          <Component {...props.pageProps} />
+          <ToastContainer />
+        </Layout>
+      </Scroll>
     </Provider>
   )
 }

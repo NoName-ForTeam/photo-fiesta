@@ -1,0 +1,14 @@
+@use '@/app/styles/mixins' as *;
+
+.account {
+  order: 1;
+  width: 100%;
+}
+
+.container {
+  @include subscription-container;
+}
+
+.title {
+  margin-bottom: 5px;
+}

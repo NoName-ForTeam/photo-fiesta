@@ -2,6 +2,7 @@ import { useState } from 'react'
 
 import { CreatePostModal } from '@/features'
 import { LogOut } from '@/shared/assets'
+import { Loader } from '@/shared/ui'
 import { ConfirmationModal, ModalAddPhoto } from '@/widgets'
 import { Button, Sidebars, SidebarsElement } from '@photo-fiesta/ui-lib'
 import clsx from 'clsx'
@@ -23,6 +24,7 @@ export const Sidebar = () => {
     handleClosePostModal,
     handleLogoutClick,
     isActive,
+    isLoading,
     modalState,
     profileInfo,
     selectedImage,
@@ -48,6 +50,10 @@ export const Sidebar = () => {
       text={item.text}
     />
   ))
+
+  if (isLoading) {
+    return <Loader />
+  }
 
   return (
     <div className={classNames.root}>

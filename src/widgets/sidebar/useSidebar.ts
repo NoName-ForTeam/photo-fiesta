@@ -45,7 +45,7 @@ type ModalState = {
 
 export const useSidebar = () => {
   const dispatch = useDispatch()
-  const [logoutMutation] = useLogoutMutation()
+  const [logoutMutation, { isLoading }] = useLogoutMutation()
   const router = useRouter()
 
   const { t } = useTranslation()
@@ -168,6 +168,7 @@ export const useSidebar = () => {
     handleLogoutClick,
     handleOpenPostModal,
     isActive,
+    isLoading,
     modalState,
     profileInfo,
     selectedImage,

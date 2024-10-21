@@ -1,155 +1,191 @@
-import { ComponentPropsWithoutRef } from 'react'
-import { Controller } from 'react-hook-form'
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useCallback, useEffect, useState } from 'react'
+import { useForm } from 'react-hook-form'
 
-import { PaypalSvgrepoCom4, StripeSvgrepoCom4 } from '@/shared/assets'
+import {
+  useGetCurrentPaymentQuery,
+  useGetProfileQuery,
+  usePostSubscriptionMutation,
+} from '@/features'
+import { ErrorResponse } from '@/shared/api'
+import { LOADING_DELAY } from '@/shared/config'
 import { Loader } from '@/shared/ui'
+import {
+  checkErrorMessages,
+  computeSubscriptionDates,
+  getBaseUrl,
+  useDelayedLoading,
+  useModal,
+} from '@/shared/utils'
 import { ConfirmationModal } from '@/widgets'
-import { Button, FormCheckbox, RadioGroup, RadioGroupItem, Typography } from '@photo-fiesta/ui-lib'
-import clsx from 'clsx'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useRouter } from 'next/router'
+import { z } from 'zod'
 
 import styles from './accountManagement.module.scss'
 
-import { useAccountManagement } from './useAccountManagement'
+import { AccountTypes } from './accountTypes'
+import { CurrentSubscription } from './currentSubscription'
+import { PaymentMethodSelector } from './paymentMethodSelector'
+import { SubscriptionCosts } from './subscriptionCosts'
+
+export type AccountType = 'business' | 'personal'
+export type SubscriptionType = 'DAY' | 'MONTHLY' | 'WEEKLY'
+
+const formSchema = z.object({
+  amount: z.number(),
+  autoRenewal: z.boolean(),
+  baseUrl: z.string(),
+  paymentType: z.enum(['STRIPE', 'PAYPAL']),
+  typeSubscription: z.enum(['MONTHLY', 'DAY', 'WEEKLY']),
+})
+
+export type FormData = z.infer<typeof formSchema>
 
 /**
  * AccountManagements component for managing user account settings
  */
 
 export const AccountManagements = () => {
+  const router = useRouter()
+
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
+  const { isModalOpen, modalTitle, setIsModalOpen, setModalTitle } = useModal()
+
+  const { isLoading: isFetchingProfile } = useGetProfileQuery()
+  const [postSubscription, { isLoading }] = usePostSubscriptionMutation()
   const {
-    accountType,
-    accountTypes,
-    checked,
-    control,
-    endDateOfSubscription,
-    handleAccountTypeChange,
-    handleAutoRenewalChange,
-    handleConfirmation,
-    handleModalClose,
-    handlePaymentSubmit,
-    handleSubmit,
-    handleSubscriptionChange,
-    isFetchingProfile,
-    isModalOpen,
-    isSubmitting,
-    isSubscriptionActive,
-    modalTitle,
-    nextPaymentDate,
-    onSubmit,
-    showLoading,
-    subscriptionCosts,
-  } = useAccountManagement()
+    data: currentPaymentData,
+    isLoading: isFetchingCurrentPayment,
+    refetch: refetchCurrentPayment,
+  } = useGetCurrentPaymentQuery()
+  const [autoRenewalEnabled, setAutoRenewalEnabled] = useState(
+    currentPaymentData?.hasAutoRenewal || false
+  )
+
+  const currentPayments = currentPaymentData?.data || []
+  const { isSubscriptionActive } = computeSubscriptionDates(currentPayments)
+  const [accountType, setAccountType] = useState<AccountType>(
+    isSubscriptionActive ? 'business' : 'personal'
+  )
+
+  useEffect(() => {
+    if (accountType === 'business') {
+      refetchCurrentPayment()
+    }
+  }, [accountType, refetchCurrentPayment])
+
+  //when true we see loading component and the delay avoids picture jerkiness
+  const showLoading = useDelayedLoading(isLoading, LOADING_DELAY)
+
+  const { control, handleSubmit, setError, setValue } = useForm<FormData>({
+    defaultValues: {
+      amount: 10,
+      autoRenewal: autoRenewalEnabled,
+      baseUrl: getBaseUrl(),
+      paymentType: 'STRIPE',
+      typeSubscription: 'DAY',
+    },
+    resolver: zodResolver(formSchema),
+  })
+
+  //* Payment handling
+  const onSubmit = async (data: FormData) => {
+    if (isSubmitting) {
+      return
+    }
+    //put in autoRenewal actual state of checkbox
+    const updatedData = {
+      ...data,
+      autoRenewal: autoRenewalEnabled, // use current state of checkbox
+    }
+
+    setIsSubmitting(true)
+    try {
+      const response = await postSubscription(updatedData).unwrap()
+
+      router.push(response.url)
+    } catch (error) {
+      setModalTitle('Error')
+      setIsModalOpen(true)
+      checkErrorMessages(error as ErrorResponse, setError)
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  //* Modal handling
+
+  const handleModalClose = () => {
+    setIsModalOpen(false)
+  }
+
+  const handleConfirmation = () => {
+    setModalTitle(null)
+    setIsModalOpen(false)
+  }
+
+  const handleSuccessfulPayment = useCallback(() => {
+    setModalTitle('Success')
+    setIsModalOpen(true)
+  }, [])
+
+  // Effect for handling successful payment redirect
+  useEffect(() => {
+    const { success } = router.query
+
+    if (isSubscriptionActive) {
+      setAccountType('business')
+    } else {
+      setAccountType('personal')
+    }
+
+    if (success === 'true') {
+      handleSuccessfulPayment()
+      //change current url removing query params success
+      router.replace(router.pathname, undefined, { shallow: true })
+    }
+    if (success === 'false') {
+      setModalTitle('Error')
+      setIsModalOpen(true)
+      router.replace(router.pathname, undefined, { shallow: true })
+    }
+  }, [router.query.success, handleSuccessfulPayment, isSubscriptionActive])
 
   const classNames = {
-    account: styles.account,
-    buttons: styles.buttons,
-    container: styles.container,
-    costs: styles.costs,
-    data: styles.data,
     form: styles.form,
-    icon: styles.icon,
-    renewal: styles.renewal,
-    subscription: styles.subscription,
-    title: styles.title,
   } as const
 
-  const AccountTypeBlocks = accountTypes.map(type => (
-    <RadioBlock key={type.value} title={type.title} value={type.value} />
-  ))
-
-  const SubscriptionCostBlocks = subscriptionCosts.map(cost => (
-    <RadioBlock key={cost.value} title={cost.title} value={cost.value} />
-  ))
-
-  if (showLoading || isFetchingProfile) {
-    return <Loader />
-  }
   const buttonTitleModal = modalTitle === 'Success' ? 'Ok' : 'Back to payment'
   const contentModal =
     modalTitle === 'Success'
       ? 'Payment was successful'
       : 'Transaction failed.Please,write to support'
 
+  if (showLoading || isFetchingProfile || isFetchingCurrentPayment) {
+    return <Loader />
+  }
+
   return (
     <form className={classNames.form} onSubmit={handleSubmit(onSubmit)}>
-      {accountType === 'business' && isSubscriptionActive && (
-        <div className={classNames.subscription}>
-          <Typography className={classNames.title} variant={'h3'}>
-            Current Subscription:
-          </Typography>
-          <div className={clsx(classNames.container, classNames.data)}>
-            <div>
-              <Typography variant={'text14'}>Expire at</Typography>
-              <Typography variant={'textBold14'}> {endDateOfSubscription}</Typography>
-            </div>
-            <div>
-              <Typography variant={'text14'}>Next payment</Typography>
-              {checked && <Typography variant={'textBold14'}> {nextPaymentDate}</Typography>}
-            </div>
-          </div>
-          <label className={classNames.renewal}>
-            <FormCheckbox
-              checked={checked}
-              control={control}
-              name={'autoRenewal'}
-              onCheckedChange={handleAutoRenewalChange}
-            />
-            <Typography variant={'text14'}>Auto-renewal</Typography>
-          </label>
-        </div>
-      )}
-
-      <div className={classNames.account}>
-        <Typography className={classNames.title} variant={'h3'}>
-          Account type:
-        </Typography>
-        <RadioGroup
-          className={classNames.container}
-          onValueChange={handleAccountTypeChange}
-          value={accountType}
-        >
-          {AccountTypeBlocks}
-        </RadioGroup>
-      </div>
+      <CurrentSubscription
+        accountType={accountType}
+        autoRenewalEnabled={autoRenewalEnabled}
+        control={control}
+        currentPaymentData={currentPaymentData}
+        setAutoRenewalEnabled={setAutoRenewalEnabled}
+      />
+      <AccountTypes accountType={accountType} setAccountType={setAccountType} />
       {accountType == 'business' && (
         <>
-          <div className={classNames.costs}>
-            <Typography variant={'h3'}>Your subscription costs:</Typography>
-            <Controller
-              control={control}
-              name={'typeSubscription'}
-              render={({ field }) => (
-                <RadioGroup
-                  className={classNames.container}
-                  defaultValue={'MONTHLY'}
-                  onValueChange={value => {
-                    field.onChange(value)
-                    handleSubscriptionChange(value)
-                  }}
-                  value={field.value}
-                >
-                  {SubscriptionCostBlocks}
-                </RadioGroup>
-              )}
-            />
-          </div>
-          <div className={classNames.buttons}>
-            <Button
-              disabled={isSubmitting}
-              onClick={() => handlePaymentSubmit('PAYPAL')}
-              variant={'icon-link'}
-            >
-              <PaypalSvgrepoCom4 className={classNames.icon} />
-            </Button>
-            <Typography variant={'text14'}>Or</Typography>
-            <Button
-              disabled={isSubmitting}
-              onClick={() => handlePaymentSubmit('STRIPE')}
-              variant={'icon-link'}
-            >
-              <StripeSvgrepoCom4 className={classNames.icon} />
-            </Button>
-          </div>
+          <SubscriptionCosts control={control} setValue={setValue} />
+          <PaymentMethodSelector
+            handleSubmit={handleSubmit}
+            isSubmitting={isSubmitting}
+            onSubmit={onSubmit}
+            setValue={setValue}
+          />
         </>
       )}
       {isModalOpen && (
@@ -164,29 +200,5 @@ export const AccountManagements = () => {
         />
       )}
     </form>
-  )
-}
-
-//RadioBlock
-type RadioBlockProps = {
-  title: string
-  value: string
-} & ComponentPropsWithoutRef<'div'>
-
-/**
- * RadioBlock component for rendering a radio button with a label
- */
-
-const RadioBlock = ({ title, value }: RadioBlockProps) => {
-  const classNames = {
-    block: styles.block,
-    radio: styles.radio,
-  } as const
-
-  return (
-    <div className={classNames.block}>
-      <RadioGroupItem className={classNames.radio} value={value} />
-      <Typography variant={'text14'}>{title}</Typography>
-    </div>
   )
 }

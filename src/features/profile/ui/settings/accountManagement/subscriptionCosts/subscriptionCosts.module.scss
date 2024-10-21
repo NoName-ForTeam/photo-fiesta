@@ -1,0 +1,10 @@
+@use '@/app/styles/mixins' as *;
+
+.costs {
+  order: 2;
+  width: 100%;
+}
+
+.container {
+  @include subscription-container;
+}
