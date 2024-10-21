@@ -5,7 +5,6 @@ import { toast } from 'react-toastify'
 import {
   useCreatePostMutation,
   useGetPostByIdQuery,
-  useImagePostModal,
   useUpdatePostMutation,
   useUploadPostImageMutation,
 } from '@/features'
@@ -18,16 +17,24 @@ const badRequestSchema = createBadRequestSchema(['description'])
 
 type UsePostFormProps = {
   handleClose: () => void
-  postId: number
+  postId?: number | undefined
+  // selectedImage?: null | string | string[]
   selectedImage?: null | string
+  setIsEditing: (isEditing: boolean) => void // пропс для изменения состояния
 }
 
-export const usePostForm = ({ handleClose, postId, selectedImage }: UsePostFormProps) => {
+export const usePostForm = ({
+  handleClose,
+  postId,
+  selectedImage,
+  setIsEditing,
+}: UsePostFormProps) => {
   const [createPost] = useCreatePostMutation()
   const [uploadImage] = useUploadPostImageMutation()
   const [updateDescription] = useUpdatePostMutation()
   const { data: post } = useGetPostByIdQuery({ postId }, { skip: !postId })
-  const { setIsEditing, setIsOpenModal } = useImagePostModal({ handleClose, postId })
+
+  const [isOpenModal, setIsOpenModal] = useState<boolean>(true)
 
   const [charCount, setCharCount] = useState(0)
 
@@ -45,17 +52,28 @@ export const usePostForm = ({ handleClose, postId, selectedImage }: UsePostFormP
   /** Submit function for createPage description in post modal */
   const onSubmit = handleSubmit(async (data: FormValues) => {
     try {
-      if (!selectedImage) {
+      if (!selectedImage || (Array.isArray(selectedImage) && selectedImage.length === 0)) {
         toast.error('No image selected')
 
         return
       }
       const formData = new FormData()
 
-      const blob = await (await fetch(selectedImage)).blob()
+      if (typeof selectedImage === 'string') {
+        const blob = await (await fetch(selectedImage)).blob()
 
-      formData.append('file', blob, 'image.jpg')
+        formData.append('file', blob, 'image.jpg')
+      }
 
+      // Если selectedImage — это массив строк, загружаем все изображения
+      if (Array.isArray(selectedImage)) {
+        for (let i = 0; i < selectedImage.length; i++) {
+          const image = selectedImage[i]
+          const blob = await (await fetch(image)).blob()
+
+          formData.append('file', blob, `image_${i}.jpg`)
+        }
+      }
       const imageUploadData = await uploadImage(formData).unwrap()
 
       await createPost({
@@ -75,12 +93,14 @@ export const usePostForm = ({ handleClose, postId, selectedImage }: UsePostFormP
 
   /** Submit function for edit description in post modal */
   const saveDescriptionChanges = handleSubmit(async (data: FormValues) => {
-    try {
-      await updateDescription({ description: data.description, postId })
-      setIsEditing(false)
-      handleClose()
-    } catch (error) {
-      handleErrorResponse<FormValues>({ badRequestSchema, error, setError })
+    if (postId) {
+      try {
+        await updateDescription({ description: data.description, postId })
+        setIsEditing(false)
+        handleClose()
+      } catch (error) {
+        handleErrorResponse<FormValues>({ badRequestSchema, error, setError })
+      }
     }
   })
 
@@ -88,6 +108,7 @@ export const usePostForm = ({ handleClose, postId, selectedImage }: UsePostFormP
     charCount,
     control,
     errors,
+    isOpenModal,
     onSubmit,
     saveDescriptionChanges,
     setCharCount,

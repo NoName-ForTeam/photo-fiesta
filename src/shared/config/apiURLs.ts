@@ -21,7 +21,7 @@ export const API_URLS = {
     CREATE_POST: 'v1/posts',
     DELETE_POST: (postId: number) => `v1/posts/${postId}`,
     DELETE_UPLOAD_IMAGE: (uploadId: string) => `v1/posts/image/${uploadId}`,
-    GET_POST_BY_ID: (postId: number) => `v1/public-posts/${postId}`,
+    GET_POST_BY_ID: (postId: number | undefined) => `v1/public-posts/${postId}`,
     GET_USER_PUBLIC_POSTS: (endCursorPostId: number | undefined, userId: number) =>
       `v1/public-posts/user/${userId}/${endCursorPostId}`,
     UPDATE_POST: (postId: number) => `v1/posts/${postId}`,

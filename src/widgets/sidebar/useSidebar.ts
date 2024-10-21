@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux'
 import { toast } from 'react-toastify'
 
 import { baseApi } from '@/app/api'
-import { useAuthMeQuery, useImagePostModal, useLogoutMutation, useProfile } from '@/features'
+import { useAuthMeQuery, useLogoutMutation, useProfile } from '@/features'
 import {
   BookmarkOutline,
   HomeOutline,
@@ -59,6 +59,7 @@ export const useSidebar = () => {
     openPostModal: false,
   })
 
+  // const [selectedImage, setSelectedImage] = useState<null | string | string[]>(null)
   const [selectedImage, setSelectedImage] = useState<null | string>(null)
 
   //* Modal control functions
@@ -71,9 +72,6 @@ export const useSidebar = () => {
   }
 
   const handleOpenPostModal = () => setModalState(prev => ({ ...prev, openPostModal: true }))
-
-  const postId = 0
-  const {} = useImagePostModal({ handleClose: handleOpenPostModal, postId })
 
   const handleCloseAddPhotoModal = () => {
     closeCreateModal()
@@ -171,7 +169,6 @@ export const useSidebar = () => {
     handleOpenPostModal,
     isActive,
     modalState,
-    postId,
     profileInfo,
     selectedImage,
     setSelectedImage,

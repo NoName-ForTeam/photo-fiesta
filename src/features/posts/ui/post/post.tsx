@@ -10,8 +10,10 @@ export type Step = 'cropping' | 'filters' | 'publication'
 type PostProps = {
   avatar: Avatar[] | undefined
   handleClose: () => void
-  postId: number
+  postId?: number
+  // selectedImage: null | string | string[]
   selectedImage: null | string
+  setIsEditing: (isEditing: boolean) => void
   step: Step
   userId: number | undefined
 }
@@ -20,7 +22,15 @@ type PostProps = {
  * The Post component represents a section of modal with different steps like cropping, filters, and publication.
  */
 
-export const Post = ({ avatar, handleClose, postId, selectedImage, step, userId }: PostProps) => {
+export const Post = ({
+  avatar,
+  handleClose,
+  postId,
+  selectedImage,
+  setIsEditing,
+  step,
+  userId,
+}: PostProps) => {
   if (step === 'publication') {
     return (
       <section className={styles.formSection}>
@@ -31,9 +41,10 @@ export const Post = ({ avatar, handleClose, postId, selectedImage, step, userId 
         <div className={styles.form}>
           <PostForm
             handleClose={handleClose}
-            isEditing={false}
             postId={postId}
             selectedImage={selectedImage}
+            // isEditing={false}
+            setIsEditing={setIsEditing}
           />
         </div>
         <div className={styles.locationContainer}>

@@ -1,4 +1,6 @@
-import { ImagePostModal } from '@/features'
+import { useState } from 'react'
+
+import { CreatePostModal } from '@/features'
 import { LogOut } from '@/shared/assets'
 import { ConfirmationModal, ModalAddPhoto } from '@/widgets'
 import { Button, Sidebars, SidebarsElement } from '@photo-fiesta/ui-lib'
@@ -22,14 +24,13 @@ export const Sidebar = () => {
     handleLogoutClick,
     isActive,
     modalState,
-    postId,
     profileInfo,
     selectedImage,
     setSelectedImage,
     sidebarItems,
     t,
   } = useSidebar()
-
+  const [isEditing, setIsEditing] = useState(false)
   const { isCreateModalOpen, isModalOpen, openPostModal } = modalState
 
   const classNames = {
@@ -74,15 +75,19 @@ export const Sidebar = () => {
         <ModalAddPhoto
           handleCloseModal={handleCloseAddPhotoModal}
           isOpen={isCreateModalOpen}
+          postPhoto
           setImage={setSelectedImage}
         />
       )}
       {openPostModal && selectedImage && (
-        <ImagePostModal
+        <CreatePostModal
           avatar={profileInfo?.avatars}
           handleClose={handleClosePostModal}
-          postId={postId ?? 0}
+          isEditing={isEditing}
+          // postPhoto
           selectedImage={selectedImage}
+          setIsEditing={setIsEditing}
+          setSelectedImage={setSelectedImage}
           userId={profileInfo?.id}
         />
       )}
