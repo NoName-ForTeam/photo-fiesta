@@ -23,7 +23,8 @@ import style from './layout.module.scss'
  * )
  */
 
-//! Problem with 401 error here
+//! Problem with side bar here
+
 export const Layout = ({ children }: { children: ReactNode }) => {
   const [authData, { isSuccess }] = useLazyAuthMeQuery()
 
