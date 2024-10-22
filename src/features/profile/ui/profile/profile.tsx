@@ -15,13 +15,11 @@ export type ProfileProps = ComponentPropsWithoutRef<'div'>
  * follower statistics, and options to follow or send a message.
  * If the authenticated user is viewing their own profile, they have the option to access profile settings.
  * It also displays a list of posts below the profile information.
- *
  * @example
  * return (
  *   <Profile />
  * )
  */
-//TODO: add translations
 export const Profile = ({ className }: ProfileProps) => {
   const { t } = useTranslation()
   const { authData, handleProfileSettings, isError, isLoading, isOwnProfile, profileInfo } =

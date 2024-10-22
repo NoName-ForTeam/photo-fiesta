@@ -3,6 +3,7 @@ import { forwardRef, useEffect, useRef } from 'react'
 import { Avatar, Post, PostForm, useImagePostModal } from '@/features'
 import { ArrowIosBackOutline, Close, CloseOutline, Edit2 } from '@/shared/assets'
 import { ProfileAvatar } from '@/shared/ui'
+import { useTranslation } from '@/shared/utils'
 import { ConfirmationModal } from '@/widgets'
 import { Button, Typography } from '@photo-fiesta/ui-lib'
 import clsx from 'clsx'
@@ -56,7 +57,7 @@ export const ImagePostModal = forwardRef<HTMLFormElement, ImagePostModalProps>(
       selectedImage,
     })
 
-    // TODO: addTranslate
+    const { t } = useTranslation()
 
     const modalRef = useRef<HTMLDivElement>(null)
 
@@ -96,12 +97,12 @@ export const ImagePostModal = forwardRef<HTMLFormElement, ImagePostModalProps>(
               <Typography variant={'h1'}>{getStepTitle()}</Typography>
               {step !== 'publication' && (
                 <Button onClick={() => changeStep('next')} variant={'ghost'}>
-                  Next
+                  {t.post.next}
                 </Button>
               )}
               {step === 'publication' && (
                 <Button form={'postDescription'} variant={'ghost'}>
-                  Publish
+                  {t.post.publish}
                 </Button>
               )}
             </div>
@@ -124,7 +125,7 @@ export const ImagePostModal = forwardRef<HTMLFormElement, ImagePostModalProps>(
                   width={492}
                 />
               ) : (
-                <Typography variant={'h2'}>No image selected</Typography>
+                <Typography variant={'h2'}>{t.post.noSelected}</Typography>
               )}
             </section>
             {viewMode && postById && (
@@ -154,12 +155,10 @@ export const ImagePostModal = forwardRef<HTMLFormElement, ImagePostModalProps>(
                         <ConfirmationModal
                           closeModal={() => setShowConfirmCloseModal(false)}
                           confirmation={handleClose}
-                          content={
-                            'Do you really want to close the edition of the publication? If you close changes won`t be saved'
-                          }
+                          content={t.post.contentClose}
                           isOpen={showConfirmCloseModal}
                           isTwoButtons
-                          title={'Close Post'}
+                          title={t.post.close}
                         />
                       )}
                     </>
@@ -172,10 +171,10 @@ export const ImagePostModal = forwardRef<HTMLFormElement, ImagePostModalProps>(
                     <ConfirmationModal
                       closeModal={() => setShowConfirmDeleteModal(false)}
                       confirmation={confirmDelete}
-                      content={'Are you sure you want to delete this post?'}
+                      content={t.post.deleteContent}
                       isOpen={showConfirmDeleteModal}
                       isTwoButtons
-                      title={'Delete Post'}
+                      title={t.post.delete}
                     />
                   )}
                 </div>
@@ -195,11 +194,9 @@ export const ImagePostModal = forwardRef<HTMLFormElement, ImagePostModalProps>(
               <ConfirmationModal
                 closeModal={() => setShowConfirmModal(false)}
                 confirmation={interruptionCreatePost}
-                content={
-                  'Do you really want to close the creation of a publication? If you close everything will be deleted.'
-                }
+                content={t.post.contentClose}
                 isOpen={showConfirmModal}
-                title={'Close'}
+                title={t.post.close}
               />
             )}
           </div>

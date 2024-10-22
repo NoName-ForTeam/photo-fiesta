@@ -1,4 +1,5 @@
 import { CloseOutline, ImageOutline } from '@/shared/assets'
+import { useTranslation } from '@/shared/utils'
 import {
   Button,
   Modal,
@@ -32,10 +33,10 @@ type ModalAddPhotoProps = {
  *       }}
  *     />
  */
-//TODO: add translations
 export const ModalAddPhoto = ({ handleCloseModal, isOpen, setImage }: ModalAddPhotoProps) => {
   const { error, fileInputRef, handleClick, handleFileChange, handleSave, isSaved, selectedImage } =
     useModalAddPhoto({ handleCloseModal, isOpen, setImage })
+  const { t } = useTranslation()
 
   const classNames = {
     block: styles.block,
@@ -53,7 +54,7 @@ export const ModalAddPhoto = ({ handleCloseModal, isOpen, setImage }: ModalAddPh
     <Modal open={isOpen}>
       <ModalContent className={classNames.content}>
         <ModalHeader className={classNames.header}>
-          <Typography variant={'h1'}>Add a Profile Photo</Typography>
+          <Typography variant={'h1'}>{t.post.addTitle}</Typography>
           <ModalClose>
             <CloseOutline className={classNames.close} onClick={handleCloseModal} />
           </ModalClose>
@@ -78,12 +79,12 @@ export const ModalAddPhoto = ({ handleCloseModal, isOpen, setImage }: ModalAddPh
             />
             {!selectedImage && !isSaved && (
               <Button fullWidth onClick={handleClick}>
-                Select from Computer
+                {t.post.selectBtn}
               </Button>
             )}
             {selectedImage && !error && !isSaved && (
               <Button className={classNames.save} onClick={handleSave}>
-                Save
+                {t.post.save}
               </Button>
             )}
           </div>

@@ -1,4 +1,5 @@
 import { CloseOutline } from '@/shared/assets'
+import { useTranslation } from '@/shared/utils'
 import {
   Button,
   Modal,
@@ -22,7 +23,6 @@ type ModalProps = {
   isTwoButtons?: boolean
   title: null | string
 }
-//TODO: add translations
 export const ConfirmationModal = ({
   buttonTitle = 'Ok',
   closeModal,
@@ -41,6 +41,8 @@ export const ConfirmationModal = ({
     icon: styles.icon,
     one: styles.one,
   } as const
+
+  const { t } = useTranslation()
 
   return (
     <Modal onOpenChange={closeModal} open={isOpen}>
@@ -62,10 +64,10 @@ export const ConfirmationModal = ({
               // TODO: create names in buttons by props
               <>
                 <Button onClick={closeModal} variant={'secondary'}>
-                  No
+                  {t.no}
                 </Button>
                 <Button onClick={confirmation} variant={'primary'}>
-                  Yes
+                  {t.yes}
                 </Button>
               </>
             )}

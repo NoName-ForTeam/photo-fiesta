@@ -20,9 +20,9 @@ export type GeneralInfoProps = ComponentPropsWithoutRef<'div'>
  * <GeneralInfo className="custom-class" />
  */
 
-//TODO: add translations
+//TODO: add translations for date picker
 export const GeneralInfo = ({ className }: GeneralInfoProps) => {
-  const { t } = useTranslation()
+  const { locale, t } = useTranslation()
   const {
     control,
     errors,
@@ -53,7 +53,7 @@ export const GeneralInfo = ({ className }: GeneralInfoProps) => {
   const renderCountryOptions = (countries: Country[]) => {
     return countries.map(country => (
       <SelectItem key={country.id} value={country.countryEn}>
-        {country.countryEn}
+        {locale === 'en' ? country.countryEn : country.country}
       </SelectItem>
     ))
   }
@@ -61,7 +61,7 @@ export const GeneralInfo = ({ className }: GeneralInfoProps) => {
   const renderCityOptions = (cities: City[]) => {
     return cities.map(city => (
       <SelectItem key={city.id} value={city.cityEn}>
-        {city.cityEn}
+        {locale === 'en' ? city.cityEn : city.city}
       </SelectItem>
     ))
   }

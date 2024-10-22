@@ -73,6 +73,22 @@ export const en = {
     settings: 'Profile Settings',
     unfollow: 'Unfollow',
   },
+  no: 'No',
+  post: {
+    addTitle: 'Add a Profile Photo',
+    close: 'Close Post',
+    closeCreate:
+      'Do you really want to close the creation of a publication? If you close everything will be deleted.',
+    contentClose:
+      'Do you really want to close the edition of the publication? If you close changes won`t be saved',
+    delete: 'Delete Post',
+    deleteContent: 'Are you sure you want to delete this post?',
+    next: 'Next',
+    noSelected: 'No image selected',
+    publish: 'Publish',
+    save: 'Save',
+    selectBtn: 'Select from Computer',
+  },
   privacyPolicy: {
     introduction: `Welcome to Inctagram! Your privacy is important to us, and this policy explains how we collect, use, and protect your personal data. Please read it carefully.`,
     sections: {
@@ -228,6 +244,7 @@ export const en = {
     welcomeMessage:
       'By accessing or using our services, you agree to the following Terms of Service. Please read them carefully.',
   },
+  yes: 'Yes',
 }
 
 export type LocaleType = typeof en

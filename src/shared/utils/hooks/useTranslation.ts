@@ -6,5 +6,5 @@ export const useTranslation = () => {
 
   const t = router.locale === 'en' ? en : ru
 
-  return { t }
+  return { locale: router.locale, t }
 }
