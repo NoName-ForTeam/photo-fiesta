@@ -59,8 +59,7 @@ export const useSidebar = () => {
     openPostModal: false,
   })
 
-  // const [selectedImage, setSelectedImage] = useState<null | string | string[]>(null)
-  const [selectedImage, setSelectedImage] = useState<null | string>(null)
+  const [selectedImage, setSelectedImage] = useState<null | string | string[]>(null)
 
   //* Modal control functions
   const openCreateModal = () => setModalState(prev => ({ ...prev, isCreateModalOpen: true }))

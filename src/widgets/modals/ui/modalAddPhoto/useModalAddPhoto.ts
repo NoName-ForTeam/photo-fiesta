@@ -6,8 +6,8 @@ type UseModalAddPhotoProps = {
   handleCloseModal: () => void
   isOpen?: boolean
   postPhoto?: boolean
-  // setImage: (image: null | string | string[]) => void
-  setImage: (image: null | string) => void
+  setImage: (image: null | string | string[]) => void
+  // setImage: (image: null | string) => void
 }
 
 export const useModalAddPhoto = ({
@@ -18,8 +18,8 @@ export const useModalAddPhoto = ({
 }: UseModalAddPhotoProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [error, setError] = useState<null | string>(null)
-  // const [selectedImage, setSelectedImage] = useState<null | string | string[]>(null)
-  const [selectedImage, setSelectedImage] = useState<null | string>(null)
+  const [selectedImage, setSelectedImage] = useState<null | string | string[]>(null)
+  // const [selectedImage, setSelectedImage] = useState<null | string>(null)
   const [isSaved, setIsSaved] = useState(false)
 
   useEffect(() => {

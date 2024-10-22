@@ -18,9 +18,8 @@ const badRequestSchema = createBadRequestSchema(['description'])
 type UsePostFormProps = {
   handleClose: () => void
   postId?: number | undefined
-  // selectedImage?: null | string | string[]
-  selectedImage?: null | string
-  setIsEditing: (isEditing: boolean) => void // пропс для изменения состояния
+  selectedImage?: null | string | string[]
+  setIsEditing: (isEditing: boolean) => void
 }
 
 export const usePostForm = ({
@@ -65,7 +64,6 @@ export const usePostForm = ({
         formData.append('file', blob, 'image.jpg')
       }
 
-      // Если selectedImage — это массив строк, загружаем все изображения
       if (Array.isArray(selectedImage)) {
         for (let i = 0; i < selectedImage.length; i++) {
           const image = selectedImage[i]

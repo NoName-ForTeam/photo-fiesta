@@ -91,7 +91,6 @@ export const Sidebar = () => {
           avatar={profileInfo?.avatars}
           handleClose={handleClosePostModal}
           isEditing={isEditing}
-          // postPhoto
           selectedImage={selectedImage}
           setIsEditing={setIsEditing}
           setSelectedImage={setSelectedImage}

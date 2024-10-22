@@ -42,6 +42,8 @@ export const ModalAddPhoto = ({
   setImage,
 }: ModalAddPhotoProps) => {
   const { error, fileInputRef, handleClick, handleFileChange, handleSave, isSaved, selectedImage } =
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
     useModalAddPhoto({ handleCloseModal, isOpen, postPhoto, setImage })
 
   const classNames = {
@@ -75,6 +77,8 @@ export const ModalAddPhoto = ({
             </Typography>
           </div>
           <div className={classNames.block}>
+            {/*eslint-disable-next-line @typescript-eslint/ban-ts-comment*/}
+            {/*   @ts-expect-error*/}
             <PhotoPreview image={selectedImage} preview={classNames.photoPreview} size={228} />
             <input
               accept={'image/*'}
