@@ -15,7 +15,7 @@ type Props = {
 export const PostList = ({ avatar, userId }: Props) => {
   const [openModal, setOpenModal] = useState(false)
   const [selectedPostId, setSelectedPostId] = useState<null | number>(null)
-  const [selectedImage, setSelectedImage] = useState<null | string>(null)
+  const [selectedImage, setSelectedImage] = useState<null | string | string[]>(null)
   const { data: userPosts } = useGetUserPostsQuery({ userId }, { skip: !userId })
 
   if (!userPosts?.items.length) {
@@ -55,6 +55,7 @@ export const PostList = ({ avatar, userId }: Props) => {
             handleClose={() => setOpenModal(false)}
             postId={selectedPostId}
             selectedImage={selectedImage}
+            setSelectedImage={setSelectedImage}
             userId={userId}
             viewMode
           />
