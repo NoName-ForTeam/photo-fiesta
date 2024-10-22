@@ -90,12 +90,12 @@ export const useSidebar = () => {
       dispatch(baseApi.util.invalidateTags(['Auth']))
       dispatch(baseApi.util.resetApiState())
       await router.push(ROUTES.SIGN_IN)
-      Storage.deleteToken()
+      Storage.removeToken()
     } catch (error: unknown) {
       if (isValidErrorResponse(error)) {
         if (error.data.statusCode === 401) {
           toast.error('Session expired. Please login again.')
-          Storage.deleteToken()
+          Storage.removeToken()
           dispatch(baseApi.util.invalidateTags(['Auth']))
           dispatch(baseApi.util.resetApiState())
           await router.push(ROUTES.SIGN_IN)

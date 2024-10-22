@@ -23,24 +23,32 @@ import style from './layout.module.scss'
  * )
  */
 
-//! Problem with 401 error here
 export const Layout = ({ children }: { children: ReactNode }) => {
   const [authData, { isSuccess }] = useLazyAuthMeQuery()
-
-  const [isToken, setIsToken] = useState(false)
+  const [token, setToken] = useState<null | string>(null)
 
   useEffect(() => {
-    // check if token is present on only client side
-    const token = Storage.getToken()
+    // initialize token in client side
+    setToken(Storage.getToken())
 
-    setIsToken(!!token)
-
-    if (token) {
-      authData() // request data if token is present
+    const handleStorageChange = () => {
+      setToken(Storage.getToken())
     }
-  }, [authData])
 
-  const isAuthenticated = isSuccess && isToken
+    window.addEventListener('storage', handleStorageChange)
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (token) {
+      authData()
+    }
+  }, [authData, token])
+
+  const isAuthenticated = isSuccess && !!token
   const classNames = {
     main: style.main,
     wrapper: style.wrapper,
