@@ -11,9 +11,9 @@ import { Close, CloseOutline, Edit2 } from '@/shared/assets'
 import { ProfileAvatar } from '@/shared/ui'
 import { useChangeTitle } from '@/shared/utils/hooks/useChangeTitle'
 import { ConfirmationModal } from '@/widgets'
+import { Carousel } from '@/widgets/slider/slider'
 import { Typography } from '@photo-fiesta/ui-lib'
 import clsx from 'clsx'
-import Image from 'next/image'
 
 import styles from './imagePostModal.module.scss'
 
@@ -21,7 +21,9 @@ type ImagePostModalProps = {
   avatar: Avatar[] | undefined
   handleClose: () => void
   postId: number | undefined
-  selectedImage: null | string
+  // selectedImage: null | string
+  selectedImage: null | string | string[]
+  setSelectedImage: (image: null | string | string[]) => void
   userId: number | undefined
   viewMode?: boolean
 }
@@ -41,7 +43,7 @@ type ImagePostModalProps = {
  */
 
 export const ImagePostModal = forwardRef<HTMLFormElement, ImagePostModalProps>(
-  ({ avatar, handleClose, postId, selectedImage, userId, viewMode = false }) => {
+  ({ avatar, handleClose, postId, selectedImage, setSelectedImage, userId, viewMode = false }) => {
     const { data: postById } = useGetPostByIdQuery({ postId }, { skip: !postId })
     const [deleteImage] = useDeleteUploadImageMutation()
     const [deletePost] = useDeletePostMutation()
@@ -78,12 +80,11 @@ export const ImagePostModal = forwardRef<HTMLFormElement, ImagePostModalProps>(
           <div className={styles.body}>
             <section className={styles.imageSection}>
               {selectedImage ? (
-                <Image
-                  alt={'Selected'}
-                  className={styles.selectedImage}
-                  height={432}
-                  src={selectedImage}
-                  width={492}
+                <Carousel
+                  handleCloseModal={handleClose}
+                  photos={selectedImage}
+                  // postPhoto
+                  setImage={setSelectedImage}
                 />
               ) : (
                 <Typography variant={'h2'}>No image selected</Typography>

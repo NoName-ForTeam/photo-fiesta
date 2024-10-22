@@ -2,7 +2,7 @@ import { ChangeEvent, useState } from 'react'
 import Slider from 'react-slick'
 
 import { Step } from '@/features'
-import { ArrowIosBackOutline, ArrowIosForwardOutline, ImageOutline } from '@/shared/assets'
+import { ImageOutline } from '@/shared/assets'
 import { useModalAddPhoto } from '@/widgets/modals/ui/modalAddPhoto/useModalAddPhoto'
 import { Button } from '@photo-fiesta/ui-lib'
 import clsx from 'clsx'
@@ -18,7 +18,7 @@ type CarouselProps = {
   photos: string | string[]
   postPhoto?: boolean
   setImage: (image: null | string | string[]) => void
-  step: Step
+  step?: Step
 }
 export const Carousel = ({
   handleCloseModal,
@@ -34,10 +34,12 @@ export const Carousel = ({
     postPhoto,
     setImage,
   })
-  const isSingleImage = allPhotos.length === 1
+  // const isSingleImage = allPhotos.length === 1
   // Carousel settings
   const settings = {
-    arrows: !isSingleImage,
+    adaptiveHeight: true,
+    arrows: allPhotos.length > 1,
+    // arrows: true,
     beforeChange: (current: number, next: number) => setActiveIndex(next),
     customPaging: (index: number) => (
       <div
@@ -45,9 +47,10 @@ export const Carousel = ({
       ></div>
     ),
     dots: allPhotos.length > 1,
-    infinite: !isSingleImage,
-    nextArrow: <CustomArrow direction={'next'} />,
-    prevArrow: <CustomArrow direction={'prev'} />,
+    // infinite: !isSingleImage,
+    infinite: allPhotos.length > 1,
+    // nextArrow: null,
+    // prevArrow: null,
     slidesToScroll: 1,
     slidesToShow: 1,
     speed: 500,
@@ -100,19 +103,6 @@ export const Carousel = ({
           />
         </div>
       )}
-    </div>
-  )
-}
-type ArrowProps = {
-  className?: string
-  direction: 'next' | 'prev'
-  onClick?: () => void
-}
-
-const CustomArrow = ({ className, direction, onClick }: ArrowProps) => {
-  return (
-    <div className={className} onClick={onClick}>
-      {direction === 'next' ? <ArrowIosForwardOutline /> : <ArrowIosBackOutline />}
     </div>
   )
 }
