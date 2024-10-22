@@ -2,7 +2,7 @@ import { ChangeEvent, useState } from 'react'
 import Slider from 'react-slick'
 
 import { Step } from '@/features'
-import { ImageOutline } from '@/shared/assets'
+import { ArrowIosBackOutline, ArrowIosForwardOutline, ImageOutline } from '@/shared/assets'
 import { useModalAddPhoto } from '@/widgets/modals/ui/modalAddPhoto/useModalAddPhoto'
 import { Button } from '@photo-fiesta/ui-lib'
 import clsx from 'clsx'
@@ -28,18 +28,18 @@ export const Carousel = ({
   step,
 }: CarouselProps) => {
   const [activeIndex, setActiveIndex] = useState(0)
-  const allPhotos = Array.isArray(photos) ? photos : [photos]
+  const [indexArrow, setIndexArrow] = useState(0)
+
   const { fileInputRef, handleClick, handleFileChange, selectedImage } = useModalAddPhoto({
     handleCloseModal,
     postPhoto,
     setImage,
   })
-  // const isSingleImage = allPhotos.length === 1
-  // Carousel settings
+
+  const allPhotos = Array.isArray(photos) ? photos : [photos]
   const settings = {
     adaptiveHeight: true,
     arrows: allPhotos.length > 1,
-    // arrows: true,
     beforeChange: (current: number, next: number) => setActiveIndex(next),
     customPaging: (index: number) => (
       <div
@@ -47,10 +47,21 @@ export const Carousel = ({
       ></div>
     ),
     dots: allPhotos.length > 1,
-    // infinite: !isSingleImage,
     infinite: allPhotos.length > 1,
-    // nextArrow: null,
-    // prevArrow: null,
+    nextArrow: (
+      <NextArrowComponent
+        indexArrow={indexArrow}
+        photosLength={photos?.length}
+        setIndexArrow={setIndexArrow}
+      />
+    ),
+    prevArrow: (
+      <PrevArrowComponent
+        indexArrow={indexArrow}
+        photosLength={photos?.length}
+        setIndexArrow={setIndexArrow}
+      />
+    ),
     slidesToScroll: 1,
     slidesToShow: 1,
     speed: 500,
@@ -59,7 +70,6 @@ export const Carousel = ({
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-expect-error
     setImage(prevImages => {
-      // Если предыдущие изображения это не массив, превращаем их в массив
       const updatedImages = Array.isArray(prevImages) ? prevImages : [prevImages]
 
       return [...updatedImages, newImage]
@@ -104,5 +114,68 @@ export const Carousel = ({
         </div>
       )}
     </div>
+  )
+}
+
+type ArrowsProps = {
+  callbackFunction?: () => void
+  indexArrow: number
+  onClick?: () => void
+  photosLength?: number
+  setIndexArrow: (value: number) => void
+}
+export const NextArrowComponent = ({
+  callbackFunction,
+  indexArrow,
+  onClick,
+  photosLength,
+  setIndexArrow,
+}: ArrowsProps) => {
+  if (
+    indexArrow === (photosLength ? photosLength - 1 : 0) ||
+    (photosLength ? photosLength : 0) <= 1
+  ) {
+    return null
+  }
+  const handleClick = () => {
+    setIndexArrow(indexArrow + 1)
+    if (callbackFunction) {
+      callbackFunction()
+    }
+    if (onClick) {
+      onClick()
+    }
+  }
+
+  return (
+    <Button className={styles.nextArrow} onClick={handleClick} variant={'icon-link'}>
+      <ArrowIosForwardOutline />
+    </Button>
+  )
+}
+export const PrevArrowComponent = ({
+  callbackFunction,
+  indexArrow,
+  onClick,
+  photosLength,
+  setIndexArrow,
+}: ArrowsProps) => {
+  if (indexArrow === 0 || (photosLength ? photosLength : 0) <= 1) {
+    return null
+  }
+  const handleClick = () => {
+    setIndexArrow(indexArrow - 1)
+    if (callbackFunction) {
+      callbackFunction()
+    }
+    if (onClick) {
+      onClick()
+    }
+  }
+
+  return (
+    <Button className={styles.prevArrow} onClick={handleClick} variant={'icon-link'}>
+      <ArrowIosBackOutline />
+    </Button>
   )
 }

@@ -31,3 +31,23 @@
   margin-top: 16px;
   font-size: 24px;
 }
+
+.prevArrow {
+  cursor: pointer;
+
+  position: absolute;
+  z-index: 1;
+  top: 50%;
+  left: 0;
+  transform: translate(0, -50%);
+}
+
+.nextArrow {
+  cursor: pointer;
+
+  position: absolute;
+  z-index: 1;
+  top: 50%;
+  right: 0;
+  transform: translate(0, -50%);
+}

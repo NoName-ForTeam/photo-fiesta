@@ -10,8 +10,7 @@ import {
 import { Close, CloseOutline, Edit2 } from '@/shared/assets'
 import { ProfileAvatar } from '@/shared/ui'
 import { useChangeTitle } from '@/shared/utils/hooks/useChangeTitle'
-import { ConfirmationModal } from '@/widgets'
-import { Carousel } from '@/widgets/slider/slider'
+import { Carousel, ConfirmationModal } from '@/widgets'
 import { Typography } from '@photo-fiesta/ui-lib'
 import clsx from 'clsx'
 
