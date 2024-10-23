@@ -54,6 +54,12 @@ export const ru: LocaleType = {
     userName: 'Имя пользователя',
     userNameContains: 'Имя пользователя должно содержать 0-9; A-Z; a-z; _; -',
   },
+  devices: {
+    active: 'Активные сессии',
+    current: 'Текущее устройство',
+    terminate: 'Завершить все другие сессии',
+    visit: 'Последний визит:',
+  },
   input: {
     email: 'Введите свою почту',
     lastName: 'Введите свою фамилию',

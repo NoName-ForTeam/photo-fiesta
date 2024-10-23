@@ -90,5 +90,5 @@
 @mixin subscription-container {
   padding: 14px 20px;
   background-color: var(--dark-500);
-  outline: 1px solid var(--dark-300);
+  border: 1px solid var(--dark-300);
 }

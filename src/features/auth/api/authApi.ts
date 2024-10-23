@@ -122,7 +122,7 @@ export const authApi = baseApi.injectEndpoints({
        * signIn({ email: 'user@example.com', password: 'password123' });
        */
       signIn: builder.mutation<SuccessSignInResponse, SignInData>({
-        invalidatesTags: ['Auth'],
+        invalidatesTags: ['Auth', 'Devices'],
         query: params => ({
           body: params,
           method: POST,
