@@ -7,11 +7,10 @@ import styles from './postForm.module.scss'
 
 type PostFormProps = {
   handleClose: () => void
-  isEditing?: boolean // обязательный пропс
+  isEditing?: boolean
   postId?: number | undefined
-  // selectedImage?: null | string | string[]
-  selectedImage?: null | string
-  setIsEditing: (isEditing: boolean) => void // пропс для изменения состояния
+  selectedImage?: null | string | string[]
+  setIsEditing: (isEditing: boolean) => void
 }
 /**
  * The PostForm component handles creating and editing posts description with controlled textarea and zod-validation.

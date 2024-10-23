@@ -11,8 +11,7 @@ type PostProps = {
   avatar: Avatar[] | undefined
   handleClose: () => void
   postId?: number
-  // selectedImage: null | string | string[]
-  selectedImage: null | string
+  selectedImage: null | string | string[]
   setIsEditing: (isEditing: boolean) => void
   step: Step
   userId: number | undefined
@@ -43,7 +42,6 @@ export const Post = ({
             handleClose={handleClose}
             postId={postId}
             selectedImage={selectedImage}
-            // isEditing={false}
             setIsEditing={setIsEditing}
           />
         </div>

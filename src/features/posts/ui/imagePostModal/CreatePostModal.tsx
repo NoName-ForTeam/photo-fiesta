@@ -2,11 +2,10 @@ import { useEffect, useRef, useState } from 'react'
 
 import { Avatar, Post } from '@/features'
 import { ArrowIosBackOutline } from '@/shared/assets'
-import { useChangeTitle } from '@/shared/utils/hooks/useChangeTitle'
-import { ConfirmationModal } from '@/widgets'
+import { useChangeTitle } from '@/shared/utils'
+import { Carousel, ConfirmationModal } from '@/widgets'
 import { Button, Typography } from '@photo-fiesta/ui-lib'
 import clsx from 'clsx'
-import Image from 'next/image'
 
 import styles from './imagePostModal.module.scss'
 
@@ -15,11 +14,9 @@ type CreatePostModalProps = {
   handleClose: () => void
   isEditing?: boolean
   postId?: number | undefined
-  // selectedImage: null | string | string[]
-  selectedImage: null | string
+  selectedImage: null | string | string[]
   setIsEditing: (isEditing: boolean) => void
-  // setSelectedImage: (image: null | string | string[]) => void
-  setSelectedImage: (image: null | string) => void
+  setSelectedImage: (image: null | string | string[]) => void
   userId: number | undefined
 }
 
@@ -30,6 +27,7 @@ export const CreatePostModal = ({
   postId,
   selectedImage,
   setIsEditing,
+  setSelectedImage,
   userId,
 }: CreatePostModalProps) => {
   const { changeStep, getStepTitle, step } = useChangeTitle({ isEditing })
@@ -84,12 +82,12 @@ export const CreatePostModal = ({
         <div className={styles.body}>
           <section className={styles.imageSection}>
             {selectedImage ? (
-              <Image
-                alt={'Selected'}
-                className={styles.selectedImage}
-                height={432}
-                src={selectedImage}
-                width={492}
+              <Carousel
+                handleCloseModal={handleClose}
+                photos={selectedImage}
+                // postPhoto
+                setImage={setSelectedImage}
+                step={step}
               />
             ) : (
               <Typography variant={'h2'}>No image selected</Typography>
@@ -104,6 +102,7 @@ export const CreatePostModal = ({
             step={step}
             userId={userId}
           />
+          {/*TODO: rename buttons*/}
           {showConfirmModal && (
             <ConfirmationModal
               closeModal={() => setShowConfirmModal(false)}

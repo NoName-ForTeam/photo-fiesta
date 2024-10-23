@@ -1,0 +1,56 @@
+@use '@/app/styles/mixins' as *;
+
+.dotsItem {
+  cursor: pointer;
+
+  position: relative;
+  top: -30px;
+
+  width: 8px;
+  height: 8px;
+  margin: 0 5px;
+
+  background-color: var(--light-900);
+  border-radius: 50%;
+}
+
+.dotsItemActive {
+  background-color: var(--accent-500);
+}
+
+.slider {
+  height: 100%;
+}
+
+.selectedImage {
+  width: 100%;
+  max-width: 492px;
+  height: 100%;
+  max-height: 432px;
+
+  object-fit: cover;
+}
+
+.icon {
+  z-index: 2;
+  margin-top: 16px;
+  font-size: 24px;
+}
+
+.prevArrow {
+  cursor: pointer;
+  position: absolute;
+  z-index: 1;
+  left: 0;
+
+  @include vertical-center;
+}
+
+.nextArrow {
+  cursor: pointer;
+  position: absolute;
+  z-index: 1;
+  right: 0;
+
+  @include vertical-center;
+}

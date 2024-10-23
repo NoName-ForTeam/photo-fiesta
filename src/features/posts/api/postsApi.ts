@@ -55,7 +55,7 @@ export const postsApi = baseApi.injectEndpoints({
      * Deletes an uploaded image by its ID.
      * @param {{ uploadId: string }} params - The ID of the uploaded image to delete.
      */
-    deleteUploadImage: builder.mutation<void, { uploadId: string }>({
+    deleteUploadImage: builder.mutation<void, { uploadId: string | string[] }>({
       invalidatesTags: ['Posts'],
       query: ({ uploadId }) => ({
         method: DELETE,

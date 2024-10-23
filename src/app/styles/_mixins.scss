@@ -92,3 +92,8 @@
   background-color: var(--dark-500);
   outline: 1px solid var(--dark-300);
 }
+
+@mixin vertical-center {
+  top: 50%;
+  transform: translate(0, -50%);
+}

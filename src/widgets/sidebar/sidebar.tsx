@@ -77,6 +77,7 @@ export const Sidebar = () => {
           title={t.sidebar.logout}
         />
       )}
+      {/*TODO: optimize function*/}
       {isCreateModalOpen && (
         <ModalAddPhoto
           handleCloseModal={handleCloseAddPhotoModal}
@@ -90,7 +91,6 @@ export const Sidebar = () => {
           avatar={profileInfo?.avatars}
           handleClose={handleClosePostModal}
           isEditing={isEditing}
-          // postPhoto
           selectedImage={selectedImage}
           setIsEditing={setIsEditing}
           setSelectedImage={setSelectedImage}
