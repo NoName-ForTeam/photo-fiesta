@@ -4,10 +4,10 @@ import { ALLOWED_FORMATS, MAX_FILE_SIZE } from '@/shared/config'
 
 type UseModalAddPhotoProps = {
   handleCloseModal: () => void
+  // setImage: (image: null | string) => void
   isOpen?: boolean
   postPhoto?: boolean
   setImage: (image: null | string | string[]) => void
-  // setImage: (image: null | string) => void
 }
 
 export const useModalAddPhoto = ({
@@ -19,12 +19,13 @@ export const useModalAddPhoto = ({
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [error, setError] = useState<null | string>(null)
   const [selectedImage, setSelectedImage] = useState<null | string | string[]>(null)
-  // const [selectedImage, setSelectedImage] = useState<null | string>(null)
+  // const [selectedImages, setSelectedImages] = useState<null | string[]>(null)
   const [isSaved, setIsSaved] = useState(false)
 
   useEffect(() => {
     if (isOpen) {
       setSelectedImage(null)
+
       setError(null)
       setIsSaved(false)
     }
@@ -58,20 +59,10 @@ export const useModalAddPhoto = ({
         const image = e.target?.result as string
 
         setSelectedImage(image)
-        // setSelectedImage(prevSelected =>
-        //   prevSelected
-        //     ? [...(Array.isArray(prevSelected) ? prevSelected : [prevSelected]), image]
-        //     : [image]
-        // )
         setError(null)
 
         if (postPhoto) {
           setImage(image)
-          // setImage(prevImage => {
-          //   const newImages = prevImage ? (Array.isArray(prevImage) ? prevImage : [prevImage]) : []
-          //
-          //   return [...newImages, image] // Возвращаем новый массив с добавленным изображением
-          // })
           setIsSaved(true)
           handleCloseModal()
         }
