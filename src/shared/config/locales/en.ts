@@ -50,6 +50,12 @@ export const en = {
     userName: 'Username',
     userNameContains: 'Username may contain 0-9; A-Z; a-z; _; -',
   },
+  devices: {
+    active: 'Active sessions',
+    current: 'Current device',
+    terminate: 'Terminate all other session',
+    visit: 'Last visit:',
+  },
   input: {
     email: 'Enter your email',
     lastName: 'Enter your last name',

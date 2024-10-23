@@ -1,0 +1,49 @@
+@use '@/app/styles/mixins' as *;
+
+.container {
+  @include subscription-container;
+
+  align-items: center;
+  width: 100%;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.icon {
+  display: flex;
+  align-items: flex-start;
+}
+
+.title {
+  margin-bottom: 13px !important;
+}
+
+.wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.leftSide {
+  display: flex;
+  gap: 12px;
+}
+
+.btn {
+  display: flex;
+  gap: 12px;
+  color: white !important;
+
+  &:active {
+    color: var(--light-900) !important;
+  }
+
+  svg {
+    width: 24px;
+    height: 24px;
+  }
+}

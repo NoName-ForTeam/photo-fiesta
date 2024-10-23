@@ -1,5 +1,6 @@
 export * from './checkErrorMessages'
 export * from './commonFormUtils'
+export * from './formatDate'
 export * from './getBaseUrl'
 export * from './handleErrorResponse'
 export * from './hooks'
