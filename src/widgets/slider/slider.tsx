@@ -3,7 +3,7 @@ import Slider from 'react-slick'
 
 import { Step } from '@/features'
 import { ArrowIosBackOutline, ArrowIosForwardOutline, ImageOutline } from '@/shared/assets'
-import { useModalAddPhoto } from '@/widgets/modals/ui/modalAddPhoto/useModalAddPhoto'
+import { useModalAddPhoto } from '@/widgets'
 import { Button } from '@photo-fiesta/ui-lib'
 import clsx from 'clsx'
 import Image from 'next/image'
@@ -46,7 +46,7 @@ export const Carousel = ({
     icon: styles.icon,
     selectedImage: styles.selectedImage,
     slider: styles.slider,
-  }
+  } as const
   const allPhotos = Array.isArray(photos) ? photos : [photos]
   /**
    * Settings for the react-slick slider.

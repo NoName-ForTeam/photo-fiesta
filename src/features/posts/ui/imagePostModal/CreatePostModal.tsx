@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 
 import { Avatar, Post } from '@/features'
 import { ArrowIosBackOutline } from '@/shared/assets'
-import { useChangeTitle } from '@/shared/utils/hooks/useChangeTitle'
+import { useChangeTitle } from '@/shared/utils'
 import { Carousel, ConfirmationModal } from '@/widgets'
 import { Button, Typography } from '@photo-fiesta/ui-lib'
 import clsx from 'clsx'
