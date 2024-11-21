@@ -1,12 +1,10 @@
 import { useMemo, useState } from 'react'
 
-import { MyPaymentsList, useGetMyPaymentsQuery } from '@/features'
+import { MyPaymentsCardsMobile, MyPaymentsList, useGetMyPaymentsQuery } from '@/features'
 import { Loader } from '@/shared/ui'
 import { Pagination, Select, SelectContainer, SelectItem } from '@photo-fiesta/ui-lib'
 
 import styles from './myPayments.module.scss'
-
-import { MyPaymentsCardsMobile } from './myPaymentsCardsMobile'
 
 const classNames = {
   container: styles.container,

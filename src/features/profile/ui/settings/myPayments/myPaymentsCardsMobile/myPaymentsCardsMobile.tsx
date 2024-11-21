@@ -1,5 +1,4 @@
-import { DetailedPayment } from '@/features'
-import { PaymentCard } from '@/features/profile/ui/settings/myPayments/myPaymentsCardsMobile/paymentCard'
+import { DetailedPayment, PaymentCard } from '@/features'
 import clsx from 'clsx'
 
 import styles from './myPaymentsCardsMobile.module.scss'
