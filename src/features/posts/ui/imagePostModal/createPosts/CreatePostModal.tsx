@@ -7,7 +7,7 @@ import { Carousel, ConfirmationModal } from '@/widgets'
 import { Button, Typography } from '@photo-fiesta/ui-lib'
 import clsx from 'clsx'
 
-import styles from './imagePostModal.module.scss'
+import styles from './createPostModal.module.scss'
 
 type CreatePostModalProps = {
   avatar: Avatar[] | undefined

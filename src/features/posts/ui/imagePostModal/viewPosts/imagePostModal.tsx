@@ -1,14 +1,22 @@
 import { useState } from 'react'
 
 import { Avatar, PostForm, useDeletePostMutation, useGetPostByIdQuery } from '@/features'
-import { Close, CloseOutline, Edit2, MoreHorizontalOutline } from '@/shared/assets'
+import {
+  BookmarkOutline,
+  Close,
+  CloseOutline,
+  Edit2,
+  HeartOutline,
+  MoreHorizontalOutline,
+  PaperPlaneOutline,
+} from '@/shared/assets'
 import { PopoverContent, PopoverRoot, PopoverTrigger, ProfileAvatar } from '@/shared/ui'
 import { useChangeTitle, useModal } from '@/shared/utils'
 import { Carousel, ConfirmationModal } from '@/widgets'
 import { Button, Typography } from '@photo-fiesta/ui-lib'
 import clsx from 'clsx'
 
-import styles from './imagePostModal.module.scss'
+import styles from './viewPosts.module.scss'
 
 type ImagePostModalProps = {
   avatar: Avatar[] | undefined
@@ -40,7 +48,6 @@ export const ImagePostModal = ({
   postId,
   selectedImages,
   setSelectedImages,
-  userId,
   viewMode = false,
 }: ImagePostModalProps) => {
   const [isEditing, setIsEditing] = useState(false)
@@ -49,10 +56,7 @@ export const ImagePostModal = ({
   const confirmDeleteModal = useModal()
   const { getStepTitle } = useChangeTitle({ isEditing, viewMode })
 
-  const { data: postById } = useGetPostByIdQuery(
-    { postId },
-    { refetchOnMountOrArgChange: true, skip: !postId }
-  )
+  const { data: postById } = useGetPostByIdQuery({ postId }, { skip: !postId })
   const [deletePost] = useDeletePostMutation()
 
   /** Delete post function */
@@ -103,7 +107,7 @@ export const ImagePostModal = ({
   const ProfileInfo = () => (
     <div className={styles.profileInfo}>
       <ProfileAvatar avatarOwner={avatar?.[0]?.url} />
-      <Typography variant={'h3'}>{userId}</Typography>
+      <Typography variant={'h3'}>{postById?.userName}</Typography>
     </div>
   )
 
@@ -130,6 +134,9 @@ export const ImagePostModal = ({
 
   const PostDetails = () => (
     <div className={styles.postDetails}>
+      <div className={styles.profileInfo}>
+        <ProfileAvatar avatarOwner={avatar?.[0]?.url} />
+      </div>
       {isEditing ? (
         <PostForm
           handleClose={handleClose}
@@ -139,9 +146,17 @@ export const ImagePostModal = ({
           setIsEditing={setIsEditing}
         />
       ) : (
-        <Typography variant={'h3'}>{postById?.description}</Typography>
+        <div className={styles.descriptionContainer}>
+          <div>
+            <Typography variant={'h3'}>
+              {postById?.userName} {postById?.description}
+            </Typography>{' '}
+          </div>
+          <span>
+            <HeartOutline className={styles.icon} />
+          </span>
+        </div>
       )}
-      <div></div>
       {confirmCloseModal.isModalOpen && (
         <ConfirmationModal
           closeModal={confirmCloseModal.closeModal}
@@ -156,6 +171,32 @@ export const ImagePostModal = ({
       )}
     </div>
   )
+
+  const Buttons = () => (
+    <div className={styles.buttonsActions}>
+      <div className={styles.buttons}>
+        <div className={styles.likeWrite}>
+          <HeartOutline className={styles.icon} />
+          <PaperPlaneOutline className={styles.icon} />
+        </div>
+        <BookmarkOutline className={styles.icon} />
+      </div>
+      <div className={styles.likes}>
+        <div>{postById?.avatarWhoLikes}</div>
+        <div>
+          {postById?.likesCount} {'Like'}
+        </div>
+      </div>
+      <div>{postById?.createdAt}</div>
+    </div>
+  )
+  const AddComments = () => {
+    return (
+      <div className={styles.addComment}>
+        {'Add a Comment...'} <Button variant={'ghost'}>Publish</Button>
+      </div>
+    )
+  }
 
   return (
     <div className={classNames.overlay}>
@@ -173,6 +214,8 @@ export const ImagePostModal = ({
               <PopoverActions />
             </div>
             <PostDetails />
+            <Buttons />
+            <AddComments />
           </section>
         </div>
       </div>
