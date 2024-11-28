@@ -82,86 +82,122 @@ export const ImagePostModal = ({
     viewMode: styles.viewMode,
   }
   // TODO: addTranslate
-  const Header = () => (
-    <div className={styles.header}>
-      <Typography variant={'h1'}>{getStepTitle()}</Typography>
-      <Close onClick={() => confirmCloseModal.openModal('ConfirmClose')} />
-    </div>
-  )
+
   const postImages = postById?.images.map(img => img.url) ?? []
 
-  const ImageSection = () => (
-    <section className={styles.imageSection}>
-      {postById?.images?.length ? (
-        <Carousel
-          handleCloseModal={handleClose}
-          photos={postImages}
-          setPhotos={setSelectedImages}
-        />
-      ) : (
-        <Typography variant={'h2'}>No image selected</Typography>
-      )}
-    </section>
-  )
-
-  const ProfileInfo = () => (
-    <div className={styles.profileInfo}>
-      <ProfileAvatar avatarOwner={avatar?.[0]?.url} />
-      <Typography variant={'h3'}>{postById?.userName}</Typography>
-    </div>
-  )
-
-  const PopoverActions = () => (
-    <div className={styles.popover}>
-      <PopoverRoot>
-        <PopoverTrigger asChild>
-          <MoreHorizontalOutline className={styles.icon} />
-        </PopoverTrigger>
-        <PopoverContent align={'start'} alignOffset={20} side={'right'} sideOffset={1}>
-          <Button onClick={() => setIsEditing(true)} variant={'icon-link'}>
-            <Edit2 className={styles.icon} /> Edit Post
-          </Button>
-          <Button
-            onClick={() => confirmDeleteModal.openModal('ConfirmDelete')}
-            variant={'icon-link'}
-          >
-            <CloseOutline className={styles.icon} /> Delete Post
-          </Button>
-        </PopoverContent>
-      </PopoverRoot>
-    </div>
-  )
-
-  const PostDetails = () => (
-    <div className={styles.postDetails}>
-      <div className={styles.profileInfo}>
-        <ProfileAvatar avatarOwner={avatar?.[0]?.url} />
-      </div>
-      {isEditing ? (
-        <PostForm
-          handleClose={handleClose}
-          isEditing
-          photos={selectedImages}
-          postId={postId}
-          setIsEditing={setIsEditing}
-        />
-      ) : (
-        <div className={styles.descriptionContainer}>
-          <div>
-            <Typography variant={'h3'}>
-              {postById?.userName} {postById?.description}
-            </Typography>{' '}
+  return (
+    <div className={classNames.overlay}>
+      <div className={clsx(classNames.modalContent)}>
+        {isEditing ? (
+          <div className={classNames.header}>
+            <Typography variant={'h1'}>{getStepTitle()}</Typography>
+            <Close onClick={() => confirmCloseModal.openModal('ConfirmClose')} />
           </div>
-          <span>
-            <HeartOutline className={styles.icon} />
-          </span>
+        ) : (
+          <CloseOutline className={classNames.closeIcon} onClick={handleClose} />
+        )}
+
+        <div className={styles.body}>
+          <section className={classNames.imageSection}>
+            {postById?.images?.length ? (
+              <Carousel
+                handleCloseModal={handleClose}
+                photos={postImages}
+                setPhotos={setSelectedImages}
+              />
+            ) : (
+              <Typography variant={'h2'}>No image selected</Typography>
+            )}
+          </section>
+
+          <section className={classNames.viewMode}>
+            {!isEditing ? (
+              <div className={classNames.info}>
+                <div className={classNames.profileInfo}>
+                  <ProfileAvatar avatarOwner={avatar?.[0]?.url} />
+                  <Typography variant={'h3'}>{postById?.userName}</Typography>
+                </div>
+                <div className={classNames.popover}>
+                  <PopoverRoot>
+                    <PopoverTrigger asChild>
+                      <MoreHorizontalOutline className={styles.icon} />
+                    </PopoverTrigger>
+                    <PopoverContent align={'start'} alignOffset={20} side={'right'} sideOffset={1}>
+                      <Button onClick={() => setIsEditing(true)} variant={'icon-link'}>
+                        <Edit2 className={styles.icon} /> Edit Post
+                      </Button>
+                      <Button
+                        onClick={() => confirmDeleteModal.openModal('ConfirmDelete')}
+                        variant={'icon-link'}
+                      >
+                        <CloseOutline className={styles.icon} /> Delete Post
+                      </Button>
+                    </PopoverContent>
+                  </PopoverRoot>
+                </div>
+              </div>
+            ) : (
+              <div className={styles.editInfo}>
+                <ProfileAvatar avatarOwner={avatar?.[0]?.url} />
+                <Typography variant={'h3'}>{postById?.userName}</Typography>
+              </div>
+            )}
+
+            <div className={classNames.postDetails}>
+              {isEditing ? (
+                <PostForm
+                  handleClose={handleClose}
+                  isEditing
+                  photos={selectedImages}
+                  postId={postId}
+                  setIsEditing={setIsEditing}
+                />
+              ) : (
+                <div>
+                  <div className={styles.descriptionContainer}>
+                    <div className={styles.profileAva}>
+                      <ProfileAvatar avatarOwner={avatar?.[0]?.url} />
+                    </div>
+                    <div>
+                      <Typography variant={'h3'}>{postById?.userName}</Typography>
+                      <Typography variant={'text14'}>{postById?.description}</Typography>
+                    </div>
+                    <span>
+                      <HeartOutline className={styles.icon} />
+                    </span>
+                  </div>
+                  <div className={styles.options}>
+                    <div className={styles.buttonsActions}>
+                      <div className={styles.buttons}>
+                        <div className={styles.likeWrite}>
+                          <HeartOutline className={styles.icon} />
+                          <PaperPlaneOutline className={styles.icon} />
+                        </div>
+                        <BookmarkOutline className={styles.icon} />
+                      </div>
+                      <div className={styles.likes}>
+                        <div>{postById?.avatarWhoLikes}</div>
+                        <div>{postById?.likesCount} Like</div>
+                      </div>
+                      <div>{postById?.createdAt}</div>
+                    </div>
+
+                    <div className={styles.addComment}>
+                      Add a Comment... <Button variant={'ghost'}>Publish</Button>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          </section>
         </div>
-      )}
+      </div>
+
       {confirmCloseModal.isModalOpen && (
         <ConfirmationModal
           closeModal={confirmCloseModal.closeModal}
           content={
-            'Do you really want to close the edition of the publication? If you close changes won’t be saved'
+            'Do you really want to close the edition of the publication? If you close, changes won’t be saved.'
           }
           handleConfirmation={handleClose}
           isOpen={confirmCloseModal.isModalOpen}
@@ -169,56 +205,6 @@ export const ImagePostModal = ({
           title={'Close Post'}
         />
       )}
-    </div>
-  )
-
-  const Buttons = () => (
-    <div className={styles.buttonsActions}>
-      <div className={styles.buttons}>
-        <div className={styles.likeWrite}>
-          <HeartOutline className={styles.icon} />
-          <PaperPlaneOutline className={styles.icon} />
-        </div>
-        <BookmarkOutline className={styles.icon} />
-      </div>
-      <div className={styles.likes}>
-        <div>{postById?.avatarWhoLikes}</div>
-        <div>
-          {postById?.likesCount} {'Like'}
-        </div>
-      </div>
-      <div>{postById?.createdAt}</div>
-    </div>
-  )
-  const AddComments = () => {
-    return (
-      <div className={styles.addComment}>
-        {'Add a Comment...'} <Button variant={'ghost'}>Publish</Button>
-      </div>
-    )
-  }
-
-  return (
-    <div className={classNames.overlay}>
-      <div className={clsx(styles.modalContent)}>
-        {!isEditing ? (
-          <CloseOutline className={styles.closeIcon} onClick={handleClose} />
-        ) : (
-          <Header />
-        )}
-        <div className={styles.body}>
-          <ImageSection />
-          <section className={styles.viewMode}>
-            <div className={styles.info}>
-              <ProfileInfo />
-              <PopoverActions />
-            </div>
-            <PostDetails />
-            <Buttons />
-            <AddComments />
-          </section>
-        </div>
-      </div>
 
       {confirmDeleteModal.isModalOpen && (
         <ConfirmationModal
