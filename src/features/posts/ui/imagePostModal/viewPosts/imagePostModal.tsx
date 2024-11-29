@@ -11,7 +11,7 @@ import {
   PaperPlaneOutline,
 } from '@/shared/assets'
 import { PopoverContent, PopoverRoot, PopoverTrigger, ProfileAvatar } from '@/shared/ui'
-import { useChangeTitle, useModal } from '@/shared/utils'
+import { useChangeTitle, useModal, useTranslation } from '@/shared/utils'
 import { Carousel, ConfirmationModal } from '@/widgets'
 import { Button, Typography } from '@photo-fiesta/ui-lib'
 import clsx from 'clsx'
@@ -24,7 +24,7 @@ type ImagePostModalProps = {
   postId: number | undefined
   selectedImages: string[]
   setSelectedImages: (images: string[]) => void
-  userId: number | undefined
+  userId: number
   viewMode?: boolean
 }
 
@@ -52,6 +52,7 @@ export const ImagePostModal = ({
 }: ImagePostModalProps) => {
   const [isEditing, setIsEditing] = useState(false)
 
+  const { t } = useTranslation()
   const confirmCloseModal = useModal()
   const confirmDeleteModal = useModal()
   const { getStepTitle } = useChangeTitle({ isEditing, viewMode })
@@ -81,7 +82,6 @@ export const ImagePostModal = ({
     profileInfo: styles.profileInfo,
     viewMode: styles.viewMode,
   }
-  // TODO: addTranslate
 
   const postImages = postById?.images.map(img => img.url) ?? []
 
@@ -106,7 +106,7 @@ export const ImagePostModal = ({
                 setPhotos={setSelectedImages}
               />
             ) : (
-              <Typography variant={'h2'}>No image selected</Typography>
+              <Typography variant={'h2'}>{t.posts.noImage}</Typography>
             )}
           </section>
 
@@ -124,13 +124,15 @@ export const ImagePostModal = ({
                     </PopoverTrigger>
                     <PopoverContent align={'start'} alignOffset={20} side={'right'} sideOffset={1}>
                       <Button onClick={() => setIsEditing(true)} variant={'icon-link'}>
-                        <Edit2 className={styles.icon} /> Edit Post
+                        <Edit2 className={styles.icon} />
+                        {t.posts.edit}
                       </Button>
                       <Button
                         onClick={() => confirmDeleteModal.openModal('ConfirmDelete')}
                         variant={'icon-link'}
                       >
-                        <CloseOutline className={styles.icon} /> Delete Post
+                        <CloseOutline className={styles.icon} />
+                        {t.posts.delete}
                       </Button>
                     </PopoverContent>
                   </PopoverRoot>
@@ -153,7 +155,7 @@ export const ImagePostModal = ({
                   setIsEditing={setIsEditing}
                 />
               ) : (
-                <div>
+                <div className={styles.viewPostDetails}>
                   <div className={styles.descriptionContainer}>
                     <div className={styles.profileAva}>
                       <ProfileAvatar avatarOwner={avatar?.[0]?.url} />
@@ -162,7 +164,7 @@ export const ImagePostModal = ({
                       <Typography variant={'h3'}>{postById?.userName}</Typography>
                       <Typography variant={'text14'}>{postById?.description}</Typography>
                     </div>
-                    <span>
+                    <span style={{ alignSelf: 'center' }}>
                       <HeartOutline className={styles.icon} />
                     </span>
                   </div>
@@ -183,7 +185,7 @@ export const ImagePostModal = ({
                     </div>
 
                     <div className={styles.addComment}>
-                      Add a Comment... <Button variant={'ghost'}>Publish</Button>
+                      {t.posts.addComment} <Button variant={'ghost'}>{t.posts.publish}</Button>
                     </div>
                   </div>
                 </div>
@@ -196,24 +198,22 @@ export const ImagePostModal = ({
       {confirmCloseModal.isModalOpen && (
         <ConfirmationModal
           closeModal={confirmCloseModal.closeModal}
-          content={
-            'Do you really want to close the edition of the publication? If you close, changes won’t be saved.'
-          }
+          content={t.posts.closePostText}
           handleConfirmation={handleClose}
           isOpen={confirmCloseModal.isModalOpen}
           isTwoButtons
-          title={'Close Post'}
+          title={t.posts.closePost}
         />
       )}
 
       {confirmDeleteModal.isModalOpen && (
         <ConfirmationModal
           closeModal={confirmDeleteModal.closeModal}
-          content={'Are you sure you want to delete this post?'}
+          content={t.posts.deletePostText}
           handleConfirmation={confirmDelete}
           isOpen={confirmDeleteModal.isModalOpen}
           isTwoButtons
-          title={'Delete Post'}
+          title={t.posts.deletePost}
         />
       )}
     </div>

@@ -85,6 +85,18 @@ export const en = {
     newNotification: 'New notification!',
     notifications: 'Notifications',
   },
+  posts: {
+    addComment: 'Add a Comment...',
+    closePost: 'Close Post',
+    closePostText:
+      'Do you really want to close the edition of the publication? If you close, changes won’t be saved.',
+    delete: 'Delete Post',
+    deletePost: 'Delete Post',
+    deletePostText: 'Are you sure you want to delete this post?',
+    edit: 'Edit Post',
+    noImage: 'No image selected',
+    publish: 'Publish',
+  },
   privacyPolicy: {
     introduction: `Welcome to Inctagram! Your privacy is important to us, and this policy explains how we collect, use, and protect your personal data. Please read it carefully.`,
     sections: {

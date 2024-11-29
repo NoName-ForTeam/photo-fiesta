@@ -22,13 +22,6 @@
   background-color: var(--dark-100);
 }
 
-.closeIcon {
-  cursor: pointer;
-  position: absolute;
-  top: -23px;
-  right: -25px;
-}
-
 .header {
   display: flex;
   flex-direction: row;
@@ -38,6 +31,13 @@
   padding: 10px 20px;
 
   border-bottom: 1px solid var(--light-900);
+}
+
+.closeIcon {
+  cursor: pointer;
+  position: absolute;
+  top: -23px;
+  right: -25px;
 }
 
 .body {
@@ -65,6 +65,15 @@
   border-bottom: 1px solid var(--light-900);
 }
 
+.profileInfo {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: center;
+
+  margin-bottom: 5px;
+}
+
 .popover button {
   display: flex;
   gap: 10px;
@@ -78,15 +87,6 @@
   height: 24px;
 }
 
-.profileInfo {
-  display: flex;
-  flex-direction: row;
-  gap: 10px;
-  align-items: center;
-
-  margin-bottom: 5px;
-}
-
 .editInfo {
   display: flex;
   flex-direction: row;
@@ -98,6 +98,31 @@
 
 .postDetails {
   display: flex;
+}
+
+.viewPostDetails {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.descriptionContainer {
+  display: flex;
+  flex-direction: row;
+  margin: 10px 0;
+  padding: 0 20px;
+}
+
+.profileAva {
+  display: flex;
+  padding-right: 10px;
+}
+
+.options {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .buttonsActions {
@@ -120,30 +145,6 @@
 .likes {
   display: flex;
   flex-direction: row;
-}
-
-.descriptionText {
-  display: flex;
-  flex-direction: row;
-  gap: 10px;
-}
-
-.descriptionContainer {
-  display: flex;
-  justify-content: flex-end;
-  margin: 10px 0;
-  padding: 0 20px;
-}
-
-.options {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.profileAva {
-  display: flex;
-  padding-right: 10px;
 }
 
 .addComment {
