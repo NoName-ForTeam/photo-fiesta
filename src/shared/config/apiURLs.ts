@@ -17,6 +17,14 @@ export const API_URLS = {
     DeleteSessionByDeviceId: (deviceId: number) => `v1/sessions/${deviceId}`,
     GET_SESSIONS: 'v1/sessions',
   },
+  FOLLOW: {
+    FOLLOW_USER: 'v1/users/following',
+    GET_USER_PROFILE: 'v1/users',
+    GetFollowers: (userName: string) => `v1/users/${userName}/followers`,
+    GetFollowing: (userName: string) => `v1/users/${userName}/following`,
+    GetProfileUserWithPost: (userName: string) => `v1/users/${userName}`,
+    RemoveFollower: (userId: number) => `v1/users/follower/${userId}`,
+  },
   NOTIFICATIONS: {
     DeleteNotifications: (id: number) => `v1/notifications/${id}`,
     GetAllNotifications: (cursor: number | undefined) => `v1/notifications/${cursor}`,

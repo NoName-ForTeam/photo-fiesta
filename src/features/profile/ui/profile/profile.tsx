@@ -1,6 +1,12 @@
 import { ComponentPropsWithoutRef } from 'react'
 
-import { GetPublicPostsResponse, GetPublicProfileResponse, PostList } from '@/features'
+import {
+  Follow,
+  GetPublicPostsResponse,
+  GetPublicProfileResponse,
+  PostList,
+  useGetProfileUserWithPostQuery,
+} from '@/features'
 import { ROUTES } from '@/shared/config'
 import { ProfileAvatar, ProfileStat } from '@/shared/ui'
 import { useTranslation } from '@/shared/utils'
@@ -32,6 +38,7 @@ export type ProfileProps = {
 export const Profile = ({ className, isOwnProfile, posts, profileInfo }: ProfileProps) => {
   const { t } = useTranslation()
   const router = useRouter()
+  const { data } = useGetProfileUserWithPostQuery({ userName: profileInfo.userName })
 
   /**
    * Handles navigation to profile settings and refetches profile data.
@@ -39,6 +46,8 @@ export const Profile = ({ className, isOwnProfile, posts, profileInfo }: Profile
   const handleProfileSettings = () => router.push(ROUTES.SETTINGS)
 
   const userAvatar = profileInfo.avatars.length ? [profileInfo.avatars[0]] : []
+  const isFollowing = data?.isFollowing ?? false
+
   const classNames = {
     avatar: styles.avatar,
     bio: styles.bio,
@@ -60,9 +69,7 @@ export const Profile = ({ className, isOwnProfile, posts, profileInfo }: Profile
     </Button>
   ) : (
     <div className={styles.btnContainer}>
-      <Button>
-        <Typography variant={'h3'}>{t.myProfile.follow}</Typography>
-      </Button>
+      <Follow initialFollowState={isFollowing} userId={profileInfo.id} />
       <Button variant={'secondary'}>
         <Typography variant={'h3'}>{t.myProfile.sendMessage}</Typography>
       </Button>
