@@ -27,8 +27,19 @@ export const PostDescription = ({
   const { t } = useTranslation()
   const createdAt = useTimeAgo(postById?.createdAt)
 
+  const classNames = {
+    addComment: styles.addComment,
+    buttonsActions: styles.buttonsActions,
+    descriptionContainer: styles.descriptionContainer,
+    icon: styles.icon,
+    options: styles.options,
+    postDetails: styles.postDetails,
+    profileAva: styles.profileAva,
+    viewPostDetails: styles.viewPostDetails,
+  }
+
   return (
-    <div className={styles.postDetails}>
+    <div className={classNames.postDetails}>
       {isEditing ? (
         <PostForm
           handleClose={handleClose}
@@ -38,9 +49,9 @@ export const PostDescription = ({
           setIsEditing={setIsEditing}
         />
       ) : (
-        <div className={styles.viewPostDetails}>
-          <div className={styles.descriptionContainer}>
-            <div className={styles.profileAva}>
+        <div className={classNames.viewPostDetails}>
+          <div className={classNames.descriptionContainer}>
+            <div className={classNames.profileAva}>
               <ProfileAvatar avatarOwner={avatar?.[0]?.url} />
             </div>
             <div>
@@ -49,16 +60,15 @@ export const PostDescription = ({
               <Typography variant={'textSmall'}>{createdAt}</Typography>
             </div>
             <span style={{ alignSelf: 'center' }}>
-              <HeartOutline className={styles.icon} />
+              <HeartOutline className={classNames.icon} />
             </span>
           </div>
-          <div className={styles.options}>
-            <div className={styles.buttonsActions}>
+          <div className={classNames.options}>
+            <div className={classNames.buttonsActions}>
               <OptionsButtons />
               <LikesDisplay postId={postId ?? 0} />
             </div>
-
-            <div className={styles.addComment}>
+            <div className={classNames.addComment}>
               {t.posts.addComment} <Button variant={'ghost'}>{t.posts.publish}</Button>
             </div>
           </div>

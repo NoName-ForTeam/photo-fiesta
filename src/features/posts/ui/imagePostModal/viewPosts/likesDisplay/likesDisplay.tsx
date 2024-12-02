@@ -22,16 +22,24 @@ export const LikesDisplay = ({ postId }: LikesDisplayProps) => {
     </Typography>
   ))
 
+  const classNames = {
+    date: styles.date,
+    likes: styles.likes,
+    likesAvatar: styles.likesAvatar,
+    likesContainer: styles.likesContainer,
+    whoLikes: styles.whoLikes,
+  }
+
   return (
-    <div className={styles.likesContainer}>
-      <div className={styles.whoLikes}>
-        <div className={styles.likesAvatar}>{postAvatar}</div>
-        <div className={styles.likes}>
+    <div className={classNames.likesContainer}>
+      <div className={classNames.whoLikes}>
+        <div className={classNames.likesAvatar}>{postAvatar}</div>
+        <div className={classNames.likes}>
           <Typography variant={'text14'}>{likeCount}</Typography>
           <Typography variant={'textBold14'}>&#34;Likes&#34;</Typography>
         </div>
       </div>
-      <div className={styles.date}>{createAt}</div>
+      <div className={classNames.date}>{createAt}</div>
     </div>
   )
 }

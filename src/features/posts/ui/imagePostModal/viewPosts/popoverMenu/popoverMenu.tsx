@@ -58,31 +58,37 @@ export const PopoverMenu = ({
     return <Loader />
   }
 
+  const classNames = {
+    content: styles.content,
+    icon: styles.icon,
+    popover: styles.popover,
+  }
+
   return (
     <>
-      <div className={styles.popover}>
+      <div className={classNames.popover}>
         <PopoverRoot>
           <PopoverTrigger asChild>
-            <MoreHorizontalOutline className={styles.icon} />
+            <MoreHorizontalOutline className={classNames.icon} />
           </PopoverTrigger>
           <PopoverContent
             align={'start'}
             alignOffset={20}
-            className={styles.content}
+            className={classNames.content}
             side={'right'}
             sideOffset={1}
           >
             {isOwnProfile ? (
               <>
                 <Button onClick={() => setIsEditing(true)} variant={'icon-link'}>
-                  <Edit2 className={styles.icon} />
+                  <Edit2 className={classNames.icon} />
                   {t.posts.edit}
                 </Button>
                 <Button
                   onClick={() => confirmDeleteModal.openModal('ConfirmDelete')}
                   variant={'icon-link'}
                 >
-                  <CloseOutline className={styles.icon} />
+                  <CloseOutline className={classNames.icon} />
                   {t.posts.delete}
                 </Button>
               </>
@@ -90,14 +96,14 @@ export const PopoverMenu = ({
               <>
                 <Button disabled={isLoading} onClick={toggleFollow} variant={'icon-link'}>
                   {follow ? (
-                    <PersonRemove className={styles.icon} />
+                    <PersonRemove className={classNames.icon} />
                   ) : (
-                    <PersonAdd className={styles.icon} />
+                    <PersonAdd className={classNames.icon} />
                   )}
                   {follow ? t.myProfile.unfollow : t.myProfile.follow}
                 </Button>
                 <Button onClick={handleCopyLink} variant={'icon-link'}>
-                  <CopyOutline className={styles.icon} />
+                  <CopyOutline className={classNames.icon} />
                   {t.posts.copyLink}
                 </Button>
               </>
