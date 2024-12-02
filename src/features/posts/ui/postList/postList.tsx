@@ -10,15 +10,23 @@ import { useRouter } from 'next/router'
 import styles from './postList.module.scss'
 
 type PostListProps = {
-  avatar: Avatar[] | undefined
+  avatar: Avatar[]
+  initialFollowState: boolean
   initialPosts: GetPublicPostsResponse
+  isOwnProfile: boolean
   userId: number
 }
 
 /**
  * PostList component for displaying a user's posts with infinite scroll functionality.
  */
-export const PostList = ({ avatar, initialPosts, userId }: PostListProps) => {
+export const PostList = ({
+  avatar,
+  initialFollowState,
+  initialPosts,
+  isOwnProfile,
+  userId,
+}: PostListProps) => {
   const router = useRouter()
   const { postId, ...restQuery } = router.query
 
@@ -156,6 +164,8 @@ export const PostList = ({ avatar, initialPosts, userId }: PostListProps) => {
           <ImagePostModal
             avatar={avatar}
             handleClose={handleCloseModal}
+            initialFollowState={initialFollowState}
+            isOwnProfile={isOwnProfile}
             postId={modalData.postId}
             selectedImages={modalData.images}
             setSelectedImages={images => setModalData(prev => ({ ...prev, images }))}

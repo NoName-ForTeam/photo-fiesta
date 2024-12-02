@@ -1,26 +1,26 @@
 import { useState } from 'react'
 
-import { Avatar, PostForm, useDeletePostMutation, useGetPostByIdQuery } from '@/features'
 import {
-  BookmarkOutline,
-  Close,
-  CloseOutline,
-  Edit2,
-  HeartOutline,
-  MoreHorizontalOutline,
-  PaperPlaneOutline,
-} from '@/shared/assets'
-import { PopoverContent, PopoverRoot, PopoverTrigger, ProfileAvatar } from '@/shared/ui'
+  Avatar,
+  PopoverMenu,
+  PostDescription,
+  ProfileInfo,
+  useDeletePostMutation,
+  useGetPostByIdQuery,
+} from '@/features'
+import { Close, CloseOutline } from '@/shared/assets'
 import { useChangeTitle, useModal, useTranslation } from '@/shared/utils'
 import { Carousel, ConfirmationModal } from '@/widgets'
-import { Button, Typography } from '@photo-fiesta/ui-lib'
+import { Typography } from '@photo-fiesta/ui-lib'
 import clsx from 'clsx'
 
 import styles from './viewPosts.module.scss'
 
 type ImagePostModalProps = {
-  avatar: Avatar[] | undefined
+  avatar: Avatar[]
   handleClose: () => void
+  initialFollowState: boolean
+  isOwnProfile: boolean
   postId: number | undefined
   selectedImages: string[]
   setSelectedImages: (images: string[]) => void
@@ -45,20 +45,21 @@ type ImagePostModalProps = {
 export const ImagePostModal = ({
   avatar,
   handleClose,
+  initialFollowState,
+  isOwnProfile,
   postId,
   selectedImages,
   setSelectedImages,
+  userId,
   viewMode = false,
 }: ImagePostModalProps) => {
-  const [isEditing, setIsEditing] = useState(false)
-
   const { t } = useTranslation()
   const confirmCloseModal = useModal()
-  const confirmDeleteModal = useModal()
-  const { getStepTitle } = useChangeTitle({ isEditing, viewMode })
-
   const { data: postById } = useGetPostByIdQuery({ postId }, { skip: !postId })
   const [deletePost] = useDeletePostMutation()
+
+  const [isEditing, setIsEditing] = useState(false)
+  const { getStepTitle } = useChangeTitle({ isEditing, viewMode })
 
   /** Delete post function */
   const confirmDelete = async () => {
@@ -71,19 +72,20 @@ export const ImagePostModal = ({
   const classNames = {
     body: styles.body,
     closeIcon: styles.closeIcon,
+    edit: styles.edit,
     header: styles.header,
-    icon: styles.icon,
     imageSection: styles.imageSection,
     info: styles.info,
     modalContent: styles.modalContent,
     overlay: styles.overlay,
-    popover: styles.popover,
-    postDetails: styles.postDetails,
-    profileInfo: styles.profileInfo,
     viewMode: styles.viewMode,
   }
 
   const postImages = postById?.images.map(img => img.url) ?? []
+
+  if (!postById) {
+    return <Typography variant={'text14'}>No post found</Typography>
+  }
 
   return (
     <div className={classNames.overlay}>
@@ -96,8 +98,7 @@ export const ImagePostModal = ({
         ) : (
           <CloseOutline className={classNames.closeIcon} onClick={handleClose} />
         )}
-
-        <div className={styles.body}>
+        <div className={classNames.body}>
           <section className={classNames.imageSection}>
             {postById?.images?.length ? (
               <Carousel
@@ -109,92 +110,35 @@ export const ImagePostModal = ({
               <Typography variant={'h2'}>{t.posts.noImage}</Typography>
             )}
           </section>
-
           <section className={classNames.viewMode}>
             {!isEditing ? (
               <div className={classNames.info}>
-                <div className={classNames.profileInfo}>
-                  <ProfileAvatar avatarOwner={avatar?.[0]?.url} />
-                  <Typography variant={'h3'}>{postById?.userName}</Typography>
-                </div>
-                <div className={classNames.popover}>
-                  <PopoverRoot>
-                    <PopoverTrigger asChild>
-                      <MoreHorizontalOutline className={styles.icon} />
-                    </PopoverTrigger>
-                    <PopoverContent align={'start'} alignOffset={20} side={'right'} sideOffset={1}>
-                      <Button onClick={() => setIsEditing(true)} variant={'icon-link'}>
-                        <Edit2 className={styles.icon} />
-                        {t.posts.edit}
-                      </Button>
-                      <Button
-                        onClick={() => confirmDeleteModal.openModal('ConfirmDelete')}
-                        variant={'icon-link'}
-                      >
-                        <CloseOutline className={styles.icon} />
-                        {t.posts.delete}
-                      </Button>
-                    </PopoverContent>
-                  </PopoverRoot>
-                </div>
+                <ProfileInfo avatar={avatar} postById={postById} />
+                <PopoverMenu
+                  confirmDelete={confirmDelete}
+                  initialFollowState={initialFollowState}
+                  isOwnProfile={isOwnProfile}
+                  setIsEditing={setIsEditing}
+                  userId={userId}
+                />
               </div>
             ) : (
-              <div className={styles.editInfo}>
-                <ProfileAvatar avatarOwner={avatar?.[0]?.url} />
-                <Typography variant={'h3'}>{postById?.userName}</Typography>
+              <div className={classNames.edit}>
+                <ProfileInfo avatar={avatar} postById={postById} />
               </div>
             )}
-
-            <div className={classNames.postDetails}>
-              {isEditing ? (
-                <PostForm
-                  handleClose={handleClose}
-                  isEditing
-                  photos={selectedImages}
-                  postId={postId}
-                  setIsEditing={setIsEditing}
-                />
-              ) : (
-                <div className={styles.viewPostDetails}>
-                  <div className={styles.descriptionContainer}>
-                    <div className={styles.profileAva}>
-                      <ProfileAvatar avatarOwner={avatar?.[0]?.url} />
-                    </div>
-                    <div>
-                      <Typography variant={'h3'}>{postById?.userName}</Typography>
-                      <Typography variant={'text14'}>{postById?.description}</Typography>
-                    </div>
-                    <span style={{ alignSelf: 'center' }}>
-                      <HeartOutline className={styles.icon} />
-                    </span>
-                  </div>
-                  <div className={styles.options}>
-                    <div className={styles.buttonsActions}>
-                      <div className={styles.buttons}>
-                        <div className={styles.likeWrite}>
-                          <HeartOutline className={styles.icon} />
-                          <PaperPlaneOutline className={styles.icon} />
-                        </div>
-                        <BookmarkOutline className={styles.icon} />
-                      </div>
-                      <div className={styles.likes}>
-                        <div>{postById?.avatarWhoLikes}</div>
-                        <div>{postById?.likesCount} Like</div>
-                      </div>
-                      <div>{postById?.createdAt}</div>
-                    </div>
-
-                    <div className={styles.addComment}>
-                      {t.posts.addComment} <Button variant={'ghost'}>{t.posts.publish}</Button>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
+            <PostDescription
+              avatar={avatar}
+              handleClose={handleClose}
+              isEditing={isEditing}
+              postById={postById}
+              postId={postId}
+              selectedImages={selectedImages}
+              setIsEditing={setIsEditing}
+            />
           </section>
         </div>
       </div>
-
       {confirmCloseModal.isModalOpen && (
         <ConfirmationModal
           closeModal={confirmCloseModal.closeModal}
@@ -203,17 +147,6 @@ export const ImagePostModal = ({
           isOpen={confirmCloseModal.isModalOpen}
           isTwoButtons
           title={t.posts.closePost}
-        />
-      )}
-
-      {confirmDeleteModal.isModalOpen && (
-        <ConfirmationModal
-          closeModal={confirmDeleteModal.closeModal}
-          content={t.posts.deletePostText}
-          handleConfirmation={confirmDelete}
-          isOpen={confirmDeleteModal.isModalOpen}
-          isTwoButtons
-          title={t.posts.deletePost}
         />
       )}
     </div>

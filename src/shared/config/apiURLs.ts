@@ -37,12 +37,12 @@ export const API_URLS = {
     GetCommentAnswers: (commentId: number, postId: number) =>
       `v1/posts/${postId}/comments/${commentId}/answers`,
     GetCommentAnswersLikes: (commentId: number, postId: number, answerId: number) =>
-      `/api/v1/posts/${postId}/comments/${commentId}/answers/${answerId}/likes`,
+      `v1/posts/${postId}/comments/${commentId}/answers/${answerId}/likes`,
     GetCommentLikes: (commentId: number, postId: number) =>
-      `/api/v1/posts/${postId}/comments/${commentId}/likes`,
-    GetPostComments: (postId: number) => `/api/v1/posts/${postId}/comments`,
-    GetPostLikes: (postId: number) => `/api/v1/posts/${postId}/likes`,
-    GetPostsByUsername: (userName: string) => `/api/v1/posts/${userName}`,
+      `v1/posts/${postId}/comments/${commentId}/likes`,
+    GetPostComments: (postId: number) => `v1/posts/${postId}/comments`,
+    GetPostLikes: (postId: number) => `v1/posts/${postId}/likes`,
+    GetPostsByUsername: (userName: string) => `v1/posts/${userName}`,
     UPLOAD_POST_IMAGE: 'v1/posts/image',
     UpdatePost: (postId: number) => `v1/posts/${postId}`,
     UpdatePostLikeStatus: (postId: number) => `v1/posts/${postId}/like-status`,
@@ -61,7 +61,7 @@ export const API_URLS = {
     GetAllPublicPosts: (endCursorPostId: number | undefined) =>
       `v1/public-posts/all/${endCursorPostId}`,
     GetPostById: (postId: number | undefined) => `v1/public-posts/${postId}`,
-    GetPublicPostComments: (postId: number) => `/api/v1/public-posts/${postId}/comments`,
+    GetPublicPostComments: (postId: number) => `v1/public-posts/${postId}/comments`,
     GetPublicProfileById: (profileId: number) => `v1/public-user/profile/${profileId}`,
     GetUserPublicPosts: (endCursorPostId: null | number, userId: number) =>
       `v1/public-posts/user/${userId}/${endCursorPostId}`,

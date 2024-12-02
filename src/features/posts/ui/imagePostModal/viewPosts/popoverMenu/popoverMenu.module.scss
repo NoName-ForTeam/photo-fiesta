@@ -1,0 +1,30 @@
+@use '@/app/styles/mixins' as *;
+
+.popover {
+  display: flex;
+  text-wrap: wrap;
+}
+
+.popover button {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+
+  @include font(var(--font-size-s), var(--line-height-m), var(--font-weight-regular));
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  padding: 5px 10px;
+
+  border: 1px solid var(--dark-100);
+  border-radius: 1px;
+}
+
+.icon {
+  width: 24px;
+  height: 24px;
+}

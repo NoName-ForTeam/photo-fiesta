@@ -1,5 +1,6 @@
 export * from './checkErrorMessages'
 export * from './commonFormUtils'
+export * from './copyLink'
 export * from './formatDate'
 export * from './getBaseUrl'
 export * from './handleErrorResponse'

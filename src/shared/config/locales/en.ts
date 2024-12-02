@@ -90,6 +90,7 @@ export const en = {
     closePost: 'Close Post',
     closePostText:
       'Do you really want to close the edition of the publication? If you close, changes won’t be saved.',
+    copyLink: 'Copy link',
     delete: 'Delete Post',
     deletePost: 'Delete Post',
     deletePostText: 'Are you sure you want to delete this post?',

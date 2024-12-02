@@ -9,7 +9,7 @@ type PostFormProps = {
   handleClose: () => void
   isEditing?: boolean
   photos?: string[]
-  postId?: number | undefined
+  postId?: number
   setIsEditing: (isEditing: boolean) => void
 }
 /**

@@ -1,0 +1,49 @@
+.postDetails {
+  display: flex;
+}
+
+.viewPostDetails {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.descriptionContainer {
+  display: flex;
+  flex-direction: row;
+  margin: 10px 0;
+  padding: 0 20px;
+}
+
+.profileAva {
+  display: flex;
+  padding-right: 10px;
+}
+
+.icon {
+  width: 24px;
+  height: 24px;
+}
+
+.options {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.buttonsActions {
+  padding: 0 20px;
+  border-top: 1px solid var(--dark-100);
+}
+
+.addComment {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin: 10px 0;
+  padding: 10px 20px;
+
+  border-top: 1px solid var(--dark-100);
+}

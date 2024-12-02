@@ -11,7 +11,7 @@ type PostProps = {
   avatar: Avatar[] | undefined
   handleClose: () => void
   photos: string[]
-  postId?: number
+  postId?: number | undefined
   setIsEditing: (isEditing: boolean) => void
   step: Step
   userId: number | undefined

@@ -112,7 +112,13 @@ export const Profile = ({ className, isOwnProfile, posts, profileInfo }: Profile
       <div className={classNames.bioMobile}>
         <Typography variant={'text14'}>{profileInfo.aboutMe}</Typography>
       </div>
-      <PostList avatar={userAvatar} initialPosts={posts} userId={profileInfo.id} />
+      <PostList
+        avatar={userAvatar}
+        initialFollowState={isFollowing}
+        initialPosts={posts}
+        isOwnProfile={isOwnProfile}
+        userId={profileInfo.id}
+      />
     </div>
   )
 }

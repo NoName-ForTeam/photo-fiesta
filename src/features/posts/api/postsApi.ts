@@ -125,7 +125,7 @@ export const postsApi = baseApi.injectEndpoints({
      * Fetches likes for a specific post.
      * @param GetPostLikesArgs - Contains the post ID.
      */
-    getPostLikes: builder.query<GetCommentAnswersResponse, GetPostLikesArgs>({
+    getPostLikes: builder.query<GetCommentAnswersLikesResponse, GetPostLikesArgs>({
       providesTags: ['Posts'],
       query: ({ postId }) => ({
         method: GET,

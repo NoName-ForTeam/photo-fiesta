@@ -77,6 +77,7 @@ export type GetPostArgs = {
 export type GetPostByUsernameArgs = { userName: string } & GetPostArgs
 export type GetCommentAnswersResponse = {
   items: CommentAnswer[]
+  notReadCount: number
   pageSize: number
   totalCount: number
 }
@@ -99,6 +100,7 @@ export type GetCommentAnswersArgs = {
 }
 export type GetCommentAnswersLikesResponse = {
   items: UserComment[]
+  notReadCount: number
   pageSize: number
   totalCount: number
 }

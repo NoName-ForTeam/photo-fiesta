@@ -1,1 +1,6 @@
 export * from './imagePostModal'
+export * from './likesDisplay'
+export * from './optionsButtons'
+export * from './popoverMenu'
+export * from './postDescription'
+export * from './profileInfo'
