@@ -1,6 +1,23 @@
+.formContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin: 20px 24px;
+}
+
+.formContainer textarea {
+  resize: none;
+  width: 100%;
+  max-width: 433px;
+  padding: 10px;
+}
+
 .char {
   display: flex;
   justify-content: end;
-  padding-right: 45px;
+
+  margin: 2px 24px;
+  padding-right: 30px;
+
   color: var(--light-900);
 }

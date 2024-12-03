@@ -5,7 +5,7 @@ import {
   GetUserProfileArgs,
   GetUserProfileResponse,
   GetUserProfileWithPosts,
-} from '@/features/profile/api/followUsers/follow.types'
+} from '@/features'
 import { API_URLS, METHOD } from '@/shared/config'
 
 const {

@@ -26,39 +26,37 @@ export const PostForm = ({
     usePostForm({ handleClose, photos, postId, setIsEditing })
 
   return (
-    <div>
-      <div>
-        <form id={'postDescription'} onSubmit={isEditing ? saveDescriptionChanges : onSubmit}>
-          <Controller
-            control={control}
-            name={'description'}
-            render={({ field }) => (
-              <>
-                <FormTextArea
-                  {...field}
-                  control={control}
-                  error={errors.description?.message}
-                  label={'Add publication description'}
-                  onChangeValue={value => {
-                    field.onChange(value)
-                    setCharCount(value.length)
-                  }}
-                  placeholder={isEditing ? 'Edit description' : 'Text-area'}
-                />
-                {/*TODO: fix charCount in FormTextArea*/}
-                <Typography className={styles.char} variant={'textSmall'}>
-                  {charCount}/500
-                </Typography>
-              </>
-            )}
-          />
-          {isEditing && (
-            <Button type={'submit'} variant={'primary'}>
-              Save Changes
-            </Button>
+    <div className={styles.formContainer}>
+      <form id={'postDescription'} onSubmit={isEditing ? saveDescriptionChanges : onSubmit}>
+        <Controller
+          control={control}
+          name={'description'}
+          render={({ field }) => (
+            <>
+              <FormTextArea
+                {...field}
+                control={control}
+                error={errors.description?.message}
+                label={'Add publication description'}
+                onChangeValue={value => {
+                  field.onChange(value)
+                  setCharCount(value.length)
+                }}
+                placeholder={isEditing ? 'Edit description' : 'Text-area'}
+              />
+              {/*TODO: fix charCount in FormTextArea*/}
+              <Typography className={styles.char} variant={'textSmall'}>
+                {charCount}/500
+              </Typography>
+            </>
           )}
-        </form>
-      </div>
+        />
+        {isEditing && (
+          <Button type={'submit'} variant={'primary'}>
+            Save Changes
+          </Button>
+        )}
+      </form>
     </div>
   )
 }
