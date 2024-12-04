@@ -4,6 +4,7 @@ import InfiniteScroll from 'react-infinite-scroll-component'
 import { Avatar, GetPublicPostsResponse, ImagePostModal, useGetUserPostsQuery } from '@/features'
 import { ImageOutline } from '@/shared/assets'
 import { Loader } from '@/shared/ui'
+import { getLastPostId, getPostImages } from '@/shared/utils'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 
@@ -31,7 +32,7 @@ export const PostList = ({
   const { postId, ...restQuery } = router.query
 
   const [endCursorPostId, setEndCursorPostId] = useState<null | number>(
-    initialPosts.items[initialPosts.items.length - 1]?.id || null
+    getLastPostId(initialPosts.items)
   )
 
   const { data, isLoading } = useGetUserPostsQuery(
@@ -47,9 +48,8 @@ export const PostList = ({
 
   const [modalData, setModalData] = useState<{
     images: string[]
-    isOpen: boolean
     postId: null | number
-  }>({ images: [], isOpen: false, postId: null })
+  }>({ images: [], postId: null })
 
   // Holds the list of posts for rendering.
   const [posts, setPosts] = useState(initialPosts.items)
@@ -66,7 +66,7 @@ export const PostList = ({
    */
   useEffect(() => {
     setPosts(initialPosts.items)
-    setEndCursorPostId(initialPosts.items[initialPosts.items.length - 1]?.id || null)
+    setEndCursorPostId(getLastPostId(initialPosts.items))
     setHasMore(initialPosts.items.length < initialPosts.totalCount)
   }, [initialPosts])
 
@@ -86,12 +86,11 @@ export const PostList = ({
   useEffect(() => {
     if (postId) {
       const parsedPostId = Number(postId)
-      const post = posts.find(p => p.id === parsedPostId)
+      const post = posts.find(post => post.id === parsedPostId)
 
       if (post) {
         setModalData({
-          images: post.images.map(img => img.url),
-          isOpen: true,
+          images: getPostImages(post),
           postId: parsedPostId,
         })
       }
@@ -99,26 +98,22 @@ export const PostList = ({
   }, [postId, posts])
 
   const handleOpenImageModal = (postId: number, images: string[]) => {
-    setModalData({ images, isOpen: true, postId })
+    setModalData({ images, postId })
     router.push({ pathname: router.pathname, query: { ...restQuery, postId } }, undefined, {
       shallow: true,
     })
   }
 
   const handleCloseModal = () => {
-    setModalData({ images: [], isOpen: false, postId: null })
+    setModalData({ images: [], postId: null })
     router.push({ pathname: router.pathname, query: restQuery }, undefined, { shallow: true })
-  }
-
-  const getImageClickHandler = (postId: number, images: string[]) => () => {
-    handleOpenImageModal(postId, images)
   }
 
   /** Fetches and appends additional posts when the user scrolls to the bottom. */
   const loadMorePosts = () => {
     if (data?.items?.length) {
       setPosts(prev => [...prev, ...data.items.filter(p => !prev.some(post => post.id === p.id))])
-      setEndCursorPostId(data.items[data.items.length - 1]?.id || null)
+      setEndCursorPostId(getLastPostId(data.items))
       setHasMore(data.items.length >= 8)
     } else {
       setHasMore(false)
@@ -149,17 +144,14 @@ export const PostList = ({
               className={classNames.image}
               height={228}
               key={post.id}
-              onClick={getImageClickHandler(
-                post.id,
-                post.images.map(image => image.url)
-              )}
+              onClick={() => handleOpenImageModal(post.id, getPostImages(post))}
               src={post.images[0]?.url}
               width={234}
             />
           ))}
         </div>
       </InfiniteScroll>
-      {modalData.isOpen && modalData.postId && modalData.images && (
+      {modalData.postId && modalData.images && (
         <div className={styles.postModal}>
           <ImagePostModal
             avatar={avatar}

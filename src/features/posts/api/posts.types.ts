@@ -30,7 +30,7 @@ type PostResponseImages = {
 export type PostsImages = {
   images: PostResponseImages[]
 }
-export type PostArgsType = {
+export type PostArgs = {
   childrenMetadata: UploadId[]
   description: string
 }

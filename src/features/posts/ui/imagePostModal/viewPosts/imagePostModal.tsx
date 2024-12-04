@@ -9,7 +9,7 @@ import {
   useGetPostByIdQuery,
 } from '@/features'
 import { Close, CloseOutline } from '@/shared/assets'
-import { useChangeTitle, useModal, useTranslation } from '@/shared/utils'
+import { getPostImages, useChangeTitle, useModal, useTranslation } from '@/shared/utils'
 import { Carousel, ConfirmationModal } from '@/widgets'
 import { Typography } from '@photo-fiesta/ui-lib'
 import clsx from 'clsx'
@@ -21,7 +21,7 @@ type ImagePostModalProps = {
   handleClose: () => void
   initialFollowState: boolean
   isOwnProfile: boolean
-  postId: number | undefined
+  postId: number
   selectedImages: string[]
   setSelectedImages: (images: string[]) => void
   userId: number
@@ -56,6 +56,8 @@ export const ImagePostModal = ({
   const { t } = useTranslation()
   const confirmCloseModal = useModal()
   const { data: postById } = useGetPostByIdQuery({ postId }, { skip: !postId })
+  const isLiked = postById?.isLiked ?? false
+
   const [deletePost] = useDeletePostMutation()
 
   const [isEditing, setIsEditing] = useState(false)
@@ -81,8 +83,6 @@ export const ImagePostModal = ({
     viewMode: styles.viewMode,
   }
 
-  const postImages = postById?.images.map(img => img.url) ?? []
-
   if (!postById) {
     return <Typography variant={'text14'}>No post found</Typography>
   }
@@ -103,7 +103,7 @@ export const ImagePostModal = ({
             {postById?.images?.length ? (
               <Carousel
                 handleCloseModal={handleClose}
-                photos={postImages}
+                photos={getPostImages(postById)}
                 setPhotos={setSelectedImages}
               />
             ) : (
@@ -130,6 +130,7 @@ export const ImagePostModal = ({
             <PostDescription
               avatar={avatar}
               handleClose={handleClose}
+              initialLikedState={isLiked}
               isEditing={isEditing}
               postById={postById}
               postId={postId}
