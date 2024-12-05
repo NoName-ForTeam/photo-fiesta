@@ -30,10 +30,6 @@ export const Like = ({ authMe, initialLikedState, postId, postLikes }: LikeProps
     }
   }, [isModalOpen, isLikedByUser, setLike])
 
-  console.log(isLikedByUser)
-  console.log(like)
-  console.log(isModalOpen)
-
   return (
     <div onClick={toggleLike}>
       {like ? (
