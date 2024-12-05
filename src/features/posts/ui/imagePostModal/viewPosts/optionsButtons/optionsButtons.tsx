@@ -1,8 +1,21 @@
-import { BookmarkOutline, HeartOutline, PaperPlaneOutline } from '@/shared/assets'
+import { AuthMeResponse, GetCommentAnswersLikesResponse, Like } from '@/features'
+import { BookmarkOutline, PaperPlaneOutline } from '@/shared/assets'
 
 import styles from './optionsButtons.module.scss'
 
-export const OptionsButtons = () => {
+type OptionsButtonsProps = {
+  authMe: AuthMeResponse
+  initialLikedState: boolean
+  postId: number
+  postLikes?: GetCommentAnswersLikesResponse
+}
+
+export const OptionsButtons = ({
+  authMe,
+  initialLikedState,
+  postId,
+  postLikes,
+}: OptionsButtonsProps) => {
   const classNames = {
     buttons: styles.buttons,
     icon: styles.icon,
@@ -12,7 +25,12 @@ export const OptionsButtons = () => {
   return (
     <div className={classNames.buttons}>
       <div className={classNames.likeWrite}>
-        <HeartOutline className={classNames.icon} />
+        <Like
+          authMe={authMe}
+          initialLikedState={initialLikedState}
+          postId={postId}
+          postLikes={postLikes}
+        />
         <PaperPlaneOutline className={classNames.icon} />
       </div>
       <BookmarkOutline className={classNames.icon} />

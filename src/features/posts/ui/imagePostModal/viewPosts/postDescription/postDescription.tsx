@@ -4,6 +4,7 @@ import {
   LikesDisplay,
   OptionsButtons,
   PostForm,
+  useAuthMeQuery,
   useGetPostLikesQuery,
 } from '@/features'
 import { ProfileAvatar } from '@/shared/ui'
@@ -33,6 +34,7 @@ export const PostDescription = ({
   setIsEditing,
 }: PostDescriptionProps) => {
   const { t } = useTranslation()
+  const { data: authMe } = useAuthMeQuery()
   const { data: postLikes } = useGetPostLikesQuery({ postId }, { skip: !postId })
   const createdAt = useTimeAgo(postById?.createdAt)
 
@@ -73,16 +75,21 @@ export const PostDescription = ({
           </div>
           <div className={classNames.options}>
             <div className={classNames.buttonsActions}>
-              <OptionsButtons
-                initialLikedState={initialLikedState}
-                postId={postId}
-                postLikes={postLikes}
-              />
+              {authMe && (
+                <OptionsButtons
+                  authMe={authMe}
+                  initialLikedState={initialLikedState}
+                  postId={postId}
+                  postLikes={postLikes}
+                />
+              )}
               <LikesDisplay postLikes={postLikes} />
             </div>
-            <div className={classNames.addComment}>
-              {t.posts.addComment} <Button variant={'ghost'}>{t.posts.publish}</Button>
-            </div>
+            {authMe && (
+              <div className={classNames.addComment}>
+                {t.posts.addComment} <Button variant={'ghost'}>{t.posts.publish}</Button>
+              </div>
+            )}
           </div>
         </div>
       )}

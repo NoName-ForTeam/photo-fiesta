@@ -1,4 +1,4 @@
-import { useGetPostLikesQuery } from '@/features'
+import { GetCommentAnswersLikesResponse } from '@/features'
 import { ProfileAvatar } from '@/shared/ui'
 import { Typography } from '@photo-fiesta/ui-lib'
 import { format } from 'date-fns'
@@ -6,21 +6,17 @@ import { format } from 'date-fns'
 import styles from './likesDisplay.module.scss'
 
 type LikesDisplayProps = {
-  postId: number
+  postLikes?: GetCommentAnswersLikesResponse
 }
 
-export const LikesDisplay = ({ postId }: LikesDisplayProps) => {
-  const { data: postLikes } = useGetPostLikesQuery({ postId }, { skip: !postId })
-
+export const LikesDisplay = ({ postLikes }: LikesDisplayProps) => {
   const likeCount = postLikes?.items?.length ?? 0
   const postAvatar = postLikes?.items
     .slice(0, 5)
     .map(like => <ProfileAvatar avatarOwner={like.avatars[0]?.url} key={like.id} />)
-  const createAt = postLikes?.items.map(like => (
-    <Typography key={like.id} variant={'textSmall'}>
-      {format(new Date(like.createdAt), 'MMMM d, yyyy')}
-    </Typography>
-  ))
+
+  const latestLike = postLikes?.items[postLikes.items.length - 1]
+  const latestLikeDate = latestLike ? format(new Date(latestLike.createdAt), 'MMMM d, yyyy') : null
 
   const classNames = {
     date: styles.date,
@@ -39,7 +35,11 @@ export const LikesDisplay = ({ postId }: LikesDisplayProps) => {
           <Typography variant={'textBold14'}>&#34;Likes&#34;</Typography>
         </div>
       </div>
-      <div className={classNames.date}>{createAt}</div>
+      {latestLikeDate && (
+        <div className={classNames.date}>
+          <Typography variant={'textSmall'}>{latestLikeDate}</Typography>
+        </div>
+      )}
     </div>
   )
 }

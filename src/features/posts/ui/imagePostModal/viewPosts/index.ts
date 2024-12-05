@@ -1,4 +1,5 @@
 export * from './imagePostModal'
+export * from './like'
 export * from './likesDisplay'
 export * from './optionsButtons'
 export * from './popoverMenu'
