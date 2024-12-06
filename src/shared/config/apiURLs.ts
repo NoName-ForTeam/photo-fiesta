@@ -34,7 +34,7 @@ export const API_URLS = {
       `/api/v1/posts/${postId}/comments/${commentId}/likes`,
     GetPostComments: (postId: number) => `/api/v1/posts/${postId}/comments`,
     GetPostLikes: (postId: number) => `/api/v1/posts/${postId}/likes`,
-    GetPostsByUsername: (userName: string) => `/api/v1/posts/${userName}`,
+    GetPostsByUsername: (username: string) => `v1/posts/${username}`,
     UPLOAD_POST_IMAGE: 'v1/posts/image',
     UpdatePost: (postId: number) => `v1/posts/${postId}`,
     UpdatePostLikeStatus: (postId: number) => `v1/posts/${postId}/like-status`,

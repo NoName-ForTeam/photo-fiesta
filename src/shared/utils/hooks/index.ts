@@ -1,4 +1,5 @@
 export * from './useChangeTitle'
+export * from './useDebounce'
 export * from './useDelayedLoading'
 export * from './useModal'
 export * from './useTimeAgo'
