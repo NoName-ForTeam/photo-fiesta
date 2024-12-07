@@ -47,7 +47,7 @@ export const publicApi = baseApi.injectEndpoints({
             }),
         }),
         /**
-         * Fetches comments for a specific public post.
+         * Fetches addComments for a specific public post.
          * @param GetPublicPostCommentArgs - Contains the post ID.
          */
         getPublicPostComments: builder.query<GetPublicPostCommentsResponse, GetPublicPostCommentArgs>({

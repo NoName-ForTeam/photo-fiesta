@@ -1,15 +1,18 @@
 import {
+  AddComments,
   Avatar,
+  Comments,
   GetPostResponse,
   LikesDisplay,
   OptionsButtons,
   PostForm,
   useAuthMeQuery,
+  useGetPostCommentsQuery,
   useGetPostLikesQuery,
 } from '@/features'
 import { ProfileAvatar } from '@/shared/ui'
-import { useTimeAgo, useTranslation } from '@/shared/utils'
-import { Button, Typography } from '@photo-fiesta/ui-lib'
+import { useTimeAgo } from '@/shared/utils'
+import { Scroll, Typography } from '@photo-fiesta/ui-lib'
 
 import styles from './postDescription.module.scss'
 
@@ -33,13 +36,12 @@ export const PostDescription = ({
   selectedImages,
   setIsEditing,
 }: PostDescriptionProps) => {
-  const { t } = useTranslation()
   const { data: authMe } = useAuthMeQuery()
   const { data: postLikes } = useGetPostLikesQuery({ postId }, { skip: !postId })
+  const { data: postComments } = useGetPostCommentsQuery({ postId })
   const createdAt = useTimeAgo(postById?.createdAt)
 
   const classNames = {
-    addComment: styles.addComment,
     buttonsActions: styles.buttonsActions,
     descriptionContainer: styles.descriptionContainer,
     icon: styles.icon,
@@ -63,16 +65,28 @@ export const PostDescription = ({
         </div>
       ) : (
         <div className={classNames.viewPostDetails}>
-          <div className={classNames.descriptionContainer}>
-            <div className={classNames.profileAva}>
-              <ProfileAvatar avatarOwner={avatar?.[0]?.url} />
+          <div>
+            <div className={classNames.descriptionContainer}>
+              <div className={classNames.profileAva}>
+                <ProfileAvatar avatarOwner={avatar?.[0]?.url} />
+              </div>
+              <div>
+                <Typography variant={'h3'}>{postById?.userName}</Typography>
+                <Typography variant={'text14'}>{postById?.description}</Typography>
+                <Typography style={{ color: 'var(--light-900)' }} variant={'textSmall'}>
+                  {createdAt}
+                </Typography>
+              </div>
             </div>
             <div>
-              <Typography variant={'h3'}>{postById?.userName}</Typography>
-              <Typography variant={'text14'}>{postById?.description}</Typography>
-              <Typography variant={'textSmall'}>{createdAt}</Typography>
+              <Scroll>
+                {postComments?.items.map(postComment => (
+                  <Comments key={postComment.id} postComment={postComment} />
+                ))}
+              </Scroll>
             </div>
           </div>
+
           <div className={classNames.options}>
             <div className={classNames.buttonsActions}>
               {authMe && (
@@ -85,11 +99,7 @@ export const PostDescription = ({
               )}
               <LikesDisplay postLikes={postLikes} />
             </div>
-            {authMe && (
-              <div className={classNames.addComment}>
-                {t.posts.addComment} <Button variant={'ghost'}>{t.posts.publish}</Button>
-              </div>
-            )}
+            {authMe && <AddComments />}
           </div>
         </div>
       )}

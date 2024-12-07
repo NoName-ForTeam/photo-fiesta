@@ -30,6 +30,10 @@
   padding-right: 10px;
 }
 
+.descriptionBox {
+  display: flex;
+}
+
 .icon {
   width: 24px;
   height: 24px;
@@ -38,21 +42,10 @@
 .options {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  max-height: 167px;
 }
 
 .buttonsActions {
-  padding: 0 20px;
-  border-top: 1px solid var(--dark-100);
-}
-
-.addComment {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  margin: 10px 0;
-  padding: 0 20px;
-
+  padding: 5px 20px;
   border-top: 1px solid var(--dark-100);
 }

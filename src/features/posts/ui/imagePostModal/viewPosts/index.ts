@@ -1,3 +1,5 @@
+export * from './addComments'
+export * from './comments'
 export * from './imagePostModal'
 export * from './like'
 export * from './likesDisplay'
