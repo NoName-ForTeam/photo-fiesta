@@ -16,5 +16,6 @@ export const baseApi = createApi({
     'Public-posts',
     'Public-user',
     'Follow',
+    'Comments',
   ],
 })

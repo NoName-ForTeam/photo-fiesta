@@ -32,6 +32,9 @@ export const API_URLS = {
   },
   POSTS: {
     CREATE_POST: 'v1/posts',
+    CreateAnswerComment: (postId: number, commentId: number) =>
+      `v1/posts/${postId}/comments/${commentId}/answers`,
+    CreateComment: (postId: number) => `v1/posts/${postId}/comments`,
     DeletePost: (postId: number) => `v1/posts/${postId}`,
     DeleteUploadImage: (uploadId: string | string[]) => `v1/posts/image/${uploadId}`,
     GetCommentAnswers: (commentId: number, postId: number) =>
@@ -44,6 +47,10 @@ export const API_URLS = {
     GetPostLikes: (postId: number) => `v1/posts/${postId}/likes`,
     GetPostsByUsername: (userName: string) => `v1/posts/${userName}`,
     UPLOAD_POST_IMAGE: 'v1/posts/image',
+    UpdateAnswerLikeStatus: (answerId: number, commentId: number, postId: number) =>
+      `v1/posts/${postId}/comments/${commentId}/answers/${answerId}/like-status`,
+    UpdateCommentLikeStatus: (commentId: number, postId: number) =>
+      `v1/posts/${postId}/comments/${commentId}/like-status`,
     UpdatePost: (postId: number) => `v1/posts/${postId}`,
     UpdatePostLikeStatus: (postId: number) => `v1/posts/${postId}/like-status`,
   },

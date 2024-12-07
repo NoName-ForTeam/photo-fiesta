@@ -45,7 +45,7 @@ export type GetPostCommentsResponse = {
   pageSize: number
   totalCount: number
 }
-type PostComment = {
+export type PostComment = {
   answerCount: number
   content: string
   createdAt: string
@@ -81,7 +81,7 @@ export type GetCommentAnswersResponse = {
   pageSize: number
   totalCount: number
 }
-type CommentAnswer = {
+export type CommentAnswer = {
   commentId: number
   content: string
   createdAt: string
@@ -122,3 +122,9 @@ export type GetPostLikesArgs = {
   postId: number
   search?: string
 }
+export type UpdateCommentLikeArgs = {
+  commentId: number
+  likeStatus: LikeStatus
+  postId: number
+}
+export type UpdateAnswerLikeArgs = { answerId: number } & UpdateCommentLikeArgs
