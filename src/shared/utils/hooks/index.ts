@@ -1,7 +1,6 @@
 export * from './useChangeTitle'
 export * from './useDelayedLoading'
 export * from './useFollowHandler'
-export * from './useLiked'
 export * from './useModal'
 export * from './useTimeAgo'
 export * from './useTranslation'
