@@ -5,14 +5,14 @@ import styles from './optionsButtons.module.scss'
 
 type OptionsButtonsProps = {
   authMe: AuthMeResponse
-  initialLikedState: boolean
+  initialLikePostState: boolean
   postId: number
   postLikes?: GetCommentAnswersLikesResponse
 }
 
 export const OptionsButtons = ({
   authMe,
-  initialLikedState,
+  initialLikePostState,
   postId,
   postLikes,
 }: OptionsButtonsProps) => {
@@ -27,7 +27,7 @@ export const OptionsButtons = ({
       <div className={classNames.likeWrite}>
         <Like
           authMe={authMe}
-          initialLikedState={initialLikedState}
+          initialLikePostState={initialLikePostState}
           postId={postId}
           postLikes={postLikes}
         />

@@ -1,5 +1,4 @@
-import { PostComment } from '@/features'
-import { HeartOutline } from '@/shared/assets'
+import { AuthMeResponse, Like, PostComment, useGetCommentLikesQuery } from '@/features'
 import { ProfileAvatar } from '@/shared/ui'
 import { useTimeAgo } from '@/shared/utils'
 import { Typography } from '@photo-fiesta/ui-lib'
@@ -7,9 +6,14 @@ import { Typography } from '@photo-fiesta/ui-lib'
 import styles from './comments.module.scss'
 
 type CommentsProps = {
+  authMe?: AuthMeResponse
+  commentId: number
   postComment: PostComment
+  postId: number
 }
-export const Comments = ({ postComment }: CommentsProps) => {
+export const Comments = ({ authMe, commentId, postComment, postId }: CommentsProps) => {
+  const { data: commentLikes } = useGetCommentLikesQuery({ commentId, postId }, { skip: !postId })
+
   return (
     <div className={styles.container}>
       <div className={styles.main}>
@@ -20,7 +24,13 @@ export const Comments = ({ postComment }: CommentsProps) => {
             <Typography variant={'text14'}>{postComment.content}</Typography>
           </div>
         </div>
-        <HeartOutline />
+        <Like
+          authMe={authMe}
+          commentId={commentId}
+          commentLikes={commentLikes}
+          initialLikeCommentState={postComment.isLiked}
+          postId={postId}
+        />
       </div>
       <Typography className={styles.options} variant={'textSmall'}>
         <div>{useTimeAgo(postComment.createdAt)}</div>

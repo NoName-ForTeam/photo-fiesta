@@ -19,7 +19,7 @@ import styles from './postDescription.module.scss'
 type PostDescriptionProps = {
   avatar: Avatar[]
   handleClose: () => void
-  initialLikedState: boolean
+  initialLikePostState: boolean
   isEditing: boolean
   postById: GetPostResponse
   postId: number
@@ -29,7 +29,7 @@ type PostDescriptionProps = {
 export const PostDescription = ({
   avatar,
   handleClose,
-  initialLikedState,
+  initialLikePostState,
   isEditing,
   postById,
   postId,
@@ -39,6 +39,7 @@ export const PostDescription = ({
   const { data: authMe } = useAuthMeQuery()
   const { data: postLikes } = useGetPostLikesQuery({ postId }, { skip: !postId })
   const { data: postComments } = useGetPostCommentsQuery({ postId })
+
   const createdAt = useTimeAgo(postById?.createdAt)
 
   const classNames = {
@@ -81,7 +82,13 @@ export const PostDescription = ({
             <div>
               <Scroll>
                 {postComments?.items.map(postComment => (
-                  <Comments key={postComment.id} postComment={postComment} />
+                  <Comments
+                    authMe={authMe}
+                    commentId={postComment.id}
+                    key={postComment.id}
+                    postComment={postComment}
+                    postId={postId}
+                  />
                 ))}
               </Scroll>
             </div>
@@ -92,7 +99,7 @@ export const PostDescription = ({
               {authMe && (
                 <OptionsButtons
                   authMe={authMe}
-                  initialLikedState={initialLikedState}
+                  initialLikePostState={initialLikePostState}
                   postId={postId}
                   postLikes={postLikes}
                 />

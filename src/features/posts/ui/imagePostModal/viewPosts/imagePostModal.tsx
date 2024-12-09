@@ -130,7 +130,7 @@ export const ImagePostModal = ({
             <PostDescription
               avatar={avatar}
               handleClose={handleClose}
-              initialLikedState={isLiked}
+              initialLikePostState={isLiked}
               isEditing={isEditing}
               postById={postById}
               postId={postId}
