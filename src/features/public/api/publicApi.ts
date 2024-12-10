@@ -51,7 +51,7 @@ export const publicApi = baseApi.injectEndpoints({
          * @param GetPublicPostCommentArgs - Contains the post ID.
          */
         getPublicPostComments: builder.query<GetPublicPostCommentsResponse, GetPublicPostCommentArgs>({
-            providesTags: ['Public-posts'],
+            providesTags: ['Public-posts', 'Posts'],
             query: ({postId}) => ({
                 method: GET,
                 url: GetPublicPostComments(postId),

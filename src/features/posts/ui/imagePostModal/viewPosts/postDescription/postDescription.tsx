@@ -9,6 +9,7 @@ import {
   useAuthMeQuery,
   useGetPostCommentsQuery,
   useGetPostLikesQuery,
+  // useGetPublicPostCommentsQuery,
 } from '@/features'
 import { ProfileAvatar } from '@/shared/ui'
 import { useTimeAgo } from '@/shared/utils'
@@ -37,9 +38,9 @@ export const PostDescription = ({
   setIsEditing,
 }: PostDescriptionProps) => {
   const { data: authMe } = useAuthMeQuery()
-  const { data: postLikes } = useGetPostLikesQuery({ postId }, { skip: !postId })
+  const { data: postLikes } = useGetPostLikesQuery({ postId })
   const { data: postComments } = useGetPostCommentsQuery({ postId })
-
+  // const { data: postComments } = useGetPublicPostCommentsQuery({ postId })
   const createdAt = useTimeAgo(postById?.createdAt)
 
   const classNames = {
@@ -51,6 +52,10 @@ export const PostDescription = ({
     profileAva: styles.profileAva,
     viewPostDetails: styles.viewPostDetails,
   }
+
+  console.log(postLikes)
+  console.log(postId)
+  console.log(postComments)
 
   return (
     <div className={classNames.postDetails}>

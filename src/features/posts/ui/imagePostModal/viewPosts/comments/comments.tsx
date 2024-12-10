@@ -12,7 +12,12 @@ type CommentsProps = {
   postId: number
 }
 export const Comments = ({ authMe, commentId, postComment, postId }: CommentsProps) => {
-  const { data: commentLikes } = useGetCommentLikesQuery({ commentId, postId }, { skip: !postId })
+  const { data: commentLikes } = useGetCommentLikesQuery({ commentId, postId })
+
+  console.log(postId)
+  console.log(commentId)
+  console.log(postComment.isLiked)
+  console.log(postComment.likeCount)
 
   return (
     <div className={styles.container}>
@@ -24,20 +29,21 @@ export const Comments = ({ authMe, commentId, postComment, postId }: CommentsPro
             <Typography variant={'text14'}>{postComment.content}</Typography>
           </div>
         </div>
-        <Like
-          authMe={authMe}
-          commentId={commentId}
-          commentLikes={commentLikes}
-          initialLikeCommentState={postComment.isLiked}
-          postId={postId}
-        />
+        {authMe && (
+          <Like
+            authMe={authMe}
+            commentId={commentId}
+            commentLikes={commentLikes}
+            initialLikeCommentState={postComment.isLiked}
+            postId={postId}
+          />
+        )}
       </div>
       <Typography className={styles.options} variant={'textSmall'}>
         <div>{useTimeAgo(postComment.createdAt)}</div>
         <div>Likes: {postComment.likeCount}</div>
         <div>Answer: {postComment.answerCount}</div>
       </Typography>
-      <div></div>
     </div>
   )
 }
