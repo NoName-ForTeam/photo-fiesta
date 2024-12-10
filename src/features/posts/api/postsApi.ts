@@ -138,9 +138,9 @@ export const postsApi = baseApi.injectEndpoints({
      */
     getPostsByUsername: builder.query<GetPostByUsernameResponse, GetPostByUsernameArgs>({
       providesTags: ['Posts'],
-      query: ({ username }) => ({
+      query: ({ userName }) => ({
         method: GET,
-        url: GetPostsByUsername(username),
+        url: GetPostsByUsername(userName),
       }),
     }),
     /**

@@ -1,6 +1,7 @@
 import { ChangeEvent, useEffect, useState } from 'react'
 
 import { useGetPostsByUsernameQuery } from '@/features'
+import { ProfileAvatar } from '@/shared/ui'
 import { useDebounce } from '@/shared/utils'
 import { Input, Typography } from '@photo-fiesta/ui-lib'
 
@@ -31,7 +32,7 @@ export const Search = () => {
    * Skips the query if the debounced username is empty.
    */
   const { data: posts } = useGetPostsByUsernameQuery(
-    { username: debouncedSearchTerm },
+    { userName: debouncedSearchTerm },
     { skip: !debouncedSearchTerm }
   )
 
@@ -58,7 +59,7 @@ export const Search = () => {
     posts?.items.length && posts.items.length > 0
       ? posts?.items.map(post => (
           <div className={classNames.wrapper} key={post.id}>
-            <img alt={'avatar'} className={classNames.img} src={post.avatarOwner} />
+            <ProfileAvatar avatarOwner={post.avatarOwner} className={classNames.img} />
             <div>
               <Typography variant={'textMedium14'}>{post.userName}</Typography>
               <Typography className={classNames.fullName} variant={'text14'}>

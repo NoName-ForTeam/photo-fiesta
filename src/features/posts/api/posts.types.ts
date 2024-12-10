@@ -74,7 +74,7 @@ export type GetPostArgs = {
   sortBy?: string
   sortDirection?: 'asc' | 'desc'
 }
-export type GetPostByUsernameArgs = { username: string } & GetPostArgs
+export type GetPostByUsernameArgs = { userName: string } & GetPostArgs
 export type GetCommentAnswersResponse = {
   items: CommentAnswer[]
   pageSize: number
