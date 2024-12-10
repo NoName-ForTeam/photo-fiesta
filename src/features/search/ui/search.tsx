@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from 'react'
+import { ChangeEvent, useEffect, useState } from 'react'
 
 import { useGetPostsByUsernameQuery } from '@/features'
 import { useDebounce } from '@/shared/utils'
@@ -11,7 +11,7 @@ import s from './search.module.scss'
  */
 
 export const Search = () => {
-  const [username, setUsername] = useState(localStorage.getItem('recent') || '')
+  const [username, setUsername] = useState('')
 
   /**
    * State for controlling the visibility of the "Recent Requests" section.
@@ -19,6 +19,12 @@ export const Search = () => {
    */
   const [recentRequests, setViewRecentRequests] = useState(true)
   const debouncedSearchTerm = useDebounce(username || '', 500)
+
+  useEffect(() => {
+    const recent = typeof window !== 'undefined' ? localStorage.getItem('recent') : ''
+
+    setUsername(recent || '')
+  }, [])
 
   /**
    * RTK Query hook for fetching posts based on the debounced username.
