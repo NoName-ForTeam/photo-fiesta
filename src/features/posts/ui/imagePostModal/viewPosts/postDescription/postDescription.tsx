@@ -53,10 +53,6 @@ export const PostDescription = ({
     viewPostDetails: styles.viewPostDetails,
   }
 
-  console.log(postLikes)
-  console.log(postId)
-  console.log(postComments)
-
   return (
     <div className={classNames.postDetails}>
       {isEditing ? (
@@ -86,15 +82,18 @@ export const PostDescription = ({
             </div>
             <div>
               <Scroll>
-                {postComments?.items.map(postComment => (
-                  <Comments
-                    authMe={authMe}
-                    commentId={postComment.id}
-                    key={postComment.id}
-                    postComment={postComment}
-                    postId={postId}
-                  />
-                ))}
+                {postComments?.items
+                  .slice()
+                  .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime())
+                  .map(postComment => (
+                    <Comments
+                      authMe={authMe}
+                      commentId={postComment.id}
+                      key={postComment.id}
+                      postComment={postComment}
+                      postId={postId}
+                    />
+                  ))}
               </Scroll>
             </div>
           </div>
@@ -111,7 +110,7 @@ export const PostDescription = ({
               )}
               <LikesDisplay postLikes={postLikes} />
             </div>
-            {authMe && <AddComments />}
+            {authMe && <AddComments postId={postId} />}
           </div>
         </div>
       )}

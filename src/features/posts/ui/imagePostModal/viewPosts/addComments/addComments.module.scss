@@ -1,10 +1,19 @@
 .addComment {
   display: flex;
+  flex-direction: row;
   align-items: center;
   justify-content: space-between;
 
-  height: 100%;
-  padding: 0 20px;
+  padding: 10px 20px;
 
   border-top: 1px solid var(--dark-100);
+}
+
+.placeholder {
+  color: var(--light-900);
+}
+
+.input {
+  background: var(--dark-300) !important;
+  border: solid var(--dark-300);
 }
