@@ -14,11 +14,6 @@ type CommentsProps = {
 export const Comments = ({ authMe, commentId, postComment, postId }: CommentsProps) => {
   const { data: commentLikes } = useGetCommentLikesQuery({ commentId, postId })
 
-  console.log(postId)
-  console.log(commentId)
-  console.log(postComment.isLiked)
-  console.log(postComment.likeCount)
-
   return (
     <div className={styles.container}>
       <div className={styles.main}>

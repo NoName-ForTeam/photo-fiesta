@@ -1,3 +1,5 @@
+import React, { useEffect, useState } from 'react'
+
 import {
   AddComments,
   Avatar,
@@ -7,9 +9,9 @@ import {
   OptionsButtons,
   PostForm,
   useAuthMeQuery,
-  useGetPostCommentsQuery,
   useGetPostLikesQuery,
-  // useGetPublicPostCommentsQuery,
+  useLazyGetPostCommentsQuery,
+  useLazyGetPublicPostCommentsQuery,
 } from '@/features'
 import { ProfileAvatar } from '@/shared/ui'
 import { useTimeAgo } from '@/shared/utils'
@@ -39,9 +41,34 @@ export const PostDescription = ({
 }: PostDescriptionProps) => {
   const { data: authMe } = useAuthMeQuery()
   const { data: postLikes } = useGetPostLikesQuery({ postId })
-  const { data: postComments } = useGetPostCommentsQuery({ postId })
-  // const { data: postComments } = useGetPublicPostCommentsQuery({ postId })
+  const [pageNumber, setPageNumber] = useState(1)
+  const [triggerGetPostComments, { data: postComments, isFetching }] = useLazyGetPostCommentsQuery()
+  const [triggerGetPublicPostComments, { data: publicPostComments }] =
+    useLazyGetPublicPostCommentsQuery()
+
   const createdAt = useTimeAgo(postById?.createdAt)
+
+  const handleScroll = (e: React.UIEvent<HTMLDivElement, UIEvent>) => {
+    const { clientHeight, scrollHeight, scrollTop } = e.currentTarget
+
+    if (scrollHeight - scrollTop === clientHeight && !isFetching) {
+      setPageNumber(prev => prev + 1)
+    }
+  }
+
+  useEffect(() => {
+    const fetchComments = async () => {
+      if (authMe) {
+        await triggerGetPostComments({ pageNumber, pageSize: 2, postId })
+      } else {
+        await triggerGetPublicPostComments({ pageNumber, pageSize: 2, postId })
+      }
+    }
+
+    fetchComments()
+  }, [authMe, pageNumber, postId, triggerGetPostComments, triggerGetPublicPostComments])
+
+  const currentComments = authMe ? postComments : publicPostComments
 
   const classNames = {
     buttonsActions: styles.buttonsActions,
@@ -81,8 +108,8 @@ export const PostDescription = ({
               </div>
             </div>
             <div>
-              <Scroll>
-                {postComments?.items
+              <Scroll maxHeight={200} onScroll={handleScroll}>
+                {currentComments?.items
                   .slice()
                   .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime())
                   .map(postComment => (

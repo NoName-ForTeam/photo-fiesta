@@ -237,6 +237,7 @@ export const {
   useGetPostCommentsQuery,
   useGetPostLikesQuery,
   useGetPostsByUsernameQuery,
+  useLazyGetPostCommentsQuery,
   useUpdateAnswerLikeStatusMutation,
   useUpdateCommentLikeStatusMutation,
   useUpdatePostLikeStatusMutation,
