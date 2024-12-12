@@ -7,8 +7,10 @@ import {
   ProfileInfo,
   useDeletePostMutation,
   useGetPostByIdQuery,
+  useGetUserPostsQuery,
 } from '@/features'
 import { Close, CloseOutline } from '@/shared/assets'
+import { Loader } from '@/shared/ui'
 import { getPostImages, useChangeTitle, useModal, useTranslation } from '@/shared/utils'
 import { Carousel, ConfirmationModal } from '@/widgets'
 import { Typography } from '@photo-fiesta/ui-lib'
@@ -55,7 +57,8 @@ export const ImagePostModal = ({
 }: ImagePostModalProps) => {
   const { t } = useTranslation()
   const confirmCloseModal = useModal()
-  const { data: postById } = useGetPostByIdQuery({ postId }, { skip: !postId })
+  const { data: postById, isLoading } = useGetPostByIdQuery({ postId }, { skip: !postId })
+  const { refetch: refetchPosts } = useGetUserPostsQuery({ endCursorPostId: 0, userId })
   const isLiked = postById?.isLiked ?? false
 
   const [deletePost] = useDeletePostMutation()
@@ -66,9 +69,10 @@ export const ImagePostModal = ({
   /** Delete post function */
   const confirmDelete = async () => {
     if (postId) {
-      await deletePost({ postId })
+      await deletePost({ postId }).unwrap()
     }
     handleClose()
+    refetchPosts()
   }
 
   const classNames = {
@@ -83,6 +87,9 @@ export const ImagePostModal = ({
     viewMode: styles.viewMode,
   }
 
+  if (isLoading) {
+    return <Loader />
+  }
   if (!postById) {
     return <Typography variant={'text14'}>No post found</Typography>
   }

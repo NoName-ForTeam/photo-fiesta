@@ -68,7 +68,7 @@ export const PostList = ({
     setPosts(initialPosts.items)
     setEndCursorPostId(getLastPostId(initialPosts.items))
     setHasMore(initialPosts.items.length < initialPosts.totalCount)
-  }, [initialPosts])
+  }, [userId, initialPosts])
 
   const classNames = {
     image: styles.image,
@@ -139,15 +139,17 @@ export const PostList = ({
       >
         <div className={classNames.postGrid}>
           {posts?.map(post => (
-            <Image
-              alt={'post image'}
-              className={classNames.image}
-              height={228}
-              key={post.id}
-              onClick={() => handleOpenImageModal(post.id, getPostImages(post))}
-              src={post.images[0]?.url}
-              width={234}
-            />
+            <div key={post.id}>
+              <Image
+                alt={'post image'}
+                className={classNames.image}
+                height={228}
+                key={post.id}
+                onClick={() => handleOpenImageModal(post.id, getPostImages(post))}
+                src={post.images[0]?.url}
+                width={234}
+              />
+            </div>
           ))}
         </div>
       </InfiniteScroll>

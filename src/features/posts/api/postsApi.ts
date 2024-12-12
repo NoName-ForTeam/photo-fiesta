@@ -84,7 +84,7 @@ export const postsApi = baseApi.injectEndpoints({
      * @param {{ postId: number }} params - The ID of the post to delete.
      */
     deletePost: builder.mutation<void, { postId: number }>({
-      invalidatesTags: ['Posts'],
+      invalidatesTags: ['Posts', 'Public-posts', 'Profile'],
       query: ({ postId }) => ({
         method: DELETE,
         url: DeletePost(postId),

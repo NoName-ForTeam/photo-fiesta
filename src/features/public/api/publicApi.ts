@@ -40,7 +40,7 @@ export const publicApi = baseApi.injectEndpoints({
          * @param {{ postId: number }} params - The ID of the post to fetch.
          */
         getPostById: builder.query<GetPostResponse, { postId: number | undefined }>({
-            providesTags: ['Public-posts'],
+            providesTags: ['Public-posts', 'Posts'],
             query: ({postId}) => ({
                 method: GET,
                 url: GetPostById(postId),
