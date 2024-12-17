@@ -1,6 +1,7 @@
+@use '@/app/styles/mixins' as *;
+
 .buttons {
   display: flex;
-  flex-direction: row;
   justify-content: space-between;
   padding-top: 8px;
 }
@@ -11,6 +12,5 @@
 }
 
 .icon {
-  width: 24px;
-  height: 24px;
+  @include icon-size;
 }

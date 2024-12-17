@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { toast } from 'react-toastify'
 
 import {
   AuthMeResponse,
@@ -62,10 +63,10 @@ export const Like = ({
         }).unwrap()
         setAnswerLike(prev => !prev)
       } else {
-        console.error('Invalid identifiers for like operation.')
+        toast.error('Invalid identifiers for like operation')
       }
     } catch (error) {
-      console.error('Failed to update like:', error)
+      toast.error('Failed to update like')
     }
   }
 

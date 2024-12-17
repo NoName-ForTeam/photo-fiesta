@@ -97,6 +97,15 @@ export const PostList = ({
     }
   }, [postId, posts])
 
+  /**
+   * Handles the opening of the image modal by setting the modal data and updating the URL query parameters.
+   *
+   * @param {number} postId - The ID of the post whose images are being displayed.
+   * @param {string[]} images - An array of image URLs associated with the post.
+   * @description This function sets the `images` and `postId` in the modal data state to open the modal
+   * and uses Next.js' router to update the query parameters with the `postId`. The URL update is performed
+   * with shallow routing to avoid a full page reload.
+   */
   const handleOpenImageModal = (postId: number, images: string[]) => {
     setModalData({ images, postId })
     router.push({ pathname: router.pathname, query: { ...restQuery, postId } }, undefined, {
@@ -160,11 +169,11 @@ export const PostList = ({
             handleClose={handleCloseModal}
             initialFollowState={initialFollowState}
             isOwnProfile={isOwnProfile}
+            isViewMode
             postId={modalData.postId}
             selectedImages={modalData.images}
             setSelectedImages={images => setModalData(prev => ({ ...prev, images }))}
             userId={userId}
-            viewMode
           />
         </div>
       )}

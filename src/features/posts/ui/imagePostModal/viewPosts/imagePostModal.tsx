@@ -23,11 +23,11 @@ type ImagePostModalProps = {
   handleClose: () => void
   initialFollowState: boolean
   isOwnProfile: boolean
+  isViewMode?: boolean
   postId: number
   selectedImages: string[]
   setSelectedImages: (images: string[]) => void
   userId: number
-  viewMode?: boolean
 }
 
 /**
@@ -49,11 +49,11 @@ export const ImagePostModal = ({
   handleClose,
   initialFollowState,
   isOwnProfile,
+  isViewMode = false,
   postId,
   selectedImages,
   setSelectedImages,
   userId,
-  viewMode = false,
 }: ImagePostModalProps) => {
   const { t } = useTranslation()
   const confirmCloseModal = useModal()
@@ -64,7 +64,7 @@ export const ImagePostModal = ({
   const [deletePost] = useDeletePostMutation()
 
   const [isEditing, setIsEditing] = useState(false)
-  const { getStepTitle } = useChangeTitle({ isEditing, viewMode })
+  const { getStepTitle } = useChangeTitle({ isEditing, isViewMode })
 
   /** Delete post function */
   const confirmDelete = async () => {

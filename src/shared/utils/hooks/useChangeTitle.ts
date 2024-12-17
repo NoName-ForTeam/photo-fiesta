@@ -5,13 +5,13 @@ type Direction = 'next' | 'prev'
 
 type UseChangeTitleParams = {
   isEditing?: boolean
-  viewMode?: boolean
+  isViewMode?: boolean
 }
 /**
  * Changes the current step to the next or previous step based on the `direction` parameter.
  * If the modal is not in view mode, it updates the `step` state accordingly.
  */
-export const useChangeTitle = ({ isEditing, viewMode }: UseChangeTitleParams) => {
+export const useChangeTitle = ({ isEditing, isViewMode }: UseChangeTitleParams) => {
   const [step, setStep] = useState<Step>('cropping')
 
   const getStepTitle = useCallback(() => {
@@ -20,7 +20,7 @@ export const useChangeTitle = ({ isEditing, viewMode }: UseChangeTitleParams) =>
 
   const changeStep = useCallback(
     (direction: Direction) => {
-      if (!viewMode) {
+      if (!isViewMode) {
         setStep(prev => {
           if (direction === 'next') {
             if (prev === 'cropping') {
@@ -38,7 +38,7 @@ export const useChangeTitle = ({ isEditing, viewMode }: UseChangeTitleParams) =>
         })
       }
     },
-    [viewMode]
+    [isViewMode]
   )
 
   return { changeStep, getStepTitle, step }

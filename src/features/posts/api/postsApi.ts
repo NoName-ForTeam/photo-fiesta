@@ -47,6 +47,11 @@ const {
 
 export const postsApi = baseApi.injectEndpoints({
   endpoints: builder => ({
+    /**
+     * Creates a reply to a specific comment on a post.
+     * @returns {Promise<CommentAnswer>} The created reply to the comment.
+     * @param - The IDs of the post and comment, along with the reply content.
+     */
     createAnswerComment: builder.mutation<
       CommentAnswer,
       { commentId: number; content: string; postId: number }
@@ -58,6 +63,11 @@ export const postsApi = baseApi.injectEndpoints({
         url: CreateAnswerComment(postId, commentId),
       }),
     }),
+    /**
+     * Creates a new comment for a specific post.
+     * @returns {Promise<PostComment>} The created comment.
+     * @param - The ID of the post and the comment content.
+     */
     createComment: builder.mutation<PostComment, { content: string; postId: number }>({
       invalidatesTags: ['Posts', 'Comments'],
       query: ({ content, postId }) => ({
@@ -170,6 +180,10 @@ export const postsApi = baseApi.injectEndpoints({
         url: GetPostsByUsername(userName),
       }),
     }),
+    /**
+     * Updates the like status for a specific reply to a comment.
+     * @param {UpdateAnswerLikeArgs} params - The answer, comment, and post IDs along with the new like status.
+     */
     updateAnswerLikeStatus: builder.mutation<void, UpdateAnswerLikeArgs>({
       invalidatesTags: ['Posts'],
       query: ({ answerId, commentId, likeStatus, postId }) => ({
@@ -178,6 +192,10 @@ export const postsApi = baseApi.injectEndpoints({
         url: UpdateAnswerLikeStatus(answerId, commentId, postId),
       }),
     }),
+    /**
+     * Updates the like status for a specific comment on a post.
+     * @param {UpdateCommentLikeArgs} params - The comment and post IDs along with the new like status.
+     */
     updateCommentLikeStatus: builder.mutation<void, UpdateCommentLikeArgs>({
       invalidatesTags: ['Posts'],
       query: ({ commentId, likeStatus, postId }) => ({
