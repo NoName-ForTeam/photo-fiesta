@@ -1,6 +1,13 @@
 import { Search } from '@/features/search'
+import { SearchWrapper } from '@/widgets/searchWrapper/searchWrapper'
 import { Typography } from '@photo-fiesta/ui-lib'
 import Head from 'next/head'
+
+/**
+ * SearchPage Component
+ * This component represents the search page of the Photo Fiesta application.
+ */
+
 const SearchPage = () => {
   return (
     <>
@@ -13,22 +20,10 @@ const SearchPage = () => {
         <meta content={`search, photo, fiesta, github`} name={'keywords'} />
         <meta content={'index, follow'} name={'robots'} />
       </Head>
-      <div
-        style={{
-          alignSelf: 'flex-start',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '13px',
-          justifyContent: 'flex-end',
-          marginTop: '35px',
-          paddingLeft: '24px',
-          paddingRight: '64px',
-          width: '100%',
-        }}
-      >
+      <SearchWrapper>
         <Typography variant={'h1'}>Search</Typography>
         <Search />
-      </div>
+      </SearchWrapper>
     </>
   )
 }

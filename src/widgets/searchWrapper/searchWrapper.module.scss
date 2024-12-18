@@ -1,0 +1,12 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+  align-self: flex-start;
+  justify-content: flex-end;
+
+  width: 100%;
+  margin-top: 35px;
+  padding-right: 64px;
+  padding-left: 24px;
+}

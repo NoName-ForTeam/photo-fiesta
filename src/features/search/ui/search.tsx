@@ -1,7 +1,7 @@
 import { ChangeEvent, useEffect, useState } from 'react'
 
 import { useGetPostsByUsernameQuery } from '@/features'
-import { ProfileAvatar } from '@/shared/ui'
+import ResultList from '@/features/search/ui/resultList/resultList'
 import { useDebounce } from '@/shared/utils'
 import { Input, Typography } from '@photo-fiesta/ui-lib'
 
@@ -11,6 +11,8 @@ import s from './search.module.scss'
  * Search component for querying posts by username and displaying recent requests.
  */
 
+const SEARCH_DEBOUNCE_DELAY = 500
+
 export const Search = () => {
   const [username, setUsername] = useState('')
 
@@ -18,8 +20,8 @@ export const Search = () => {
    * State for controlling the visibility of the "Recent Requests" section.
    * Defaults to true, showing the recent requests initially.
    */
-  const [recentRequests, setViewRecentRequests] = useState(true)
-  const debouncedSearchTerm = useDebounce(username || '', 500)
+  const [isRecentRequests, setViewIsRecentRequests] = useState(true)
+  const debouncedSearchTerm = useDebounce(username || '', SEARCH_DEBOUNCE_DELAY)
 
   useEffect(() => {
     const recent = typeof window !== 'undefined' ? localStorage.getItem('recent') : ''
@@ -31,7 +33,7 @@ export const Search = () => {
    * RTK Query hook for fetching posts based on the debounced username.
    * Skips the query if the debounced username is empty.
    */
-  const { data: posts } = useGetPostsByUsernameQuery(
+  const { data } = useGetPostsByUsernameQuery(
     { userName: debouncedSearchTerm },
     { skip: !debouncedSearchTerm }
   )
@@ -47,28 +49,13 @@ export const Search = () => {
 
   const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setUsername(e.currentTarget.value)
-    setViewRecentRequests(false)
+    setViewIsRecentRequests(false)
   }
 
   const onBlurHandler = () => {
-    setViewRecentRequests(true)
+    setViewIsRecentRequests(true)
     localStorage.setItem('recent', username || '')
   }
-
-  const postsList =
-    posts?.items.length && posts.items.length > 0
-      ? posts?.items.map(post => (
-          <div className={classNames.wrapper} key={post.id}>
-            <ProfileAvatar avatarOwner={post.avatarOwner} className={classNames.img} />
-            <div>
-              <Typography variant={'textMedium14'}>{post.userName}</Typography>
-              <Typography className={classNames.fullName} variant={'text14'}>
-                {post.owner.firstName} {post.owner.lastName}
-              </Typography>
-            </div>
-          </div>
-        ))
-      : ''
 
   return (
     <div>
@@ -81,11 +68,11 @@ export const Search = () => {
         width={'100%'}
       />
 
-      {recentRequests ? (
+      {isRecentRequests ? (
         <div className={classNames.recent}>
           <Typography variant={'textBold16'}>Recent requests</Typography>
-          {postsList?.length ? (
-            postsList
+          {data?.items?.length ? (
+            <ResultList data={data} />
           ) : (
             <div className={classNames.empty}>
               <Typography variant={'textBold14'}>Oops! This place looks empty!</Typography>
@@ -94,7 +81,9 @@ export const Search = () => {
           )}
         </div>
       ) : (
-        <div className={classNames.container}>{postsList}</div>
+        <div className={classNames.container}>
+          <ResultList data={data || null} />
+        </div>
       )}
     </div>
   )

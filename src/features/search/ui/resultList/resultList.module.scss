@@ -1,0 +1,15 @@
+.wrapper {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-top: 24px;
+}
+
+.img {
+  width: 48px;
+  height: 48px;
+}
+
+.fullName {
+  color: var(--light-900);
+}
