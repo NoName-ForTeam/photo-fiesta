@@ -24,14 +24,13 @@ type UsePostFormProps = {
 }
 
 export const usePostForm = ({ handleClose, photos, postId, setIsEditing }: UsePostFormProps) => {
+  const router = useRouter()
   const [createPost] = useCreatePostMutation()
   const [uploadImage] = useUploadPostImageMutation()
   const [updateDescription] = useUpdatePostMutation()
   const { data: post } = useGetPostByIdQuery({ postId }, { skip: !postId })
-  const router = useRouter()
-  const [isOpenModal, setIsOpenModal] = useState<boolean>(true)
 
-  const [charCount, setCharCount] = useState(0)
+  const [isOpenModal, setIsOpenModal] = useState<boolean>(true)
 
   const {
     control,
@@ -96,12 +95,10 @@ export const usePostForm = ({ handleClose, photos, postId, setIsEditing }: UsePo
   })
 
   return {
-    charCount,
     control,
     errors,
     isOpenModal,
     onSubmit,
     saveDescriptionChanges,
-    setCharCount,
   }
 }

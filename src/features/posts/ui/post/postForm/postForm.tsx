@@ -22,8 +22,12 @@ export const PostForm = ({
   postId,
   setIsEditing,
 }: PostFormProps) => {
-  const { charCount, control, errors, onSubmit, saveDescriptionChanges, setCharCount } =
-    usePostForm({ handleClose, photos, postId, setIsEditing })
+  const { control, errors, onSubmit, saveDescriptionChanges } = usePostForm({
+    handleClose,
+    photos,
+    postId,
+    setIsEditing,
+  })
 
   return (
     <div className={styles.formContainer}>
@@ -38,15 +42,11 @@ export const PostForm = ({
                 control={control}
                 error={errors.description?.message}
                 label={'Add publication description'}
-                onChangeValue={value => {
-                  field.onChange(value)
-                  setCharCount(value.length)
-                }}
+                onChangeValue={value => field.onChange(value)}
                 placeholder={isEditing ? 'Edit description' : 'Text-area'}
               />
-              {/*TODO: fix charCount in FormTextArea*/}
               <Typography className={styles.char} variant={'textSmall'}>
-                {charCount}/500
+                {field.value.length || 0}/500
               </Typography>
             </>
           )}
