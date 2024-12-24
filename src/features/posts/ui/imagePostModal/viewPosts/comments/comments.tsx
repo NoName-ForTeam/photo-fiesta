@@ -32,7 +32,7 @@ export const Comments = ({ authMe, commentId, postComment, postId }: CommentsPro
             <Typography variant={'text14'}>{postComment.content}</Typography>
           </div>
         </div>
-        {authMe && (
+        {authMe && postId && (
           <Like
             authMe={authMe}
             commentId={commentId}

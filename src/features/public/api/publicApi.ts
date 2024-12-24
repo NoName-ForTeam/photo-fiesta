@@ -99,5 +99,3 @@ export const {
     useLazyGetPublicPostCommentsQuery,
     useLazyGetUserPostsQuery,
 } = publicApi
-
-export const {getUserPosts} = publicApi.endpoints

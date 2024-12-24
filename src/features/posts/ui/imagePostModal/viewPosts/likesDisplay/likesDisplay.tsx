@@ -6,16 +6,16 @@ import { format } from 'date-fns'
 import styles from './likesDisplay.module.scss'
 
 type LikesDisplayProps = {
-  postLikes?: GetCommentAnswersLikesResponse
+  postLikes: GetCommentAnswersLikesResponse
 }
 
 export const LikesDisplay = ({ postLikes }: LikesDisplayProps) => {
-  const likeCount = postLikes?.items?.length ?? 0
-  const postAvatar = postLikes?.items
+  const likeCount = postLikes.items?.length
+  const postAvatar = postLikes.items
     .slice(0, 5)
     .map(like => <ProfileAvatar avatarOwner={like.avatars[0]?.url} key={like.id} />)
 
-  const latestLike = postLikes?.items[postLikes.items.length - 1]
+  const latestLike = postLikes.items[postLikes.items.length - 1]
   const latestLikeDate = latestLike ? format(new Date(latestLike.createdAt), 'MMMM d, yyyy') : null
 
   const classNames = {

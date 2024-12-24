@@ -48,10 +48,6 @@ export const PopoverMenu = ({
     userId,
   })
 
-  const handleCopyLink = () => {
-    copyLink()
-  }
-
   const isLoading = isFollowLoading || isUnfollowLoading
 
   if (isLoading) {
@@ -102,7 +98,7 @@ export const PopoverMenu = ({
                   )}
                   {follow ? t.myProfile.unfollow : t.myProfile.follow}
                 </Button>
-                <Button onClick={handleCopyLink} variant={'icon-link'}>
+                <Button onClick={() => copyLink()} variant={'icon-link'}>
                   <CopyOutline className={classNames.icon} />
                   {t.posts.copyLink}
                 </Button>

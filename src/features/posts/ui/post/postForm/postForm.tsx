@@ -31,28 +31,34 @@ export const PostForm = ({
 
   return (
     <div className={styles.formContainer}>
-      <form id={'postDescription'} onSubmit={isEditing ? saveDescriptionChanges : onSubmit}>
-        <Controller
-          control={control}
-          name={'description'}
-          render={({ field }) => (
-            <>
-              <FormTextArea
-                {...field}
-                control={control}
-                error={errors.description?.message}
-                label={'Add publication description'}
-                onChangeValue={value => field.onChange(value)}
-                placeholder={isEditing ? 'Edit description' : 'Text-area'}
-              />
-              <Typography className={styles.char} variant={'textSmall'}>
-                {field.value.length || 0}/500
-              </Typography>
-            </>
-          )}
-        />
+      <form
+        className={styles.form}
+        id={'postDescription'}
+        onSubmit={isEditing ? saveDescriptionChanges : onSubmit}
+      >
+        <div>
+          <Controller
+            control={control}
+            name={'description'}
+            render={({ field }) => (
+              <>
+                <FormTextArea
+                  {...field}
+                  control={control}
+                  error={errors.description?.message}
+                  label={'Add publication description'}
+                  onChangeValue={value => field.onChange(value)}
+                  placeholder={isEditing ? 'Edit description' : 'Text-area'}
+                />
+                <Typography className={styles.char} variant={'textSmall'}>
+                  {field.value.length || 0}/500
+                </Typography>
+              </>
+            )}
+          />
+        </div>
         {isEditing && (
-          <Button type={'submit'} variant={'primary'}>
+          <Button className={styles.submitBtn} type={'submit'} variant={'primary'}>
             Save Changes
           </Button>
         )}

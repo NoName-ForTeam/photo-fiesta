@@ -4,6 +4,7 @@ import {
   AddComments,
   Avatar,
   Comments,
+  GetPostCommentsArgs,
   GetPostResponse,
   LikesDisplay,
   OptionsButtons,
@@ -41,6 +42,7 @@ export const PostDescription = ({
 }: PostDescriptionProps) => {
   const { data: authMe } = useAuthMeQuery()
   const { data: postLikes } = useGetPostLikesQuery({ postId })
+
   const [pageNumber, setPageNumber] = useState(1)
   const [triggerGetPostComments, { data: postComments, isFetching }] = useLazyGetPostCommentsQuery()
   const [triggerGetPublicPostComments, { data: publicPostComments }] =
@@ -51,22 +53,28 @@ export const PostDescription = ({
   const handleScroll = (e: React.UIEvent<HTMLDivElement, UIEvent>) => {
     const { clientHeight, scrollHeight, scrollTop } = e.currentTarget
 
-    if (scrollHeight - scrollTop === clientHeight && !isFetching) {
+    if (scrollHeight - scrollTop <= clientHeight + 10 && !isFetching) {
       setPageNumber(prev => prev + 1)
     }
   }
 
-  useEffect(() => {
-    const fetchComments = async () => {
-      if (authMe) {
-        await triggerGetPostComments({ pageNumber, pageSize: 2, postId })
-      } else {
-        await triggerGetPublicPostComments({ pageNumber, pageSize: 2, postId })
-      }
+  const fetchComments = async () => {
+    const params: GetPostCommentsArgs = {
+      pageNumber,
+      pageSize: 2,
+      postId,
     }
 
+    if (authMe) {
+      await triggerGetPostComments(params)
+    } else {
+      await triggerGetPublicPostComments(params)
+    }
+  }
+
+  useEffect(() => {
     fetchComments()
-  }, [authMe, pageNumber, postId, triggerGetPostComments, triggerGetPublicPostComments])
+  }, [authMe, pageNumber, postId])
 
   const currentComments = authMe ? postComments : publicPostComments
 
@@ -83,15 +91,13 @@ export const PostDescription = ({
   return (
     <div className={classNames.postDetails}>
       {isEditing ? (
-        <div className={styles.form}>
-          <PostForm
-            handleClose={handleClose}
-            isEditing
-            photos={selectedImages}
-            postId={postId}
-            setIsEditing={setIsEditing}
-          />
-        </div>
+        <PostForm
+          handleClose={handleClose}
+          isEditing
+          photos={selectedImages}
+          postId={postId}
+          setIsEditing={setIsEditing}
+        />
       ) : (
         <div className={classNames.viewPostDetails}>
           <div>
@@ -111,7 +117,7 @@ export const PostDescription = ({
               <Scroll maxHeight={200} onScroll={handleScroll}>
                 {currentComments?.items
                   .slice()
-                  .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime())
+                  .reverse()
                   .map(postComment => (
                     <Comments
                       authMe={authMe}
@@ -135,7 +141,7 @@ export const PostDescription = ({
                   postLikes={postLikes}
                 />
               )}
-              <LikesDisplay postLikes={postLikes} />
+              {postLikes && <LikesDisplay postLikes={postLikes} />}
             </div>
             {authMe && <AddComments postId={postId} />}
           </div>

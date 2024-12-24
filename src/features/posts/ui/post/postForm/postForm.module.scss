@@ -1,23 +1,35 @@
 .formContainer {
   display: flex;
   flex-direction: column;
+
   width: 100%;
-  margin: 20px 24px;
+  height: 100vh;
+  max-height: 450px;
+  padding: 20px 24px;
 }
 
-.formContainer textarea {
+.form textarea {
   resize: none;
   width: 100%;
   max-width: 433px;
   padding: 10px;
 }
 
+.form {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  justify-content: space-between;
+}
+
 .char {
   display: flex;
-  justify-content: end;
-
-  margin: 2px 24px;
-  padding-right: 30px;
-
+  justify-content: flex-end;
+  margin: 5px;
   color: var(--light-900);
+}
+
+.submitBtn {
+  align-self: flex-end;
+  margin-top: auto;
 }
