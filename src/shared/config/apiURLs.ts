@@ -17,6 +17,14 @@ export const API_URLS = {
     DeleteSessionByDeviceId: (deviceId: number) => `v1/sessions/${deviceId}`,
     GET_SESSIONS: 'v1/sessions',
   },
+  FOLLOW: {
+    FOLLOW_USER: 'v1/users/following',
+    GET_USER_PROFILE: 'v1/users',
+    GetFollowers: (userName: string) => `v1/users/${userName}/followers`,
+    GetFollowing: (userName: string) => `v1/users/${userName}/following`,
+    GetProfileUserWithPost: (userName: string) => `v1/users/${userName}`,
+    RemoveFollower: (userId: number) => `v1/users/follower/${userId}`,
+  },
   NOTIFICATIONS: {
     DeleteNotifications: (id: number) => `v1/notifications/${id}`,
     GetAllNotifications: (cursor: number | undefined) => `v1/notifications/${cursor}`,
@@ -24,18 +32,25 @@ export const API_URLS = {
   },
   POSTS: {
     CREATE_POST: 'v1/posts',
+    CreateAnswerComment: (postId: number, commentId: number) =>
+      `v1/posts/${postId}/comments/${commentId}/answers`,
+    CreateComment: (postId: number) => `v1/posts/${postId}/comments`,
     DeletePost: (postId: number) => `v1/posts/${postId}`,
     DeleteUploadImage: (uploadId: string | string[]) => `v1/posts/image/${uploadId}`,
     GetCommentAnswers: (commentId: number, postId: number) =>
       `v1/posts/${postId}/comments/${commentId}/answers`,
     GetCommentAnswersLikes: (commentId: number, postId: number, answerId: number) =>
-      `/api/v1/posts/${postId}/comments/${commentId}/answers/${answerId}/likes`,
+      `v1/posts/${postId}/comments/${commentId}/answers/${answerId}/likes`,
     GetCommentLikes: (commentId: number, postId: number) =>
-      `/api/v1/posts/${postId}/comments/${commentId}/likes`,
-    GetPostComments: (postId: number) => `/api/v1/posts/${postId}/comments`,
-    GetPostLikes: (postId: number) => `/api/v1/posts/${postId}/likes`,
-    GetPostsByUsername: (userName: string) => `/api/v1/posts/${userName}`,
+      `v1/posts/${postId}/comments/${commentId}/likes`,
+    GetPostComments: (postId: number) => `v1/posts/${postId}/comments`,
+    GetPostLikes: (postId: number) => `v1/posts/${postId}/likes`,
+    GetPostsByUsername: (userName: string) => `v1/posts/${userName}`,
     UPLOAD_POST_IMAGE: 'v1/posts/image',
+    UpdateAnswerLikeStatus: (answerId: number, commentId: number, postId: number) =>
+      `v1/posts/${postId}/comments/${commentId}/answers/${answerId}/like-status`,
+    UpdateCommentLikeStatus: (commentId: number, postId: number) =>
+      `v1/posts/${postId}/comments/${commentId}/like-status`,
     UpdatePost: (postId: number) => `v1/posts/${postId}`,
     UpdatePostLikeStatus: (postId: number) => `v1/posts/${postId}/like-status`,
   },
@@ -53,7 +68,7 @@ export const API_URLS = {
     GetAllPublicPosts: (endCursorPostId: number | undefined) =>
       `v1/public-posts/all/${endCursorPostId}`,
     GetPostById: (postId: number | undefined) => `v1/public-posts/${postId}`,
-    GetPublicPostComments: (postId: number) => `/api/v1/public-posts/${postId}/comments`,
+    GetPublicPostComments: (postId: number) => `v1/public-posts/${postId}/comments`,
     GetPublicProfileById: (profileId: number) => `v1/public-user/profile/${profileId}`,
     GetUserPublicPosts: (endCursorPostId: null | number, userId: number) =>
       `v1/public-posts/user/${userId}/${endCursorPostId}`,

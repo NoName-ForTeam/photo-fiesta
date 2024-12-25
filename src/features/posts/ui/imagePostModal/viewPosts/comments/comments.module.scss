@@ -1,0 +1,31 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  margin: 10px 24px;
+}
+
+.profileInfo {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.description {
+  display: flex;
+}
+
+.main {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.options {
+  display: flex;
+  gap: 20px;
+  justify-content: flex-start;
+
+  padding-left: 45px;
+
+  color: var(--light-900);
+}

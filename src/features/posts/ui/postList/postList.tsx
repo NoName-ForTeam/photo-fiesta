@@ -4,26 +4,35 @@ import InfiniteScroll from 'react-infinite-scroll-component'
 import { Avatar, GetPublicPostsResponse, ImagePostModal, useGetUserPostsQuery } from '@/features'
 import { ImageOutline } from '@/shared/assets'
 import { Loader } from '@/shared/ui'
+import { getLastPostId, getPostImages } from '@/shared/utils'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 
 import styles from './postList.module.scss'
 
 type PostListProps = {
-  avatar: Avatar[] | undefined
+  avatar: Avatar[]
+  initialFollowState: boolean
   initialPosts: GetPublicPostsResponse
+  isOwnProfile: boolean
   userId: number
 }
 
 /**
  * PostList component for displaying a user's posts with infinite scroll functionality.
  */
-export const PostList = ({ avatar, initialPosts, userId }: PostListProps) => {
+export const PostList = ({
+  avatar,
+  initialFollowState,
+  initialPosts,
+  isOwnProfile,
+  userId,
+}: PostListProps) => {
   const router = useRouter()
   const { postId, ...restQuery } = router.query
 
   const [endCursorPostId, setEndCursorPostId] = useState<null | number>(
-    initialPosts.items[initialPosts.items.length - 1]?.id || null
+    getLastPostId(initialPosts.items)
   )
 
   const { data, isLoading } = useGetUserPostsQuery(
@@ -39,9 +48,8 @@ export const PostList = ({ avatar, initialPosts, userId }: PostListProps) => {
 
   const [modalData, setModalData] = useState<{
     images: string[]
-    isOpen: boolean
     postId: null | number
-  }>({ images: [], isOpen: false, postId: null })
+  }>({ images: [], postId: null })
 
   // Holds the list of posts for rendering.
   const [posts, setPosts] = useState(initialPosts.items)
@@ -58,9 +66,9 @@ export const PostList = ({ avatar, initialPosts, userId }: PostListProps) => {
    */
   useEffect(() => {
     setPosts(initialPosts.items)
-    setEndCursorPostId(initialPosts.items[initialPosts.items.length - 1]?.id || null)
+    setEndCursorPostId(getLastPostId(initialPosts.items))
     setHasMore(initialPosts.items.length < initialPosts.totalCount)
-  }, [initialPosts])
+  }, [userId, initialPosts])
 
   const classNames = {
     image: styles.image,
@@ -78,39 +86,43 @@ export const PostList = ({ avatar, initialPosts, userId }: PostListProps) => {
   useEffect(() => {
     if (postId) {
       const parsedPostId = Number(postId)
-      const post = posts.find(p => p.id === parsedPostId)
+      const post = posts.find(post => post.id === parsedPostId)
 
       if (post) {
         setModalData({
-          images: post.images.map(img => img.url),
-          isOpen: true,
+          images: getPostImages(post),
           postId: parsedPostId,
         })
       }
     }
   }, [postId, posts])
 
+  /**
+   * Handles the opening of the image modal by setting the modal data and updating the URL query parameters.
+   *
+   * @param {number} postId - The ID of the post whose images are being displayed.
+   * @param {string[]} images - An array of image URLs associated with the post.
+   * @description This function sets the `images` and `postId` in the modal data state to open the modal
+   * and uses Next.js' router to update the query parameters with the `postId`. The URL update is performed
+   * with shallow routing to avoid a full page reload.
+   */
   const handleOpenImageModal = (postId: number, images: string[]) => {
-    setModalData({ images, isOpen: true, postId })
+    setModalData({ images, postId })
     router.push({ pathname: router.pathname, query: { ...restQuery, postId } }, undefined, {
       shallow: true,
     })
   }
 
   const handleCloseModal = () => {
-    setModalData({ images: [], isOpen: false, postId: null })
+    setModalData({ images: [], postId: null })
     router.push({ pathname: router.pathname, query: restQuery }, undefined, { shallow: true })
-  }
-
-  const getImageClickHandler = (postId: number, images: string[]) => () => {
-    handleOpenImageModal(postId, images)
   }
 
   /** Fetches and appends additional posts when the user scrolls to the bottom. */
   const loadMorePosts = () => {
     if (data?.items?.length) {
       setPosts(prev => [...prev, ...data.items.filter(p => !prev.some(post => post.id === p.id))])
-      setEndCursorPostId(data.items[data.items.length - 1]?.id || null)
+      setEndCursorPostId(getLastPostId(data.items))
       setHasMore(data.items.length >= 8)
     } else {
       setHasMore(false)
@@ -136,31 +148,32 @@ export const PostList = ({ avatar, initialPosts, userId }: PostListProps) => {
       >
         <div className={classNames.postGrid}>
           {posts?.map(post => (
-            <Image
-              alt={'post image'}
-              className={classNames.image}
-              height={228}
-              key={post.id}
-              onClick={getImageClickHandler(
-                post.id,
-                post.images.map(image => image.url)
-              )}
-              src={post.images[0]?.url}
-              width={234}
-            />
+            <div key={post.id}>
+              <Image
+                alt={'post image'}
+                className={classNames.image}
+                height={228}
+                key={post.id}
+                onClick={() => handleOpenImageModal(post.id, getPostImages(post))}
+                src={post.images[0]?.url}
+                width={234}
+              />
+            </div>
           ))}
         </div>
       </InfiniteScroll>
-      {modalData.isOpen && modalData.postId && modalData.images && (
+      {modalData.postId && modalData.images && (
         <div className={styles.postModal}>
           <ImagePostModal
             avatar={avatar}
             handleClose={handleCloseModal}
+            initialFollowState={initialFollowState}
+            isOwnProfile={isOwnProfile}
+            isViewMode
             postId={modalData.postId}
             selectedImages={modalData.images}
             setSelectedImages={images => setModalData(prev => ({ ...prev, images }))}
             userId={userId}
-            viewMode
           />
         </div>
       )}

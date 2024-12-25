@@ -30,7 +30,7 @@ type PostResponseImages = {
 export type PostsImages = {
   images: PostResponseImages[]
 }
-export type PostArgsType = {
+export type PostArgs = {
   childrenMetadata: UploadId[]
   description: string
 }
@@ -45,7 +45,7 @@ export type GetPostCommentsResponse = {
   pageSize: number
   totalCount: number
 }
-type PostComment = {
+export type PostComment = {
   answerCount: number
   content: string
   createdAt: string
@@ -77,10 +77,11 @@ export type GetPostArgs = {
 export type GetPostByUsernameArgs = { userName: string } & GetPostArgs
 export type GetCommentAnswersResponse = {
   items: CommentAnswer[]
+  notReadCount: number
   pageSize: number
   totalCount: number
 }
-type CommentAnswer = {
+export type CommentAnswer = {
   commentId: number
   content: string
   createdAt: string
@@ -99,6 +100,7 @@ export type GetCommentAnswersArgs = {
 }
 export type GetCommentAnswersLikesResponse = {
   items: UserComment[]
+  notReadCount: number
   pageSize: number
   totalCount: number
 }
@@ -120,3 +122,9 @@ export type GetPostLikesArgs = {
   postId: number
   search?: string
 }
+export type UpdateCommentLikeArgs = {
+  commentId: number
+  likeStatus: LikeStatus
+  postId: number
+}
+export type UpdateAnswerLikeArgs = { answerId: number } & UpdateCommentLikeArgs

@@ -1,0 +1,39 @@
+@use '@/app/styles/mixins' as *;
+
+.likesContainer {
+  display: flex;
+  flex-direction: column;
+  padding-top: 10px;
+}
+
+.whoLikes {
+  display: flex;
+  gap: 10px;
+}
+
+.likesAvatar {
+  position: relative;
+  display: flex;
+
+  & > * {
+    position: relative;
+    z-index: 1;
+    margin-left: -15px;
+  }
+
+  & > *:first-child {
+    margin-left: 0;
+  }
+}
+
+.date {
+  padding-top: 5px;
+  color: var(--light-900);
+}
+
+.likes {
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+  align-items: center;
+}

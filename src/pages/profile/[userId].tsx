@@ -16,7 +16,7 @@ import Head from 'next/head'
  */
 // eslint-disable-next-line react-refresh/only-export-components
 export const getServerSideProps: GetServerSideProps = async context => {
-  const { postId, userId } = context.query
+  const { userId } = context.query
 
   const userProfileResponse = await fetch(
     `${API_URLS.BASE_URL}${API_URLS.PUBLIC.GetPublicProfileById(Number(userId))}`
@@ -30,7 +30,6 @@ export const getServerSideProps: GetServerSideProps = async context => {
 
   return {
     props: {
-      postId: postId ? Number(postId) : null,
       posts: userAllPosts,
       userProfile,
     },

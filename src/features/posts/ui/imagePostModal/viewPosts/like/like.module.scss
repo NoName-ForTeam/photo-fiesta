@@ -1,0 +1,9 @@
+@use '@/app/styles/mixins' as *;
+
+.likeIcon {
+  color: var(--danger-500);
+}
+
+.icon {
+  @include icon-size;
+}

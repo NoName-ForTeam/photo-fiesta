@@ -9,7 +9,7 @@ type PostFormProps = {
   handleClose: () => void
   isEditing?: boolean
   photos?: string[]
-  postId?: number | undefined
+  postId?: number
   setIsEditing: (isEditing: boolean) => void
 }
 /**
@@ -22,13 +22,21 @@ export const PostForm = ({
   postId,
   setIsEditing,
 }: PostFormProps) => {
-  const { charCount, control, errors, onSubmit, saveDescriptionChanges, setCharCount } =
-    usePostForm({ handleClose, photos, postId, setIsEditing })
+  const { control, errors, onSubmit, saveDescriptionChanges } = usePostForm({
+    handleClose,
+    photos,
+    postId,
+    setIsEditing,
+  })
 
   return (
-    <div>
-      <div>
-        <form id={'postDescription'} onSubmit={isEditing ? saveDescriptionChanges : onSubmit}>
+    <div className={styles.formContainer}>
+      <form
+        className={styles.form}
+        id={'postDescription'}
+        onSubmit={isEditing ? saveDescriptionChanges : onSubmit}
+      >
+        <div>
           <Controller
             control={control}
             name={'description'}
@@ -39,26 +47,22 @@ export const PostForm = ({
                   control={control}
                   error={errors.description?.message}
                   label={'Add publication description'}
-                  onChangeValue={value => {
-                    field.onChange(value)
-                    setCharCount(value.length)
-                  }}
+                  onChangeValue={value => field.onChange(value)}
                   placeholder={isEditing ? 'Edit description' : 'Text-area'}
                 />
-                {/*TODO: fix charCount in FormTextArea*/}
                 <Typography className={styles.char} variant={'textSmall'}>
-                  {charCount}/500
+                  {field.value.length || 0}/500
                 </Typography>
               </>
             )}
           />
-          {isEditing && (
-            <Button type={'submit'} variant={'primary'}>
-              Save Changes
-            </Button>
-          )}
-        </form>
-      </div>
+        </div>
+        {isEditing && (
+          <Button className={styles.submitBtn} type={'submit'} variant={'primary'}>
+            Save Changes
+          </Button>
+        )}
+      </form>
     </div>
   )
 }
