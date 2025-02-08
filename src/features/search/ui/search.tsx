@@ -1,8 +1,11 @@
-import { ChangeEvent, useState } from 'react'
+import { ChangeEvent, useEffect, useState } from 'react'
 
-import { useGetPostsByUsernameQuery } from '@/features'
+import { UserProfile, useGetUserProfileQuery } from '@/features'
+import { ROUTES } from '@/shared/config'
+import { ProfileAvatar } from '@/shared/ui'
 import { useDebounce } from '@/shared/utils'
 import { Input, Typography } from '@photo-fiesta/ui-lib'
+import Link from 'next/link'
 
 import s from './search.module.scss'
 
@@ -11,7 +14,15 @@ import s from './search.module.scss'
  */
 
 export const Search = () => {
-  const [username, setUsername] = useState(localStorage.getItem('recent'))
+  // const [username, setUsername] = useState(localStorage.getItem('recent'))
+
+  const [username, setUsername] = useState('')
+
+  useEffect(() => {
+    const storedUsername = localStorage.getItem('recent') || ''
+
+    setUsername(storedUsername)
+  }, [])
 
   /**
    * State for controlling the visibility of the "Recent Requests" section.
@@ -24,10 +35,12 @@ export const Search = () => {
    * RTK Query hook for fetching posts based on the debounced username.
    * Skips the query if the debounced username is empty.
    */
-  const { data: posts } = useGetPostsByUsernameQuery(
-    { username: debouncedSearchTerm },
-    { skip: !debouncedSearchTerm }
-  )
+  const { data: users } = useGetUserProfileQuery({
+    cursor: 0,
+    pageNumber: 1,
+    pageSize: 12,
+    search: debouncedSearchTerm,
+  })
 
   const classNames = {
     container: s.container,
@@ -48,18 +61,18 @@ export const Search = () => {
     localStorage.setItem('recent', username || '')
   }
 
-  const postsList =
-    posts?.items.length && posts.items.length > 0
-      ? posts?.items.map(post => (
-          <div className={classNames.wrapper} key={post.id}>
-            <img alt={'avatar'} className={classNames.img} src={post.avatarOwner} />
+  const usersList =
+    Array.isArray(users?.items) && users.items.length > 0
+      ? users.items.map((user: UserProfile) => (
+          <Link className={classNames.wrapper} href={`${ROUTES.PROFILE}/${user.id}`} key={user.id}>
+            <ProfileAvatar avatarOwner={user.avatars?.[0]?.url} className={classNames.img} />
             <div>
-              <Typography variant={'textMedium14'}>{post.userName}</Typography>
+              <Typography variant={'textMedium14'}>{user.userName}</Typography>
               <Typography className={classNames.fullName} variant={'text14'}>
-                {post.owner.firstName} {post.owner.lastName}
+                {user.firstName} {user.lastName}
               </Typography>
             </div>
-          </div>
+          </Link>
         ))
       : ''
 
@@ -77,8 +90,8 @@ export const Search = () => {
       {recentRequests ? (
         <div className={classNames.recent}>
           <Typography variant={'textBold16'}>Recent requests</Typography>
-          {postsList?.length ? (
-            postsList
+          {usersList?.length ? (
+            usersList
           ) : (
             <div className={classNames.empty}>
               <Typography variant={'textBold14'}>Oops! This place looks empty!</Typography>
@@ -87,7 +100,7 @@ export const Search = () => {
           )}
         </div>
       ) : (
-        <div className={classNames.container}>{postsList}</div>
+        <div className={classNames.container}>{usersList}</div>
       )}
     </div>
   )

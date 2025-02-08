@@ -1,6 +1,7 @@
 export * from './useChangeTitle'
 export * from './useDebounce'
 export * from './useDelayedLoading'
+export * from './useFollowHandler'
 export * from './useModal'
 export * from './useTimeAgo'
 export * from './useTranslation'

@@ -1,0 +1,52 @@
+@use '@/app/styles/mixins' as *;
+
+.postDetails {
+  display: flex;
+  height: 100%;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+
+.viewPostDetails {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  width: 100%;
+  height: 100%;
+}
+
+.descriptionContainer {
+  display: flex;
+  margin: 10px 0;
+  padding: 0 20px;
+}
+
+.profileAva {
+  display: flex;
+  padding-right: 10px;
+}
+
+.descriptionBox {
+  display: flex;
+}
+
+.icon {
+  @include icon-size;
+}
+
+.options {
+  display: flex;
+  flex-direction: column;
+  max-height: 167px;
+}
+
+.buttonsActions {
+  padding: 5px 20px;
+  border-top: 1px solid var(--dark-100);
+}

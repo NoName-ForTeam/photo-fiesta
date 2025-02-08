@@ -1,5 +1,6 @@
 import { baseApi } from '@/app/api'
 import {
+  CommentAnswer,
   GetCommentAnswersArgs,
   GetCommentAnswersLikesArgs,
   GetCommentAnswersLikesResponse,
@@ -12,14 +13,19 @@ import {
   GetPostLikesArgs,
   GetPostResponse,
   LikeStatus,
-  PostArgsType,
+  PostArgs,
+  PostComment,
   PostsImages,
+  UpdateAnswerLikeArgs,
+  UpdateCommentLikeArgs,
 } from '@/features'
 import { API_URLS, METHOD } from '@/shared/config'
 
 const { DELETE, GET, POST, PUT } = METHOD
 const {
   CREATE_POST,
+  CreateAnswerComment,
+  CreateComment,
   DeletePost,
   DeleteUploadImage,
   GetCommentAnswers,
@@ -29,6 +35,8 @@ const {
   GetPostLikes,
   GetPostsByUsername,
   UPLOAD_POST_IMAGE,
+  UpdateAnswerLikeStatus,
+  UpdateCommentLikeStatus,
   UpdatePost,
   UpdatePostLikeStatus,
 } = API_URLS.POSTS
@@ -40,11 +48,40 @@ const {
 export const postsApi = baseApi.injectEndpoints({
   endpoints: builder => ({
     /**
+     * Creates a reply to a specific comment on a post.
+     * @returns {Promise<CommentAnswer>} The created reply to the comment.
+     * @param - The IDs of the post and comment, along with the reply content.
+     */
+    createAnswerComment: builder.mutation<
+      CommentAnswer,
+      { commentId: number; content: string; postId: number }
+    >({
+      invalidatesTags: ['Posts', 'Comments'],
+      query: ({ commentId, content, postId }) => ({
+        body: { content },
+        method: POST,
+        url: CreateAnswerComment(postId, commentId),
+      }),
+    }),
+    /**
+     * Creates a new comment for a specific post.
+     * @returns {Promise<PostComment>} The created comment.
+     * @param - The ID of the post and the comment content.
+     */
+    createComment: builder.mutation<PostComment, { content: string; postId: number }>({
+      invalidatesTags: ['Posts', 'Comments'],
+      query: ({ content, postId }) => ({
+        body: { content },
+        method: POST,
+        url: CreateComment(postId),
+      }),
+    }),
+    /**
      * Creates a new post.
      * @returns {Promise<GetPostResponse>} The created post.
-     * @param {PostArgsType} params - The post data.
+     * @param {PostArgs} params - The post data.
      */
-    createPost: builder.mutation<GetPostResponse, PostArgsType>({
+    createPost: builder.mutation<GetPostResponse, PostArgs>({
       invalidatesTags: ['Posts'],
       query: body => ({
         body,
@@ -57,7 +94,7 @@ export const postsApi = baseApi.injectEndpoints({
      * @param {{ postId: number }} params - The ID of the post to delete.
      */
     deletePost: builder.mutation<void, { postId: number }>({
-      invalidatesTags: ['Posts'],
+      invalidatesTags: ['Posts', 'Public-posts', 'Profile'],
       query: ({ postId }) => ({
         method: DELETE,
         url: DeletePost(postId),
@@ -111,7 +148,7 @@ export const postsApi = baseApi.injectEndpoints({
       }),
     }),
     /**
-     * Fetches comments for a specific post.
+     * Fetches addComments for a specific post.
      * @param GetPostCommentsArgs - Contains the post ID.
      */
     getPostComments: builder.query<GetPostCommentsResponse, GetPostCommentsArgs>({
@@ -125,7 +162,7 @@ export const postsApi = baseApi.injectEndpoints({
      * Fetches likes for a specific post.
      * @param GetPostLikesArgs - Contains the post ID.
      */
-    getPostLikes: builder.query<GetCommentAnswersResponse, GetPostLikesArgs>({
+    getPostLikes: builder.query<GetCommentAnswersLikesResponse, GetPostLikesArgs>({
       providesTags: ['Posts'],
       query: ({ postId }) => ({
         method: GET,
@@ -141,6 +178,30 @@ export const postsApi = baseApi.injectEndpoints({
       query: ({ username }) => ({
         method: GET,
         url: GetPostsByUsername(username),
+      }),
+    }),
+    /**
+     * Updates the like status for a specific reply to a comment.
+     * @param {UpdateAnswerLikeArgs} params - The answer, comment, and post IDs along with the new like status.
+     */
+    updateAnswerLikeStatus: builder.mutation<void, UpdateAnswerLikeArgs>({
+      invalidatesTags: ['Posts'],
+      query: ({ answerId, commentId, likeStatus, postId }) => ({
+        body: { likeStatus },
+        method: PUT,
+        url: UpdateAnswerLikeStatus(answerId, commentId, postId),
+      }),
+    }),
+    /**
+     * Updates the like status for a specific comment on a post.
+     * @param {UpdateCommentLikeArgs} params - The comment and post IDs along with the new like status.
+     */
+    updateCommentLikeStatus: builder.mutation<void, UpdateCommentLikeArgs>({
+      invalidatesTags: ['Posts'],
+      query: ({ commentId, likeStatus, postId }) => ({
+        body: { likeStatus },
+        method: PUT,
+        url: UpdateCommentLikeStatus(commentId, postId),
       }),
     }),
     /**
@@ -183,6 +244,8 @@ export const postsApi = baseApi.injectEndpoints({
 })
 
 export const {
+  useCreateAnswerCommentMutation,
+  useCreateCommentMutation,
   useCreatePostMutation,
   useDeletePostMutation,
   useDeleteUploadImageMutation,
@@ -192,6 +255,9 @@ export const {
   useGetPostCommentsQuery,
   useGetPostLikesQuery,
   useGetPostsByUsernameQuery,
+  useLazyGetPostCommentsQuery,
+  useUpdateAnswerLikeStatusMutation,
+  useUpdateCommentLikeStatusMutation,
   useUpdatePostLikeStatusMutation,
   useUpdatePostMutation,
   useUploadPostImageMutation,

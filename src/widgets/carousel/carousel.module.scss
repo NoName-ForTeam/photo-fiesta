@@ -4,3 +4,10 @@
   max-width: var(--max-width-image);
   max-height: var(--max-height-image);
 }
+
+.selectedImage {
+  width: 100%;
+  max-width: var(--max-width-image);
+  height: var(--max-height-image);
+  object-fit: cover;
+}

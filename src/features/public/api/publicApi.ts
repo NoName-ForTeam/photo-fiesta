@@ -40,18 +40,18 @@ export const publicApi = baseApi.injectEndpoints({
          * @param {{ postId: number }} params - The ID of the post to fetch.
          */
         getPostById: builder.query<GetPostResponse, { postId: number | undefined }>({
-            providesTags: ['Public-posts'],
+            providesTags: ['Public-posts', 'Posts'],
             query: ({postId}) => ({
                 method: GET,
                 url: GetPostById(postId),
             }),
         }),
         /**
-         * Fetches comments for a specific public post.
+         * Fetches addComments for a specific public post.
          * @param GetPublicPostCommentArgs - Contains the post ID.
          */
         getPublicPostComments: builder.query<GetPublicPostCommentsResponse, GetPublicPostCommentArgs>({
-            providesTags: ['Public-posts'],
+            providesTags: ['Public-posts', 'Posts'],
             query: ({postId}) => ({
                 method: GET,
                 url: GetPublicPostComments(postId),
@@ -96,7 +96,6 @@ export const {
     useGetPublicProfileByIdQuery,
     useGetUserPostsQuery,
     useGetUsersCountQuery,
-    useLazyGetUserPostsQuery
+    useLazyGetPublicPostCommentsQuery,
+    useLazyGetUserPostsQuery,
 } = publicApi
-
-export const {getUserPosts} = publicApi.endpoints

@@ -10,6 +10,7 @@ import {
 } from '@/features'
 import { createBadRequestSchema, handleErrorResponse, postDescriptionSchema } from '@/shared/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useRouter } from 'next/router'
 import { z } from 'zod'
 
 type FormValues = z.infer<typeof postDescriptionSchema>
@@ -17,20 +18,19 @@ const badRequestSchema = createBadRequestSchema(['description'])
 
 type UsePostFormProps = {
   handleClose: () => void
-  photos?: string[]
+  photos?: (File | string)[]
   postId?: number | undefined
   setIsEditing: (isEditing: boolean) => void
 }
 
 export const usePostForm = ({ handleClose, photos, postId, setIsEditing }: UsePostFormProps) => {
+  const router = useRouter()
   const [createPost] = useCreatePostMutation()
   const [uploadImage] = useUploadPostImageMutation()
   const [updateDescription] = useUpdatePostMutation()
   const { data: post } = useGetPostByIdQuery({ postId }, { skip: !postId })
 
   const [isOpenModal, setIsOpenModal] = useState<boolean>(true)
-
-  const [charCount, setCharCount] = useState(0)
 
   const {
     control,
@@ -46,31 +46,34 @@ export const usePostForm = ({ handleClose, photos, postId, setIsEditing }: UsePo
   /** Submit function for createPage description in post modal */
   const onSubmit = handleSubmit(async (data: FormValues) => {
     try {
-      if (photos && photos.length === 0) {
+      if (!photos || photos.length === 0) {
         toast.error('No image selected')
 
         return
       }
       const formData = new FormData()
 
-      if (photos) {
-        for (let i = 0; i < photos.length; i++) {
-          const image = photos[i]
-          const blob = await (await fetch(image)).blob()
+      await Promise.all(
+        photos.map(async (photo, i) => {
+          if (typeof photo === 'string') {
+            const blob = await (await fetch(photo)).blob()
 
-          formData.append('file', blob, `image_${i}.jpg`)
-        }
-      }
+            formData.append('file', blob, `image_${i}.jpg`)
+          } else if (photo instanceof File) {
+            formData.append('file', photo)
+          }
+        })
+      )
+
       const imageUploadData = await uploadImage(formData).unwrap()
 
       await createPost({
-        childrenMetadata: Array.isArray(imageUploadData)
-          ? imageUploadData.map(img => ({ uploadId: img.uploadId }))
-          : [{ uploadId: imageUploadData.images[0]?.uploadId }],
+        childrenMetadata: imageUploadData.images.map(img => ({ uploadId: img.uploadId })),
         description: data.description,
       })
 
       handleClose()
+      await router.replace(router.asPath)
       setIsOpenModal(false)
     } catch (error) {
       console.error('Error during post creation', error)
@@ -92,12 +95,10 @@ export const usePostForm = ({ handleClose, photos, postId, setIsEditing }: UsePo
   })
 
   return {
-    charCount,
     control,
     errors,
     isOpenModal,
     onSubmit,
     saveDescriptionChanges,
-    setCharCount,
   }
 }

@@ -1,0 +1,17 @@
+.addComment {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 10px 20px;
+
+  border-top: 1px solid var(--dark-100);
+}
+
+.placeholder {
+  color: var(--light-900);
+}
+
+.input {
+  background: var(--dark-300) !important;
+}

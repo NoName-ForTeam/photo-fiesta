@@ -1,0 +1,73 @@
+@use '@/app/styles/mixins' as *;
+
+.overlay {
+  @include overlay;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modalContent {
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+
+  width: 90%;
+  max-width: 972px;
+  max-height: 564px;
+  margin-left: calc(150 / 1280 * 100%);
+
+  background-color: var(--dark-300);
+}
+
+.header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 10px 20px;
+
+  border-bottom: 1px solid var(--dark-100);
+}
+
+.closeIcon {
+  cursor: pointer;
+  position: absolute;
+  top: -23px;
+  right: -25px;
+}
+
+.body {
+  display: flex;
+}
+
+.imageSection {
+  width: 50%;
+  height: 504px;
+}
+
+.viewMode {
+  display: flex;
+  flex-direction: column;
+
+  width: 50%;
+  height: 480px;
+  margin: 5px 0;
+}
+
+.info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 3px 20px;
+
+  border-bottom: 1px solid var(--dark-100);
+}
+
+.edit {
+  margin: 5px 24px;
+}

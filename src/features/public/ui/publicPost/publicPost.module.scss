@@ -1,4 +1,60 @@
-.user{
+@use '@/app/styles/mixins' as *;
+
+.postContainer {
+  position: relative;
+  width: 100%;
+  max-width: 234px;
+}
+
+.photo {
+  cursor: pointer;
+  overflow: hidden;
+  transition: height 0.5s ease;
+
+  img {
+    width: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+}
+
+.postInfo {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.time {
+  color: var(--light-900);
+}
+
+.user {
   display: flex;
   gap: 10px;
+  align-items: center;
+
+  margin: 10px 0;
+
+  text-decoration: none;
+}
+
+.description {
+  overflow: hidden;
+  display: flex;
+  text-overflow: ellipsis;
+  transition: max-height 0.5s ease;
+
+  @include font(var(--font-size-s),
+          var(--line-height-m),
+          var(--font-weight-regular));
+}
+
+.trigger {
+  cursor: pointer;
+
+  color: var(--accent-500);
+  text-decoration: underline;
+
+  background: none;
+  border: none;
 }
