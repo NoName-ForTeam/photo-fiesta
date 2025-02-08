@@ -9,32 +9,24 @@ import Link from 'next/link'
 
 import s from './search.module.scss'
 
+const SEARCH_DEBOUNCE_DELAY = 500
+
 /**
  * Search component for querying posts by username and displaying recent requests.
  */
-
 export const Search = () => {
-  // const [username, setUsername] = useState(localStorage.getItem('recent'))
-
   const [username, setUsername] = useState('')
+  const [isRecentRequests, setViewIsRecentRequests] = useState(true)
 
+  // Set the username from localStorage if available
   useEffect(() => {
     const storedUsername = localStorage.getItem('recent') || ''
 
     setUsername(storedUsername)
   }, [])
 
-  /**
-   * State for controlling the visibility of the "Recent Requests" section.
-   * Defaults to true, showing the recent requests initially.
-   */
-  const [recentRequests, setViewRecentRequests] = useState(true)
-  const debouncedSearchTerm = useDebounce(username || '', 500)
+  const debouncedSearchTerm = useDebounce(username || '', SEARCH_DEBOUNCE_DELAY)
 
-  /**
-   * RTK Query hook for fetching posts based on the debounced username.
-   * Skips the query if the debounced username is empty.
-   */
   const { data: users } = useGetUserProfileQuery({
     cursor: 0,
     pageNumber: 1,
@@ -53,11 +45,11 @@ export const Search = () => {
 
   const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setUsername(e.currentTarget.value)
-    setViewRecentRequests(false)
+    setViewIsRecentRequests(false)
   }
 
   const onBlurHandler = () => {
-    setViewRecentRequests(true)
+    setViewIsRecentRequests(true)
     localStorage.setItem('recent', username || '')
   }
 
@@ -87,10 +79,10 @@ export const Search = () => {
         width={'100%'}
       />
 
-      {recentRequests ? (
+      {isRecentRequests ? (
         <div className={classNames.recent}>
           <Typography variant={'textBold16'}>Recent requests</Typography>
-          {usersList?.length ? (
+          {usersList ? (
             usersList
           ) : (
             <div className={classNames.empty}>
