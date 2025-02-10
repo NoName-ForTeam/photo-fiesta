@@ -13,7 +13,7 @@ export type GetUserProfileResponse = {
   prevCursor: number
   totalCount: number
 }
-type UserProfile = {
+export type UserProfile = {
   avatars: Avatar[]
   createdAt: string
   firstName: string

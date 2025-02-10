@@ -68,7 +68,10 @@ export const followApi = baseApi.injectEndpoints({
        */
       getUserProfile: builder.query<GetUserProfileResponse, GetUserProfileArgs>({
         providesTags: ['Follow'],
-        query: () => GET_USER_PROFILE,
+        query: ({ cursor, pageNumber, pageSize, search }) => ({
+          params: { cursor, pageNumber, pageSize, search },
+          url: GET_USER_PROFILE,
+        }),
       }),
       /**
        * Mutation to unfollow a user.

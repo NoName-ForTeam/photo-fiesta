@@ -42,10 +42,10 @@ export const API_URLS = {
     GetCommentAnswersLikes: (commentId: number, postId: number, answerId: number) =>
       `v1/posts/${postId}/comments/${commentId}/answers/${answerId}/likes`,
     GetCommentLikes: (commentId: number, postId: number) =>
-      `v1/posts/${postId}/comments/${commentId}/likes`,
-    GetPostComments: (postId: number) => `v1/posts/${postId}/comments`,
-    GetPostLikes: (postId: number) => `v1/posts/${postId}/likes`,
-    GetPostsByUsername: (userName: string) => `v1/posts/${userName}`,
+      `/api/v1/posts/${postId}/comments/${commentId}/likes`,
+    GetPostComments: (postId: number) => `/api/v1/posts/${postId}/comments`,
+    GetPostLikes: (postId: number) => `/api/v1/posts/${postId}/likes`,
+    GetPostsByUsername: (username: string) => `v1/posts/${username}`,
     UPLOAD_POST_IMAGE: 'v1/posts/image',
     UpdateAnswerLikeStatus: (answerId: number, commentId: number, postId: number) =>
       `v1/posts/${postId}/comments/${commentId}/answers/${answerId}/like-status`,

@@ -1,0 +1,40 @@
+.wrapper {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+
+  margin-top: 24px;
+
+  text-decoration: none;
+}
+
+.img {
+  width: 48px;
+  height: 48px;
+}
+
+.fullName {
+  color: var(--light-900);
+}
+
+.recent {
+  margin-top: 30px;
+}
+
+.emptyList {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: center;
+  justify-content: center;
+
+  margin-top: 60px;
+
+  color: var(--light-900);
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
