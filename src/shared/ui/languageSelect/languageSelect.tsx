@@ -23,6 +23,12 @@ export const LanguageSelect = ({ className }: { className: string }) => {
     lang: styles.lang,
     selectItem: styles.selectItem,
   }
+  const languages = [
+    { flag: <FlagUnitedKingdom className={classNames.flag} />, label: 'English', value: 'en' },
+    { flag: <FlagRussia className={styles.flag} />, label: 'Russian', value: 'ru' },
+  ]
+
+  const sortedLanguages = locale === 'en' ? languages : languages.reverse()
 
   /**
    * Handles changing the current language by updating the locale in the router.
@@ -35,18 +41,14 @@ export const LanguageSelect = ({ className }: { className: string }) => {
 
   return (
     <Select className={className} defaultValue={locale} onValueChange={onChangeLanguage}>
-      <SelectItem value={'en'}>
-        <div className={classNames.selectItem}>
-          <FlagUnitedKingdom className={classNames.flag} />
-          <span className={classNames.lang}>English</span>{' '}
-        </div>
-      </SelectItem>
-      <SelectItem value={'ru'}>
-        <div className={classNames.selectItem}>
-          <FlagRussia className={styles.flag} />
-          <span className={classNames.lang}>Russian</span>
-        </div>
-      </SelectItem>
+      {sortedLanguages.map(({ flag, label, value }) => (
+        <SelectItem key={value} value={value}>
+          <div className={classNames.selectItem}>
+            {flag}
+            <span className={classNames.lang}>{label}</span>
+          </div>
+        </SelectItem>
+      ))}
     </Select>
   )
 }
