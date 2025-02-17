@@ -80,6 +80,7 @@ export const PostDescription = ({
 
   const classNames = {
     buttonsActions: styles.buttonsActions,
+    description: styles.description,
     descriptionContainer: styles.descriptionContainer,
     icon: styles.icon,
     options: styles.options,
@@ -107,7 +108,9 @@ export const PostDescription = ({
               </div>
               <div>
                 <Typography variant={'h3'}>{postById?.userName}</Typography>
-                <Typography variant={'text14'}>{postById?.description}</Typography>
+                <Typography className={classNames.description} variant={'text14'}>
+                  {postById?.description}
+                </Typography>
                 <Typography style={{ color: 'var(--light-900)' }} variant={'textSmall'}>
                   {createdAt}
                 </Typography>
