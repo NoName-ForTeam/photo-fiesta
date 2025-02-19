@@ -1,6 +1,7 @@
-import { ComponentPropsWithoutRef } from 'react'
+import { ComponentPropsWithoutRef, useEffect, useState } from 'react'
 
 import { GithubSvgrepoCom31, GoogleSvgrepoCom1 } from '@/shared/assets'
+import { API_URLS } from '@/shared/config'
 import { Button, Card, Typography } from '@photo-fiesta/ui-lib'
 import Link from 'next/link'
 
@@ -47,6 +48,16 @@ export const AuthCard = ({
     title: styles.title,
   } as const
 
+  const [githubAuthUrl, setGithubAuthUrl] = useState<string>('#')
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const redirectUrl = encodeURIComponent(`${window.location.origin}/auth/auth-callback`)
+
+      setGithubAuthUrl(API_URLS.GITHUB_OAUTH2(redirectUrl))
+    }
+  }, [])
+
   return (
     <Card className={classNames.card}>
       <div className={classNames.header}>
@@ -62,7 +73,7 @@ export const AuthCard = ({
           </Button>
           <Button asChild variant={'icon-link'}>
             {/**TODO: add link to github*/}
-            <Link href={'#'} passHref>
+            <Link href={githubAuthUrl} passHref>
               <GithubSvgrepoCom31 className={classNames.icons} />
             </Link>
           </Button>
