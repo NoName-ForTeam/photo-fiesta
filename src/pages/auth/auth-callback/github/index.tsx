@@ -3,8 +3,10 @@ import { useEffect } from 'react'
 import { useLazyAuthMeQuery } from '@/features'
 import { ROUTES } from '@/shared/config'
 import { Loader } from '@/shared/ui'
-import { Storage } from '@/shared/utils'
+import { checkErrorMessages, Storage } from '@/shared/utils'
 import { useRouter } from 'next/router'
+import { ErrorResponse } from '@/shared/api'
+import { toast } from 'react-toastify'
 
 /**
  * GithubCallback Component
@@ -35,14 +37,27 @@ const GithubCallback = () => {
         }
 
         // redirect to user profile
-        void router.replace(`${ROUTES.PROFILE}/${userId}`)
+        router.replace(`${ROUTES.PROFILE}/${userId}`)
       } catch (error) {
-        console.error('failed to fetch user data:', error)
+        if (
+          typeof error === 'object' &&
+          error !== null &&
+          'data' in error &&
+          typeof error.data === 'object' &&
+          error.data !== null &&
+          'error' in error.data &&
+          'messages' in error.data &&
+          'statusCode' in error.data
+        ) {
+          checkErrorMessages(error as ErrorResponse, () => {})
+        } else {
+          toast.error('An unexpected error occurred')
+        }
       }
     }
 
     if (router.isReady && typeof accessToken === 'string') {
-      void handleLoginByGithub(accessToken)
+      handleLoginByGithub(accessToken)
     }
   }, [accessToken, router.isReady])
 
