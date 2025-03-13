@@ -1,4 +1,5 @@
 import { CloseOutline } from '@/shared/assets'
+import { useTranslation } from '@/shared/utils'
 import {
   Button,
   Modal,
@@ -23,7 +24,7 @@ type ModalProps = {
   pushNo?: () => void
   title: null | string
 }
-//TODO: add translations
+
 export const ConfirmationModal = ({
   buttonTitle = 'Ok',
   closeModal,
@@ -34,7 +35,9 @@ export const ConfirmationModal = ({
   pushNo,
   title,
 }: ModalProps) => {
+  const { t } = useTranslation()
   const classNames = {
+    buttonsContainer: styles.buttonsContainer,
     container: styles.container,
     content: styles.content,
     description: styles.description,
@@ -61,15 +64,14 @@ export const ConfirmationModal = ({
           </Typography>
           <ModalFooter className={classNames.footer}>
             {isTwoButtons && (
-              // TODO: create names in buttons by props
-              <>
-                <Button onClick={pushNo ? pushNo : closeModal} variant={'secondary'}>
-                  No
+              <div className={classNames.buttonsContainer}>
+                <Button onClick={handleConfirmation} variant={'outlined'}>
+                  {t.buttonsConfirm.yes}
                 </Button>
-                <Button onClick={handleConfirmation} variant={'primary'}>
-                  Yes
+                <Button onClick={pushNo ? pushNo : closeModal} variant={'primary'}>
+                  {t.buttonsConfirm.no}
                 </Button>
-              </>
+              </div>
             )}
             {!isTwoButtons && (
               <Button

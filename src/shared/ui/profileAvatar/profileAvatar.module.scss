@@ -1,3 +1,10 @@
+@use '@/app/styles/mixins' as *;
+
 .avatar {
   border-radius: 50%;
+
+  @include mobile {
+    width: 72px;
+    height: 72px;
+  }
 }

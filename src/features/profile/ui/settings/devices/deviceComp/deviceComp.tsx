@@ -2,8 +2,10 @@ import { Device, useDeleteByIdMutation } from '@/features'
 import { Chrome, LogOut, PC, Phone } from '@/shared/assets'
 import { formatDateTo, useTranslation } from '@/shared/utils'
 import { Button, Typography } from '@photo-fiesta/ui-lib'
+import clsx from 'clsx'
+import { useRouter } from 'next/router'
 
-import styles from './device.module.scss'
+import styles from 'src/features/profile/ui/settings/devices/deviceComp/deviceComp.module.scss'
 
 type DeviceCompProps = {
   device: Device
@@ -19,11 +21,16 @@ type DeviceCompProps = {
 export const DeviceComp = ({ device, other = false }: DeviceCompProps) => {
   const { t } = useTranslation()
   const [logout] = useDeleteByIdMutation()
+  const { locale } = useRouter()
+  const isLangRu = locale === 'ru'
+
   const classNames = {
-    btn: styles.btn,
+    btn: clsx(styles.btn, { [styles.langRu]: isLangRu }),
     container: styles.container,
+    dataLastVisit: styles.dataLastVisit,
+    deviceInfo: styles.deviceInfo,
     icon: styles.icon,
-    info: styles.info,
+    info: clsx(styles.info, { [styles.langRu]: isLangRu }),
     leftSide: styles.leftSide,
     title: styles.title,
     wrapper: styles.wrapper,
@@ -51,14 +58,14 @@ export const DeviceComp = ({ device, other = false }: DeviceCompProps) => {
           <div className={classNames.icon}>
             <DeviceIcon />
           </div>
-          <div>
+          <div className={classNames.deviceInfo}>
             <Typography className={classNames.title} variant={'textBold16'}>
               {deviceTitle}
             </Typography>
             <div className={classNames.info}>
               <Typography variant={'text14'}>IP: {device?.ip}</Typography>
               {other && (
-                <Typography variant={'text14'}>
+                <Typography variant={'textSmall'}>
                   {t.devices.visit} {formatDateTo(device?.lastActive)}
                 </Typography>
               )}
@@ -67,12 +74,10 @@ export const DeviceComp = ({ device, other = false }: DeviceCompProps) => {
         </div>
 
         {other && (
-          <div>
-            <Button className={classNames.btn} onClick={logoutHandler} variant={'ghost'}>
-              <LogOut />
-              <Typography variant={'textMedium14'}>Log Out</Typography>
-            </Button>
-          </div>
+          <Button className={classNames.btn} onClick={logoutHandler} variant={'link'}>
+            <LogOut />
+            <Typography variant={'textMedium14'}>Log Out</Typography>
+          </Button>
         )}
       </div>
     </div>

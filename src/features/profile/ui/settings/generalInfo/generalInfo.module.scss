@@ -53,10 +53,18 @@
   width: 100%;
   max-width: 740px;
 
+  & input {
+    color: var(--light-100);
+  }
+
   & .select,
   .datePicker {
     font-size: var(--font-size-s);
     color: var(--light-900);
+
+    & input {
+      padding: 7px 12px;
+    }
   }
 
   & .textarea {
@@ -154,8 +162,8 @@
   cursor: pointer;
 
   position: absolute;
-  top: 19px;
-  right: 10px;
+  top: 21px;
+  right: 15px;
 
   display: flex;
   align-items: center;
@@ -165,12 +173,19 @@
   height: 16px;
 
   background-color: var(--danger-500);
-  border: none;
   border-radius: 50%;
+  outline: 4px solid var(--dark-700);
 
   transition: background-color 0.3s ease;
 
   &:hover {
     background-color: var(--danger-300);
+  }
+
+  @include mobile {
+    top: 15px;
+    right: 15px;
+    width: 24px;
+    height: 24px;
   }
 }

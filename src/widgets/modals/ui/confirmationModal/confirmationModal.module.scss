@@ -1,16 +1,14 @@
 @use '@/app/styles/mixins' as *;
 
-.container {
+.content {
   z-index: 1000;
-
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-
-  padding: 0 24px 36px;
+  width: 100%;
+  max-width: var(--max-width-image);
 
   @include mobile {
-    padding: 0 12px 30px;
+    position: absolute;
+    top: 42% !important;
+    width: var(--mobile-content-width);
   }
 }
 
@@ -25,13 +23,17 @@
   }
 }
 
-.content {
+.container {
   z-index: 1000;
-  width: 100%;
-  max-width: var(--max-width-image);
+
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+
+  padding: 0 24px 36px;
 
   @include mobile {
-    --mobile-content-width: 330px;
+    padding: 0 12px 30px;
   }
 }
 
@@ -44,6 +46,23 @@
       width: 100%;
       padding: 12px 0;
     }
+  }
+}
+
+.buttonsContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 24px;
+  align-items: center;
+  justify-content: center;
+
+  @include mobile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    width: 100% !important;
   }
 }
 

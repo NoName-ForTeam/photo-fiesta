@@ -10,6 +10,8 @@
 
   @include mobile {
     @include font(var(--font-size-xs), var(--line-height-s), var(--font-weight-semibold));
+
+    gap: 0;
   }
 }
 

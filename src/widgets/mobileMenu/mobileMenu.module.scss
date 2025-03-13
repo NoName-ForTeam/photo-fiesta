@@ -7,8 +7,23 @@
 }
 
 .container {
+  position: fixed !important;
+  color: var(--light-100);
+
+  & a {
+    color: inherit;
+    text-decoration: none;
+  }
+
   & a[class*='active'] {
     font-weight: bold;
     color: var(--accent-500);
+  }
+
+  @include mobile {
+    & svg {
+      width: 24px;
+      height: 24px;
+    }
   }
 }

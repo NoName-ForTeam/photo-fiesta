@@ -10,7 +10,13 @@
 }
 
 .current {
+  display: flex;
+  flex-direction: column;
   width: 100%;
+
+  @include mobile {
+    gap: 5px;
+  }
 }
 
 .btn {
@@ -34,6 +40,12 @@
 
   @include mobile {
     margin-top: 31px;
+  }
+}
+
+.infoLoggedDevices {
+  @include mobile {
+    text-align: center;
   }
 }
 
