@@ -25,6 +25,8 @@ export const API_URLS = {
     GetProfileUserWithPost: (userName: string) => `v1/users/${userName}`,
     RemoveFollower: (userId: number) => `v1/users/follower/${userId}`,
   },
+  GITHUB_OAUTH2: (redirectUrl: string) =>
+    `${API_URLS.BASE_URL}v1/auth/github/login?redirect_url=${redirectUrl}`,
   NOTIFICATIONS: {
     DeleteNotifications: (id: number) => `v1/notifications/${id}`,
     GetAllNotifications: (cursor: number | undefined) => `v1/notifications/${cursor}`,
