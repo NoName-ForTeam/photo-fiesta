@@ -51,9 +51,14 @@ export const en = {
     userName: 'Username',
     userNameContains: 'Username may contain 0-9; A-Z; a-z; _; -',
   },
+  buttonsConfirm: {
+    no: 'No',
+    yes: 'Yes',
+  },
   devices: {
     active: 'Active sessions',
     current: 'Current device',
+    noLoggedDevices: 'You have not yet logged in from other devices',
     terminate: 'Terminate all other session',
     visit: 'Last visit:',
   },

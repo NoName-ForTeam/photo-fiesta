@@ -51,7 +51,7 @@
   align-items: center;
 
   @include mobile {
-    gap: 24px;
+    gap: 12px;
   }
 }
 
@@ -67,6 +67,12 @@
     min-width: 30px;
     padding: 0;
     border: none;
+
+    & button {
+      gap: 0;
+      padding: 0;
+      border: none;
+    }
   }
 }
 

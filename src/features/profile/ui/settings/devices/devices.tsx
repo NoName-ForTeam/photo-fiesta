@@ -17,6 +17,7 @@ export const Devices = () => {
   const classNames = {
     btn: styles.btn,
     current: styles.current,
+    infoLoggedDevices: styles.infoLoggedDevices,
     others: styles.others,
     othersList: styles.othersList,
     root: styles.root,
@@ -44,7 +45,7 @@ export const Devices = () => {
   return (
     <div className={classNames.root}>
       <div className={classNames.current}>
-        <Typography title={classNames.title} variant={'h3'}>
+        <Typography title={classNames.title} variant={'textMedium14'}>
           {t.devices.current}
         </Typography>
         {devices?.current ? (
@@ -52,22 +53,28 @@ export const Devices = () => {
         ) : (
           <div>No current device found</div>
         )}
-        <div className={classNames.btn}>
-          <Button
-            disabled={!devicesList || devicesList.length === 0}
-            onClick={() => deleteAll()}
-            variant={'outlined'}
-          >
-            {t.devices.terminate}
-          </Button>
-        </div>
+      </div>
+      <div className={classNames.btn}>
+        <Button
+          disabled={!devicesList || devicesList.length === 0}
+          onClick={() => deleteAll()}
+          variant={'outlined'}
+        >
+          {t.devices.terminate}
+        </Button>
       </div>
 
       <div className={classNames.others}>
         <div className={classNames.current}>
-          <Typography title={classNames.title} variant={'h3'}>
-            {t.devices.active}
-          </Typography>
+          {devicesList && devicesList.length > 0 ? (
+            <Typography title={classNames.title} variant={'textMedium14'}>
+              {t.devices.active}
+            </Typography>
+          ) : (
+            <Typography className={classNames.infoLoggedDevices} variant={'h2'}>
+              {t.devices.noLoggedDevices}
+            </Typography>
+          )}
           <div className={classNames.othersList}>{devicesList}</div>
         </div>
       </div>

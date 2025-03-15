@@ -5,25 +5,42 @@
 
   align-items: center;
   width: 100%;
-
-  @include mobile {
-    padding-right: 14px;
-  }
+  height: 120px;
+  padding: 17px 14px;
 }
 
 .info {
   display: flex;
   flex-direction: column;
   gap: 5px;
+
+  @include mobile {
+    gap: 5px;
+    padding: 3px;
+  }
+}
+
+.info.langRu {
+  @include mobile {
+    gap: 0;
+  }
 }
 
 .icon {
   display: flex;
   align-items: flex-start;
+
+  @include mobile {
+    padding-top: 5px;
+  }
 }
 
 .title {
   margin-bottom: 13px !important;
+
+  @include mobile {
+    margin-bottom: 10px !important;
+  }
 }
 
 .wrapper {
@@ -39,11 +56,16 @@
 .leftSide {
   display: flex;
   gap: 12px;
+
+  @include mobile {
+    max-width: 60%;
+  }
 }
 
 .btn {
   display: flex;
   gap: 12px;
+  padding: 0;
   color: var(--light-100) !important;
 
   &:active {
@@ -56,8 +78,9 @@
   }
 }
 
-button.btn {
+button.btn.langRu {
   @include mobile {
+    margin-bottom: 6px;
     padding: 0;
   }
 }
