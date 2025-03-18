@@ -1,5 +1,9 @@
 @use '@/app/styles/mixins' as *;
 
+.postListContainer {
+  height: 100vh;
+}
+
 .postGrid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
