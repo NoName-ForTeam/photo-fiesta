@@ -56,3 +56,7 @@ export type AuthMeResponse = {
 
 //Token management
 export type UpdateTokens = Token
+
+// login by google
+export type LoginByGoogleRequest = { code: string }
+export type LoginByGoogleResponse = Token

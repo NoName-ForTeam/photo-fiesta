@@ -27,6 +27,7 @@ export const API_URLS = {
   },
   GITHUB_OAUTH2: (redirectUrl: string) =>
     `${API_URLS.BASE_URL}v1/auth/github/login?redirect_url=${redirectUrl}`,
+  GOOGLE_OAUTH2: `v1/auth/google/login`,
   NOTIFICATIONS: {
     DeleteNotifications: (id: number) => `v1/notifications/${id}`,
     GetAllNotifications: (cursor: number | undefined) => `v1/notifications/${cursor}`,

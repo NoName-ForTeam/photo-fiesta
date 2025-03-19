@@ -2,6 +2,7 @@ import { ComponentPropsWithoutRef, useEffect, useState } from 'react'
 
 import { GithubSvgrepoCom31, GoogleSvgrepoCom1 } from '@/shared/assets'
 import { API_URLS } from '@/shared/config'
+import { useGoogleAuth } from '@/shared/utils/hooks/useGoogleAuth'
 import { Button, Card, Typography } from '@photo-fiesta/ui-lib'
 import Link from 'next/link'
 
@@ -48,6 +49,8 @@ export const AuthCard = ({
     title: styles.title,
   } as const
 
+  const googleAuth = useGoogleAuth()
+
   const [githubAuthUrl, setGithubAuthUrl] = useState<string>('#')
 
   useEffect(() => {
@@ -65,9 +68,9 @@ export const AuthCard = ({
           {title}
         </Typography>
         <div className={classNames.links}>
-          <Button asChild variant={'icon-link'}>
+          <Button asChild onClick={googleAuth} variant={'icon-link'}>
             {/**TODO: add link to google*/}
-            <Link href={'#'} passHref>
+            <Link href={''} passHref>
               <GoogleSvgrepoCom1 className={classNames.icons} />
             </Link>
           </Button>

@@ -5,6 +5,8 @@ import {
   CheckRecoveryCodeResponse,
   ConfirmRegistration,
   CreateNewPasswordData,
+  LoginByGoogleRequest,
+  LoginByGoogleResponse,
   PasswordRecoveryData,
   ResendLink,
   SignInData,
@@ -76,6 +78,19 @@ export const authApi = baseApi.injectEndpoints({
           method: POST,
           url: NEW_PASSWORD,
         }),
+      }),
+      /**
+       * Mutation for logging in using Google OAuth
+       * Sends a POST request to the Google OAuth endpoint with the provided authentication code
+       */
+      loginByGoogle: builder.mutation<LoginByGoogleResponse, LoginByGoogleRequest>({
+        query: params => {
+          return {
+            body: params,
+            method: POST,
+            url: API_URLS.GOOGLE_OAUTH2,
+          }
+        },
       }),
       /**
        * Mutation to log out the current user.
@@ -166,6 +181,7 @@ export const {
   useConfirmRegistrationQuery,
   useCreateNewPasswordMutation,
   useLazyAuthMeQuery,
+  useLoginByGoogleMutation,
   useLogoutMutation,
   usePasswordRecoveryMutation,
   useResendLinkMutation,

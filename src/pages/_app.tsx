@@ -5,6 +5,7 @@ import { ToastContainer } from 'react-toastify'
 
 import { wrapper } from '@/app/store'
 import { Layout } from '@/widgets'
+import { GoogleOAuthProvider } from '@react-oauth/google'
 import Head from 'next/head'
 
 import '@/app/styles/index.scss'
@@ -19,22 +20,24 @@ function MyApp({ Component, ...rest }: AppProps) {
   const { props, store } = wrapper.useWrappedStore(rest)
 
   return (
-    <Provider store={store}>
-      <Head>
-        <title>Photo Fiesta</title>
-        <meta
-          content={
-            'Photo Fiesta is a place where you can share your photos with your friends and family.'
-          }
-          name={'description'}
-        />
-        <link href={'/favicon.jpg'} rel={'icon'} sizes={'32x32'} type={'image/png'} />
-      </Head>
-      <Layout>
-        <Component {...props.pageProps} />
-        <ToastContainer />
-      </Layout>
-    </Provider>
+    <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || ''}>
+      <Provider store={store}>
+        <Head>
+          <title>Photo Fiesta</title>
+          <meta
+            content={
+              'Photo Fiesta is a place where you can share your photos with your friends and family.'
+            }
+            name={'description'}
+          />
+          <link href={'/favicon.jpg'} rel={'icon'} sizes={'32x32'} type={'image/png'} />
+        </Head>
+        <Layout>
+          <Component {...props.pageProps} />
+          <ToastContainer />
+        </Layout>
+      </Provider>
+    </GoogleOAuthProvider>
   )
 }
 
