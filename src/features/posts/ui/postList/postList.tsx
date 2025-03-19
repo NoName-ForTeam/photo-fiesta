@@ -73,6 +73,7 @@ export const PostList = ({
   const classNames = {
     image: styles.image,
     postGrid: styles.postGrid,
+    postListContainer: styles.postListContainer,
   } as const
 
   /**
@@ -138,7 +139,7 @@ export const PostList = ({
   }
 
   return (
-    <>
+    <div className={classNames.postListContainer}>
       <InfiniteScroll
         className={styles.infiniteScrollWrapper}
         dataLength={posts.length}
@@ -177,6 +178,6 @@ export const PostList = ({
           />
         </div>
       )}
-    </>
+    </div>
   )
 }
