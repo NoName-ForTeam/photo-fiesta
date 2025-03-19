@@ -1,12 +1,12 @@
 import { useEffect } from 'react'
+import { toast } from 'react-toastify'
 
 import { useLazyAuthMeQuery } from '@/features'
+import { ErrorResponse } from '@/shared/api'
 import { ROUTES } from '@/shared/config'
 import { Loader } from '@/shared/ui'
-import { checkErrorMessages, Storage } from '@/shared/utils'
+import { Storage, checkErrorMessages } from '@/shared/utils'
 import { useRouter } from 'next/router'
-import { ErrorResponse } from '@/shared/api'
-import { toast } from 'react-toastify'
 
 /**
  * GithubCallback Component
