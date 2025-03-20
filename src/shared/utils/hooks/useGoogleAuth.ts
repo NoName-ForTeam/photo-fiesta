@@ -28,7 +28,7 @@ export function useGoogleAuth() {
         const userId = meResponse?.data?.userId
 
         if (!userId) {
-          console.error('User ID not found')
+          toast.error('User ID not found')
 
           return
         }
