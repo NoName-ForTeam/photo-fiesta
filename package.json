@@ -30,6 +30,7 @@
     "@hookform/resolvers": "^3.9.0",
     "@photo-fiesta/ui-lib": "^0.0.14",
     "@radix-ui/react-slider": "^1.2.1",
+    "@react-oauth/google": "^0.12.1",
     "@reduxjs/toolkit": "^2.2.7",
     "@types/react-google-recaptcha": "^2.1.9",
     "@types/throttle-debounce": "^5.0.2",
