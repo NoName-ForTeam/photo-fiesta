@@ -11,5 +11,10 @@ module.exports = {
       { allowConstantExport: true },
     ],
     'no-undef': 'off',
+    '@typescript-eslint/no-unused-vars': 'warn',
+    'react-hooks/exhaustive-deps': 'warn',
+    '@typescript-eslint/no-empty-object-type': 'warn',
+    'no-empty-pattern': 'warn',
+    '@typescript-eslint/no-unused-expressions': 'warn',
   },
 }
