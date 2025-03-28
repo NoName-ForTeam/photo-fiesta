@@ -1,5 +1,6 @@
 import { baseApi } from '@/app/api'
-import { EnhancedStore, combineSlices, configureStore } from '@reduxjs/toolkit'
+import { croppSlice } from '@/features/posts/model/croppSlice'
+import { EnhancedStore, configureStore } from '@reduxjs/toolkit'
 import { createWrapper } from 'next-redux-wrapper'
 
 /**
@@ -12,10 +13,15 @@ import { createWrapper } from 'next-redux-wrapper'
  * @returns {EnhancedStore} The configured Redux store.
  */
 
+const rootReducer = {
+  [baseApi.reducerPath]: baseApi.reducer,
+  croppSlice: croppSlice.reducer,
+}
+
 const makeStore = (): EnhancedStore =>
   configureStore({
     middleware: getDefaultMiddleware => getDefaultMiddleware().concat(baseApi.middleware),
-    reducer: combineSlices(baseApi),
+    reducer: rootReducer,
   })
 
 // export an assembled wrapper
