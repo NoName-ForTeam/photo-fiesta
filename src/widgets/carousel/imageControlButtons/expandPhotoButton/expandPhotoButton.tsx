@@ -57,7 +57,7 @@ export const ExpandPhotoButton = ({
         </PopoverTrigger>
         <PopoverContent align={'start'} className={classNames.extendContent} side={'left'}>
           {aspectRatios.map(ratio => {
-            const isActive = currentAspectRatio.label === ratio.label
+            const isActive = currentAspectRatio?.label === ratio.label
 
             return (
               <div

@@ -34,7 +34,7 @@ export const Post = ({
     return (
       <section className={styles.formSection}>
         <div className={styles.profileInfo}>
-          <ProfileAvatar avatarOwner={avatar?.[0].url} />
+          <ProfileAvatar avatarOwner={avatar?.[0]?.url} />
           <Typography variant={'h3'}>{userId}</Typography>
         </div>
         <div className={styles.form}>
