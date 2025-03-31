@@ -11,6 +11,8 @@ import Link from 'next/link'
 import styles from './sidebar.module.scss'
 
 import { Icon, useSidebar } from './useSidebar'
+import { useDispatch } from 'react-redux'
+import { setArrBase64 } from '@/features/posts/model/croppSlice'
 
 type SidebarProps = {
   className?: string
@@ -37,6 +39,7 @@ export const Sidebar = ({ className }: SidebarProps) => {
     t,
   } = useSidebar()
   const [isEditing, setIsEditing] = useState(false)
+  const dispatch = useDispatch()
   const { isCreateModalOpen, isModalOpen, openPostModal } = modalState
 
   const classNames = {
@@ -57,6 +60,11 @@ export const Sidebar = ({ className }: SidebarProps) => {
 
   if (isLoading) {
     return <Loader />
+  }
+
+  const handleAddPhoto = (image: string) => {
+    dispatch(setArrBase64(image))
+    /*    setPhotos(prevPhotos => [...prevPhotos, image])*/
   }
 
   return (
@@ -84,7 +92,7 @@ export const Sidebar = ({ className }: SidebarProps) => {
       {/*TODO: optimize function*/}
       {isCreateModalOpen && (
         <ModalAddPhoto
-          handleAddPhoto={(image: string) => setPhotos(prevPhotos => [...prevPhotos, image])}
+          handleAddPhoto={handleAddPhoto}
           handleCloseModal={handleCloseAddPhotoModal}
           isOpen={isCreateModalOpen}
           postPhoto

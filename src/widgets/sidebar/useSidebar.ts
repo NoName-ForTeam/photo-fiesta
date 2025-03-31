@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
 
 import { baseApi } from '@/app/api'
@@ -16,6 +16,7 @@ import {
 import { ROUTES } from '@/shared/config'
 import { Storage, isValidErrorResponse, useTranslation } from '@/shared/utils'
 import { useRouter } from 'next/router'
+import { photosArrString } from '@/features/posts/model/croppSlice'
 
 /** Type representing the icon components used in the sidebar */
 export type Icon = typeof HomeOutline
@@ -59,7 +60,13 @@ export const useSidebar = () => {
     openPostModal: false,
   })
 
+  /*  const [photos, setPhotos] = useState<string[]>([])*/
+  const arrBase64Strings = useSelector(photosArrString)
   const [photos, setPhotos] = useState<string[]>([])
+
+  useEffect(() => {
+    setPhotos(arrBase64Strings)
+  }, [arrBase64Strings])
 
   //* Modal control functions
   const openCreateModal = () => setModalState(prev => ({ ...prev, isCreateModalOpen: true }))

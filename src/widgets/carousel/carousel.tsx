@@ -4,7 +4,7 @@ import { Crop } from 'react-image-crop'
 import { Step } from '@/features'
 import { ALLOWED_FORMATS, MAX_FILE_SIZE_FOR_POST, MAX_PHOTOS } from '@/shared/config'
 import { CustomSlider } from '@/shared/ui'
-import { applyImageTransformations } from '@/shared/utils'
+import { applyImageTransformations, applyImageTransformationsArray } from '@/shared/utils'
 import { ErrorMessage } from '@/widgets'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -17,6 +17,13 @@ import styles from './carousel.module.scss'
 import { NextArrow, PrevArrow } from './carouselArrows'
 import { CarouselItem } from './carouselItem'
 import { ImageControlButtons } from './imageControlButtons'
+import { useDispatch, useSelector } from 'react-redux'
+import {
+  selectFilterState,
+  setFilterState,
+  setArrBase64,
+  setPublishPhotos,
+} from '@/features/posts/model/croppSlice'
 export type ImageData = {
   aspectRatio: { label: string; value: null | number }
   crop: Crop
@@ -46,6 +53,8 @@ export const Carousel = ({
   const [activeIndex, setActiveIndex] = useState(0)
   const [indexArrow, setIndexArrow] = useState(0)
   const [error, setError] = useState<null | string>(null)
+  const dispatch = useDispatch()
+
   const [imagesData, setImagesData] = useState<ImageData[]>(
     photos.map(photo => ({
       aspectRatio: { label: 'Original', value: null },
@@ -55,18 +64,47 @@ export const Carousel = ({
     }))
   )
 
+  const selectorFilterState = useSelector(selectFilterState)
+
   // update photos with transformed images
   useEffect(() => {
     const updatePhotos = async () => {
       const transformedPhotos = await Promise.all(
-        imagesData.map(img => applyImageTransformations(img))
+        imagesData.map(img => applyImageTransformations(img)) // возвращает массив строк Base64
       )
-
       setPhotos(transformedPhotos)
+
+      const newState = (await Promise.all(imagesData.map(applyImageTransformationsArray))).flat() // берет текущий стейт [{}, {}] и созд массив { crop сохраняется , а src в новый base64 преобразуется}
+      dispatch(setFilterState(newState))
+
+      /*if(step==="publication"){
+        dispatch(setArrBase64(transformedPhotos))
+      }*/
     }
+
+    /*if(step==="publication"){
+      const transformedPhotos2 = await Promise.all(
+          imagesData.map(img => applyImageTransformations(img)) // возвращает массив строк Base64
+      )
+      dispatch(setArrBase64(transformedPhotos2))
+    }*/
 
     updatePhotos()
   }, [imagesData, setPhotos])
+
+  // ДОБАВИЛА
+  useEffect(() => {
+    if (step === 'publication') {
+      const updatePhotos = async () => {
+        const transformedPhotos2 = await Promise.all(
+          selectorFilterState.map(img => applyImageTransformations(img)) // возвращает массив строк Base64
+        )
+        dispatch(setPublishPhotos(transformedPhotos2))
+      }
+
+      updatePhotos()
+    }
+  }, [step, dispatch])
 
   /**
    * Handles the file change event for the input element.
@@ -80,6 +118,7 @@ export const Carousel = ({
     }
 
     const newImages: ImageData[] = []
+    const newImages2: string[] = []
     let hasError = false
 
     if (photos.length + newImages.length > MAX_PHOTOS) {
@@ -109,11 +148,14 @@ export const Carousel = ({
         src: URL.createObjectURL(file),
         zoom: 1,
       })
+
+      newImages2.push(URL.createObjectURL(file))
     })
 
     if (!hasError) {
       setError(null)
       setImagesData(prev => [...prev, ...newImages])
+      dispatch(setArrBase64(newImages2))
       setActiveIndex(imagesData.length + newImages.length - 1)
       setIndexArrow(imagesData.length + newImages.length - 1)
 
@@ -162,15 +204,38 @@ export const Carousel = ({
         setActiveIndex={setActiveIndex}
         setIndexArrow={setIndexArrow}
       >
-        {imagesData.map((imageData, index) => (
-          <CarouselItem
-            handleCropChange={handleCropChange}
-            imageData={imageData}
-            index={index}
-            key={uuidv4()}
-            step={step}
-          />
-        ))}
+        {step === 'cropping' &&
+          imagesData.map((imageData, index) => (
+            <CarouselItem
+              handleCropChange={handleCropChange}
+              imageData={imageData}
+              index={index}
+              key={uuidv4()}
+              step={step}
+            />
+          ))}
+
+        {step === 'filters' &&
+          selectorFilterState.map((imageData, index) => (
+            <CarouselItem
+              handleCropChange={handleCropChange}
+              imageData={imageData}
+              index={index}
+              key={uuidv4()}
+              step={step}
+            />
+          ))}
+
+        {step === 'publication' &&
+          selectorFilterState.map((imageData, index) => (
+            <CarouselItem
+              handleCropChange={handleCropChange}
+              imageData={imageData}
+              index={index}
+              key={uuidv4()}
+              step={step}
+            />
+          ))}
       </CustomSlider>
 
       {error && <ErrorMessage error={error} />}

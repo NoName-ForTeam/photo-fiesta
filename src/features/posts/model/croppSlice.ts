@@ -3,6 +3,7 @@ import { ImageData } from '@/widgets'
 
 const initialState = {
   photos: [] as string[],
+  photosForPublish: [] as string[],
   cropp: [] as ImageData[],
   filter: [] as ImageData[],
   publication: [] as ImageData[],
@@ -12,30 +13,27 @@ export const croppSlice = createSlice({
   name: 'croppSlice',
   initialState,
   reducers: {
-    setPhotosSlice: (state, action: PayloadAction<string | string[]>) => {
+    setArrBase64: (state, action: PayloadAction<string | string[]>) => {
       if (typeof action.payload === 'string') {
         state.photos = [...state.photos, action.payload]
       } else {
         state.photos = [...state.photos, ...action.payload]
       }
     },
-    setInitState: (state, action: PayloadAction<string[]>) => {
-      state.cropp = action.payload.map(image => ({
-        aspectRatio: { label: 'Original', value: null },
-        crop: { height: 100, unit: '%', width: 100, x: 0, y: 0 },
-        src: image,
-        zoom: 1,
-      }))
+    setPublishPhotos: (state, action: PayloadAction<string[]>) => {
+      state.photos = action.payload
     },
-    setFilterState: () => {
-      /*      state.filter = action.payload.images*/
+    setFilterState: (state, action: PayloadAction<ImageData[]>) => {
+      state.filter = action.payload
     },
   },
   selectors: {
     initState: sliceState => sliceState.cropp,
     photosArrString: sliceState => sliceState.photos,
+    selectFilterState: sliceState => sliceState.filter,
+    selectPhotoForPublish: sliceState => sliceState.photosForPublish,
   },
 })
 
-export const { setInitState, setFilterState, setPhotosSlice } = croppSlice.actions
-export const { initState, photosArrString } = croppSlice.selectors
+export const { setFilterState, setArrBase64, setPublishPhotos } = croppSlice.actions
+export const { photosArrString, selectFilterState } = croppSlice.selectors
