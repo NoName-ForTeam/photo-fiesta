@@ -24,6 +24,7 @@ import {
   setArrBase64,
   setPublishPhotos,
 } from '@/features/posts/model/croppSlice'
+
 export type ImageData = {
   aspectRatio: { label: string; value: null | number }
   crop: Crop
@@ -64,6 +65,7 @@ export const Carousel = ({
     }))
   )
 
+  const isShowPostPhotos = step != 'cropping' && step != 'filters' && step != 'publication'
   const selectorFilterState = useSelector(selectFilterState)
 
   // update photos with transformed images
@@ -76,18 +78,7 @@ export const Carousel = ({
 
       const newState = (await Promise.all(imagesData.map(applyImageTransformationsArray))).flat() // берет текущий стейт [{}, {}] и созд массив { crop сохраняется , а src в новый base64 преобразуется}
       dispatch(setFilterState(newState))
-
-      /*if(step==="publication"){
-        dispatch(setArrBase64(transformedPhotos))
-      }*/
     }
-
-    /*if(step==="publication"){
-      const transformedPhotos2 = await Promise.all(
-          imagesData.map(img => applyImageTransformations(img)) // возвращает массив строк Base64
-      )
-      dispatch(setArrBase64(transformedPhotos2))
-    }*/
 
     updatePhotos()
   }, [imagesData, setPhotos])
@@ -101,10 +92,9 @@ export const Carousel = ({
         )
         dispatch(setPublishPhotos(transformedPhotos2))
       }
-
       updatePhotos()
     }
-  }, [step, dispatch])
+  }, [step, imagesData, dispatch])
 
   /**
    * Handles the file change event for the input element.
@@ -204,6 +194,16 @@ export const Carousel = ({
         setActiveIndex={setActiveIndex}
         setIndexArrow={setIndexArrow}
       >
+        {isShowPostPhotos &&
+          imagesData.map((imageData, index) => (
+            <CarouselItem
+              handleCropChange={handleCropChange}
+              imageData={imageData}
+              index={index}
+              key={uuidv4()}
+              step={step}
+            />
+          ))}
         {step === 'cropping' &&
           imagesData.map((imageData, index) => (
             <CarouselItem

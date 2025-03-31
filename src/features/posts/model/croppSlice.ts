@@ -26,6 +26,7 @@ export const croppSlice = createSlice({
     setFilterState: (state, action: PayloadAction<ImageData[]>) => {
       state.filter = action.payload
     },
+    resetCropState: () => initialState,
   },
   selectors: {
     initState: sliceState => sliceState.cropp,
@@ -35,5 +36,5 @@ export const croppSlice = createSlice({
   },
 })
 
-export const { setFilterState, setArrBase64, setPublishPhotos } = croppSlice.actions
+export const { setFilterState, setArrBase64, setPublishPhotos, resetCropState } = croppSlice.actions
 export const { photosArrString, selectFilterState } = croppSlice.selectors
