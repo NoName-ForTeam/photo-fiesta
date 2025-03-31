@@ -22,6 +22,7 @@ const makeStore = (): EnhancedStore =>
   configureStore({
     middleware: getDefaultMiddleware => getDefaultMiddleware().concat(baseApi.middleware),
     reducer: rootReducer,
+    devTools: process.env.NODE_ENV !== 'production',
   })
 
 // export an assembled wrapper
