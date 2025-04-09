@@ -51,7 +51,7 @@ export const useFavoritePosts = () => {
     } else {
       setFetchedPosts([])
     }
-  }, [favoritePostIds.join(',')]) // массив как строка, чтобы useEffect работал корректно
+  }, [favoritePostIds.join(',')])
 
   return {
     isLoading: favoritePostIds.length > 0 && fetchedPosts.length === 0,
