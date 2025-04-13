@@ -10,7 +10,7 @@ import { FavoritePost, GetPostResponse, useLazyGetPostByIdQuery } from '@/featur
 
 export const useFavoritePosts = () => {
   const favoritePostIds = useSelector((state: RootState) =>
-    state.favorites.favoritePosts.map((f: FavoritePost) => f.postId)
+    state.favorites.favoritePosts.map((favoritePostData: FavoritePost) => favoritePostData.postId)
   )
 
   const [fetchedPosts, setFetchedPosts] = useState<GetPostResponse[]>([])
