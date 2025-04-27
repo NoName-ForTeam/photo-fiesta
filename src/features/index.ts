@@ -1,4 +1,5 @@
 export * from './auth'
+export * from './favorites'
 export * from './notifications'
 export * from './posts'
 export * from './profile'

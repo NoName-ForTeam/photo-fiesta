@@ -1,0 +1,18 @@
+.postsWrapper {
+  display: flex;
+  flex-direction: column;
+  align-self: flex-start;
+
+  width: 100%;
+  padding: 36px 64px 0 24px;
+
+  @include mobile {
+    padding: 24px 15px 0;
+  }
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 140px;
+}

@@ -147,6 +147,13 @@ export const postsApi = baseApi.injectEndpoints({
         url: GetCommentLikes(commentId, postId),
       }),
     }),
+    getFavoritePosts: builder.query<GetPostResponse[], { postId: number; userId: number }>({
+      providesTags: ['Posts'],
+      query: ({ postId, userId }) => ({
+        method: GET,
+        url: `/v1/posts/${userId}/${postId}`,
+      }),
+    }),
     /**
      * Fetches addComments for a specific post.
      * @param GetPostCommentsArgs - Contains the post ID.
@@ -252,6 +259,7 @@ export const {
   useGetCommentAnswersLikesQuery,
   useGetCommentAnswersQuery,
   useGetCommentLikesQuery,
+  useGetFavoritePostsQuery,
   useGetPostCommentsQuery,
   useGetPostLikesQuery,
   useGetPostsByUsernameQuery,

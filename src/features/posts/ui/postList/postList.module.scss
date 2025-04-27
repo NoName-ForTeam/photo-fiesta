@@ -17,6 +17,8 @@
 }
 
 .image {
+  cursor: pointer;
+
   @include mobile {
     width: 100%;
     height: 100%;

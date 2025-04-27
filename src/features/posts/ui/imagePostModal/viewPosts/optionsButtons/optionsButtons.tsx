@@ -1,5 +1,9 @@
+import { useDispatch, useSelector } from 'react-redux'
+
+import { RootState } from '@/app/store'
 import { AuthMeResponse, GetCommentAnswersLikesResponse, Like } from '@/features'
-import { BookmarkOutline, PaperPlaneOutline } from '@/shared/assets'
+import { FavoritePost, toggleFavorite } from '@/features/posts/api/slice/favoritesSlice'
+import { Bookmark, BookmarkOutline, PaperPlaneOutline } from '@/shared/assets'
 
 import styles from './optionsButtons.module.scss'
 
@@ -22,6 +26,15 @@ export const OptionsButtons = ({
     likeWrite: styles.likeWrite,
   }
 
+  const dispatch = useDispatch()
+  const favoritePosts = useSelector((state: RootState) => state.favorites.favoritePosts) // Получаем избранные посты
+
+  const isFavorite = favoritePosts.some((fav: FavoritePost) => fav.postId === postId)
+
+  const handleToggleFavorite = () => {
+    dispatch(toggleFavorite({ postId }))
+  }
+
   return (
     <div className={classNames.buttons}>
       <div className={classNames.likeWrite}>
@@ -33,7 +46,11 @@ export const OptionsButtons = ({
         />
         <PaperPlaneOutline className={classNames.icon} />
       </div>
-      <BookmarkOutline className={classNames.icon} />
+      {isFavorite ? (
+        <Bookmark className={classNames.icon} onClick={handleToggleFavorite} />
+      ) : (
+        <BookmarkOutline className={classNames.icon} onClick={handleToggleFavorite} />
+      )}
     </div>
   )
 }
