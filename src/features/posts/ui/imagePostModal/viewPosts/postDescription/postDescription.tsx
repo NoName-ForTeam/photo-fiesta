@@ -79,7 +79,7 @@ export const PostDescription = ({
       const res = await triggerGetPostComments(params).unwrap()
       const items = (res?.items ?? []) as PostComment[]
       setAccComments(prev => [...prev, ...items])
-      if (items.length < params.pageSize) setHasMore(false)
+      if (items.length < (params.pageSize ?? 2)) setHasMore(false)
     } catch {
       setHasMore(false)
     } finally {
