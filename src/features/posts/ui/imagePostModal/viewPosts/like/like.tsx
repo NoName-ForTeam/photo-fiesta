@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { toast } from 'react-toastify'
 
 import {
@@ -35,6 +35,7 @@ export const Like = ({
   initialLikePostState,
   postId,
   postLikes,
+  commentLikes,
 }: LikeProps) => {
   const [hasPostLike, setHasPostLike] = useState(initialLikePostState)
   const [hasCommentLike, setHasCommentLike] = useState(initialLikeCommentState)
@@ -43,6 +44,15 @@ export const Like = ({
   const [updatePostLike] = useUpdatePostLikeStatusMutation()
   const [updateCommentLike] = useUpdateCommentLikeStatusMutation()
   const [updateAnswerLike] = useUpdateAnswerLikeStatusMutation()
+
+  const targetHasLike = useMemo(() => {
+    if (commentId) return !!hasCommentLike
+    if (answerId) return !!hasAnswerLike
+    return !!hasPostLike
+  }, [commentId, answerId, hasCommentLike, hasAnswerLike, hasPostLike])
+
+  // иконка — по таргету
+  const isActive = targetHasLike
 
   const handleToggleLike = async () => {
     const newStatus: LikeStatus =
@@ -66,22 +76,29 @@ export const Like = ({
       } else {
         toast.error('Invalid identifiers for like operation')
       }
-    } catch (error) {
+    } catch {
       toast.error('Failed to update like')
     }
   }
 
   useEffect(() => {
-    if (postLikes) {
-      const isLikedByMe = postLikes.items.some(like => like.userId === authMe?.userId)
+    if (!postLikes?.items || !authMe?.userId || commentId || answerId) return
+    if (postLikes.items.some(l => l.userId === authMe.userId)) setHasPostLike(true)
+  }, [postLikes?.items, authMe?.userId, commentId, answerId])
 
-      setHasPostLike(isLikedByMe)
-    }
-  }, [postLikes, authMe, postId])
+  // комментарий: аналогично
+  useEffect(() => {
+    if (!commentLikes?.items || !authMe?.userId || !commentId) return
+    if (commentLikes.items.some(l => l.userId === authMe.userId)) setHasCommentLike(true)
+  }, [commentLikes?.items, authMe?.userId, commentId])
+
+  useEffect(() => setHasPostLike(initialLikePostState), [initialLikePostState])
+  useEffect(() => setHasCommentLike(initialLikeCommentState), [initialLikeCommentState])
+  useEffect(() => setHasAnswerLike(initialLikeAnswerState), [initialLikeAnswerState])
 
   return (
     <div className={styles.likeContainer} onClick={handleToggleLike}>
-      {hasPostLike || hasCommentLike || hasAnswerLike ? (
+      {isActive ? (
         <Heart className={clsx(styles.icon, styles.likeIcon)} />
       ) : (
         <HeartOutline className={styles.icon} />

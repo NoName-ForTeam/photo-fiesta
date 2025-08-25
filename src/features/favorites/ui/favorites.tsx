@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-import { PostList } from '@/features'
+import { PostList, useAuthMeQuery, useGetProfileUserWithPostQuery } from '@/features'
 import { Loader } from '@/shared/ui'
 import { Typography } from '@photo-fiesta/ui-lib'
 
@@ -14,11 +14,14 @@ import { useFavoritePosts } from './useFavoritePost'
 
 export const Favorites = () => {
   const { isLoading, posts } = useFavoritePosts()
-  const classNames = {
-    postsWrapper: styles.postsWrapper,
-    title: styles.title,
-    wrapper: styles.wrapper,
-  } as const
+  const { data: authMe } = useAuthMeQuery()
+  const userName = authMe?.userName
+  const { data: profileData } = useGetProfileUserWithPostQuery(
+    { userName: userName! },
+    { skip: !userName }
+  )
+
+  const userAvatar = profileData?.avatars?.length ? [profileData.avatars[0]] : []
 
   const [isClient, setIsClient] = useState(false)
 
@@ -35,12 +38,18 @@ export const Favorites = () => {
     return <Loader />
   }
 
+  const classNames = {
+    postsWrapper: styles.postsWrapper,
+    title: styles.title,
+    wrapper: styles.wrapper,
+  } as const
+
   return (
     <div className={classNames.wrapper}>
       <Typography variant={'h1'}>Favorites</Typography>
       <div className={classNames.postsWrapper}>
         <PostList
-          avatar={[]}
+          avatar={userAvatar}
           initialFollowState={false}
           initialPosts={{ items: posts, pageSize: 8, totalCount: 0, totalUsers: 0 }}
           isOwnProfile={false}
