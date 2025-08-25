@@ -20,19 +20,34 @@ type CommentsProps = {
 export const Comments = ({ authMe, commentId, postComment, postId }: CommentsProps) => {
   const { data: commentLikes } = useGetCommentLikesQuery({ commentId, postId })
   const { data: commentAnswers } = useGetCommentAnswersQuery({ commentId, postId })
+
+  const createdAgo = useTimeAgo(postComment.createdAt)
+  const avatarUrl = postComment.from.avatars?.[0]?.url ?? ''
+  const username = postComment.from.username ?? 'unknown'
+
   const showAnswer = () => {}
+
+  const likesCount =
+    (Array.isArray(commentLikes?.items) ? commentLikes!.items.length : undefined) ??
+    postComment.likeCount ??
+    0
+
+  const answersCount =
+    (Array.isArray(commentAnswers?.items) ? commentAnswers!.items.length : undefined) ??
+    postComment.answerCount ??
+    0
 
   return (
     <div className={styles.container}>
       <div className={styles.main}>
         <div className={styles.profileInfo}>
-          <ProfileAvatar avatarOwner={postComment.from.avatars[0].url} />
-          <div>{postComment.from.username}</div>
+          <ProfileAvatar avatarOwner={avatarUrl} />
+          <div>{username}</div>
           <div className={styles.description}>
             <Typography variant={'text14'}>{postComment.content}</Typography>
           </div>
         </div>
-        {authMe && postId && (
+        {authMe && postId ? (
           <Like
             authMe={authMe}
             commentId={commentId}
@@ -40,28 +55,35 @@ export const Comments = ({ authMe, commentId, postComment, postId }: CommentsPro
             initialLikeCommentState={postComment.isLiked}
             postId={postId}
           />
-        )}
+        ) : null}
       </div>
-      <Typography className={styles.options} variant={'textSmall'}>
-        <div>{useTimeAgo(postComment.createdAt)}</div>
-        <div>Likes: {postComment.likeCount}</div>
-        <div onClick={showAnswer}>Answer: {postComment.answerCount}</div>
-      </Typography>
-      {commentAnswers?.items.map(answer => (
-        <div key={answer.id}>
-          <div className={styles.profileInfo}>
-            <ProfileAvatar avatarOwner={answer.from.avatars[0].url} />
-            <div>{answer.from.username}</div>
-            <div className={styles.description}>
-              <Typography variant={'text14'}>{answer.content}</Typography>
+      <div className={styles.options}>
+        <Typography variant={'textSmall'}>{createdAgo}</Typography>
+        <Typography variant={'textSmall'}>Likes: {likesCount}</Typography>
+        <button className={styles.answerBtn} onClick={showAnswer}>
+          <Typography variant="textSmall">Answer: {answersCount}</Typography>
+        </button>
+      </div>
+      {commentAnswers?.items?.map(answer => {
+        const ansAvatar = answer.from.avatars?.[0]?.url ?? ''
+        const ansName = answer.from.username ?? 'unknown'
+
+        return (
+          <div key={answer.id}>
+            <div className={styles.profileInfo}>
+              <ProfileAvatar avatarOwner={ansAvatar} />
+              <div>{ansName}</div>
+              <div className={styles.description}>
+                <Typography variant="text14">{answer.content}</Typography>
+              </div>
             </div>
+            <Typography className={styles.options} variant="textSmall">
+              {/* <div>{ansAgo}</div> */}
+              <div>Likes: {answer.likeCount ?? 0}</div>
+            </Typography>
           </div>
-          <Typography className={styles.options} variant={'textSmall'}>
-            {/*<div>{useTimeAgo(answer.createdAt)}</div>*/}
-            <div>Likes: {answer.likeCount}</div>
-          </Typography>
-        </div>
-      ))}
+        )
+      })}
     </div>
   )
 }
