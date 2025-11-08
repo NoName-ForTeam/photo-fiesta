@@ -1,7 +1,10 @@
 import { GetPublicPostsResponse, PublicPosts, RegisteredUsersCounter } from '@/features'
-import { API_URLS } from '@/shared/config'
+import { API_URLS, ROUTES } from '@/shared/config'
 import { GetStaticProps } from 'next'
 import Head from 'next/head'
+import { useRouter } from 'next/router'
+import { useEffect } from 'react'
+import { Loader } from '@/shared/ui'
 
 /**
  * Fetches public posts and total registered users data for static generation.
@@ -9,7 +12,7 @@ import Head from 'next/head'
  *
  * @returns {Promise<{ props: Pick<GetPublicPostsResponse, 'items' | 'totalUsers'>, revalidate: number }>} Static props.
  */
-// eslint-disable-next-line react-refresh/only-export-components
+ 
 export const getStaticProps: GetStaticProps = async () => {
   const res = await fetch(
     `${API_URLS.BASE_URL}${API_URLS.PUBLIC.GetAllPublicPosts(undefined)}?pageSize=4`
@@ -27,6 +30,21 @@ export const getStaticProps: GetStaticProps = async () => {
  * - `totalUsers` (number): Total count of registered users.
  */
 const Public = ({ items, totalUsers }: Pick<GetPublicPostsResponse, 'items' | 'totalUsers'>) => {
+  const router = useRouter()
+  const { code, email } = router.query
+
+  useEffect(() => {
+    if (code && email) {
+      router.replace({
+        pathname: ROUTES.CONFIRM_EMAIL,
+        query: { code, email },
+      })
+    }
+  }, [code, email])
+
+  if (code && email) {
+    return <Loader />
+  }
   return (
     <>
       <Head>
