@@ -12,6 +12,7 @@ export const ROUTES = {
   SETTINGS: '/profile/settings',
   SIGN_IN: '/auth/signInPage',
   SIGN_UP: '/auth/signUpPage',
+  CONFIRM_EMAIL: '/auth/registration-confirmation',
   STATICS: '/statics',
   TERMS_OF_SERVICE: '/auth/termsOfServicePage',
 }
