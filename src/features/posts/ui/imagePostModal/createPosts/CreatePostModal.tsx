@@ -8,6 +8,7 @@ import { Button, Typography } from '@photo-fiesta/ui-lib'
 import clsx from 'clsx'
 
 import styles from './createPostModal.module.scss'
+import { useDraft } from '@/features/posts/ui/imagePostModal/createPosts/useDraft'
 
 type CreatePostModalProps = {
   avatar: Avatar[] | undefined
@@ -33,6 +34,7 @@ export const CreatePostModal = ({
   const { changeStep, getStepTitle, step } = useChangeTitle({ isEditing })
   const [showConfirmModal, setShowConfirmModal] = useState(false)
   const modalRef = useRef<HTMLDivElement>(null)
+  const { saveDraft, isDBReady } = useDraft()
 
   /**
    * Sets up an event listener for mouse down events on the document (ImagePostModal for creating post).
@@ -59,6 +61,14 @@ export const CreatePostModal = ({
   }
   const handleCloseConfirmModal = () => {
     setShowConfirmModal(false)
+  }
+
+  const handleSaveToDraft = async () => {
+    if (!isDBReady) return
+    await saveDraft(photos, () => {
+      handleClose()
+      setPhotos([])
+    })
   }
 
   return (
@@ -108,6 +118,8 @@ export const CreatePostModal = ({
           {/*TODO: rename buttons*/}
           {showConfirmModal && (
             <ConfirmationModal
+              isCreatePostModal
+              saveToDraft={handleSaveToDraft}
               closeModal={handleCloseConfirmModal}
               content={
                 'Do you really want to close the creation of a publication? If you close everything will be deleted.'

@@ -53,8 +53,8 @@
   display: flex;
   flex-direction: row;
   gap: 24px;
-  align-items: center;
-  justify-content: center;
+  align-items: end;
+  justify-content: space-between;
 
   @include mobile {
     display: flex;
