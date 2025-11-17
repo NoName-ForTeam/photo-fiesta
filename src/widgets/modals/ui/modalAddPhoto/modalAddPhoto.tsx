@@ -12,7 +12,8 @@ import Image from 'next/image'
 
 import styles from './modalAddPhoto.module.scss'
 
-import { useModalAddPhoto } from './useModalAddPhoto'
+import { useModalAddPhoto } from '@/widgets'
+import { useDraft } from '@/features/posts/ui/imagePostModal/createPosts/useDraft'
 
 type ModalAddPhotoProps = {
   handleAddPhoto?: (photo: string) => void
@@ -44,6 +45,7 @@ export const ModalAddPhoto = ({
 }: ModalAddPhotoProps) => {
   const { error, fileInputRef, handleClick, handleFileChange, handleSave, isSaved, selectedImage } =
     useModalAddPhoto({ handleAddPhoto, handleCloseModal, isOpen, postPhoto, setImage })
+  const { getAndRemoveLastDraft, hasDraft, isDBReady } = useDraft()
 
   const classNames = {
     block: styles.block,
@@ -55,7 +57,17 @@ export const ModalAddPhoto = ({
     photoPreview: styles.photoPreview,
     save: styles.save,
     visible: styles.visible,
+    btnContainer: styles.btnContainer,
   } as const
+
+  const handleOpenDraft = async () => {
+    if (!isDBReady) return
+    const lastDraft = await getAndRemoveLastDraft()
+    if (lastDraft && handleAddPhoto && lastDraft.photos.length > 0) {
+      handleAddPhoto(lastDraft.photos[0]) // Загружаем фото в пост
+      handleCloseModal() // Закрываем модалку добавления фото
+    }
+  }
 
   return (
     <Modal open={isOpen}>
@@ -77,11 +89,19 @@ export const ModalAddPhoto = ({
               ref={fileInputRef}
               type={'file'}
             />
-            {!selectedImage && !isSaved && (
-              <Button fullWidth onClick={handleClick}>
-                Select from Computer
-              </Button>
-            )}
+            <div className={classNames.btnContainer}>
+              {!selectedImage && !isSaved && (
+                <Button fullWidth onClick={handleClick}>
+                  Select from Computer
+                </Button>
+              )}
+              {hasDraft && (
+                <Button variant={'outlined'} fullWidth onClick={handleOpenDraft}>
+                  Open Drafts
+                </Button>
+              )}
+            </div>
+
             {selectedImage && !error && !isSaved && (
               <Button className={classNames.save} onClick={handleSave}>
                 Save

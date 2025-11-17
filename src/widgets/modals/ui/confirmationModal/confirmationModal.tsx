@@ -23,11 +23,15 @@ type ModalProps = {
   isTwoButtons?: boolean
   pushNo?: () => void
   title: null | string
+  isCreatePostModal?: boolean
+  saveToDraft?: () => void
 }
 
 export const ConfirmationModal = ({
   buttonTitle = 'Ok',
   closeModal,
+  saveToDraft,
+  isCreatePostModal = false,
   content,
   handleConfirmation,
   isOpen,
@@ -68,9 +72,15 @@ export const ConfirmationModal = ({
                 <Button onClick={handleConfirmation} variant={'outlined'}>
                   {t.buttonsConfirm.yes}
                 </Button>
-                <Button onClick={pushNo ? pushNo : closeModal} variant={'primary'}>
-                  {t.buttonsConfirm.no}
-                </Button>
+                {isCreatePostModal ? (
+                  <Button onClick={saveToDraft} variant={'primary'}>
+                    {'Save draft'}
+                  </Button>
+                ) : (
+                  <Button onClick={pushNo ? pushNo : closeModal} variant={'primary'}>
+                    {t.buttonsConfirm.no}
+                  </Button>
+                )}
               </div>
             )}
             {!isTwoButtons && (

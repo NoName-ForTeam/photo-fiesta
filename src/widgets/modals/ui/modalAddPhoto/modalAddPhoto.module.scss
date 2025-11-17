@@ -80,3 +80,9 @@
   width: var(--photo-icon-size);
   height: var(--photo-icon-size);
 }
+
+.btnContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}

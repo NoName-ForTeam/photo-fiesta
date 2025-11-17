@@ -7,7 +7,7 @@ import styles from './post.module.scss'
 
 export type Step = 'cropping' | 'filters' | 'publication'
 
-type PostProps = {
+export type PostProps = {
   avatar: Avatar[] | undefined
   handleClose: () => void
   photos: string[]
@@ -30,11 +30,12 @@ export const Post = ({
   step,
   userId,
 }: PostProps) => {
+  const avatarUrl = avatar?.[0]?.url || '' // Добавляем проверку
   if (step === 'publication') {
     return (
       <section className={styles.formSection}>
         <div className={styles.profileInfo}>
-          <ProfileAvatar avatarOwner={avatar?.[0].url} />
+          <ProfileAvatar avatarOwner={avatarUrl} />
           <Typography variant={'h3'}>{userId}</Typography>
         </div>
         <div className={styles.form}>
